@@ -2,6 +2,7 @@
 
 > **Date**: 2026-10-13  
 > **Status**: VERIFIED (Pasted terminal proof below)  
+> **Commit**: `b4c08de` (`feat(phase-5): Scanning simulation and DRIMS v1 JSON schema export with idempotency`)  
 > **Phase**: Phase 5 of 9 (Scanning and DRIMS Export)  
 
 ---
