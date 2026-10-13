@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+<defs>
+  <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#0f172a"/>
+    <stop offset="100%" stop-color="#1e293b"/>
+  </linearGradient>
+</defs>
+<rect width="800" height="450" fill="url(#bgGrad)" rx="8"/>
+<text x="400.0" y="32" fill="#f8fafc" font-size="16" font-weight="bold" text-anchor="middle">Waypoints Sequencing Strategy Sweep Benchmark</text>
+<line x1="80" y1="60.0" x2="740" y2="60.0" stroke="#334155" stroke-dasharray="4,4"/>
+<text x="70" y="64.0" fill="#38bdf8" font-size="10" text-anchor="end">19.9 cm</text>
+<line x1="80" y1="142.5" x2="740" y2="142.5" stroke="#334155" stroke-dasharray="4,4"/>
+<text x="70" y="146.5" fill="#38bdf8" font-size="10" text-anchor="end">14.9 cm</text>
+<line x1="80" y1="225.0" x2="740" y2="225.0" stroke="#334155" stroke-dasharray="4,4"/>
+<text x="70" y="229.0" fill="#38bdf8" font-size="10" text-anchor="end">10.0 cm</text>
+<line x1="80" y1="307.5" x2="740" y2="307.5" stroke="#334155" stroke-dasharray="4,4"/>
+<text x="70" y="311.5" fill="#38bdf8" font-size="10" text-anchor="end">5.0 cm</text>
+<line x1="80" y1="390.0" x2="740" y2="390.0" stroke="#334155" stroke-dasharray="4,4"/>
+<text x="70" y="394.0" fill="#38bdf8" font-size="10" text-anchor="end">0.0 cm</text>
+<text x="80.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">serpentine</text>
+<text x="300.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">nearest</text>
+<text x="520.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">minimum_time</text>
+<text x="740.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">naive</text>
+<polyline points="80.0,158.6 300.0,185.0 520.0,208.5 740.0,126.0" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+<polyline points="80.0,195.9 300.0,141.2 520.0,196.8 740.0,126.0" fill="none" stroke="#ec4899" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,3"/>
+<circle cx="80.0" cy="158.6" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="300.0" cy="185.0" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="520.0" cy="208.5" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="740.0" cy="126.0" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="80.0" cy="195.9" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="300.0" cy="141.2" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="520.0" cy="196.8" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="740.0" cy="126.0" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<g transform="translate(520, 20)">
+<circle cx="0" cy="0" r="4" fill="#38bdf8"/>
+<text x="10" y="4" fill="#38bdf8" font-size="11">Mean Tracking Error (cm)</text>
+<circle cx="160" cy="0" r="4" fill="#ec4899"/>
+<text x="170" y="4" fill="#ec4899" font-size="11">Energy (Wh)</text>
+</g>
+<text x="400.0" y="438" fill="#cbd5e1" font-size="12" text-anchor="middle">strategy</text>
+</svg>

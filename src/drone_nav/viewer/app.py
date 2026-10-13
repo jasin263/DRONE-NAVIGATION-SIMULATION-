@@ -1,21 +1,35 @@
-"""FastAPI application for drone-nav warehouse viewer."""
+"""FastAPI application for drone-nav warehouse viewer, mission execution, and simulation API."""
 
+import io
+import json
+import tempfile
+import zipfile
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+import yaml
+from fastapi import Body, FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
+from fastapi.staticfiles import StaticFiles
 
 from drone_nav.config.loader import ConfigError, get_json_schema, load_config
+from drone_nav.config.models import WarehouseConfig
+from drone_nav.export.exporter import DRIMSExporter
+from drone_nav.localisation.estimator import LocalisationEstimator
+from drone_nav.planner.planner import MissionPlanner
+from drone_nav.safety.injector import FailureInjectionFramework
+from drone_nav.scanning.service import ScanningMissionSimulator
+from drone_nav.scenarios.plotter import export_sweep_plot_svg
+from drone_nav.scenarios.runner import ScenarioRunner
 from drone_nav.world.csv_importer import CSVImportError, import_drims_csv
 from drone_nav.world.generator import generate_world_from_config
 from drone_nav.world.models import World
 
 app = FastAPI(
     title="drone-nav Warehouse Simulator & Viewer",
-    description="Interactive viewer and API for drone warehouse navigation simulation",
-    version="0.1.0",
+    description="Interactive viewer, 3D simulation replay, and REST API for indoor warehouse drones",
+    version="1.0.0",
 )
 
 app.add_middleware(
@@ -28,6 +42,29 @@ app.add_middleware(
 
 CONFIGS_DIR = Path("configs")
 PRESETS_DIR = CONFIGS_DIR / "presets"
+
+# Mount Amazon Bin Image Dataset statically if present
+amazon_img_path = Path("Amazonbindata/img")
+if amazon_img_path.exists() and amazon_img_path.is_dir():
+    app.mount("/img/amazon", StaticFiles(directory=str(amazon_img_path)), name="amazon_images")
+
+# In-memory mission runs cache
+MISSION_RUNS: dict[str, dict[str, Any]] = {}
+
+
+def _resolve_config_path(config_param: str) -> Path:
+    candidates = [
+        Path(config_param),
+        PRESETS_DIR / f"{config_param}.yaml",
+        PRESETS_DIR / f"{config_param}.yml",
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    raise HTTPException(
+        status_code=404,
+        detail=f"Configuration '{config_param}' not found. Checked: {[str(c) for c in candidates]}",
+    )
 
 
 def serialize_world(world: World) -> dict[str, Any]:
@@ -99,6 +136,10 @@ def serialize_world(world: World) -> dict[str, Any]:
                 "rack_id": b.rack_id,
                 "bay_index": b.bay_index,
                 "level_index": b.level_index,
+                "shelf_slot": b.shelf_slot,
+                "center": list(b.center),
+                "scan_pos": list(b.recommended_scan_pos),
+                "normal": list(b.scan_face_normal),
                 "bounds": {
                     "x_min": b.bounds.x_min,
                     "x_max": b.bounds.x_max,
@@ -107,9 +148,6 @@ def serialize_world(world: World) -> dict[str, Any]:
                     "z_min": b.bounds.z_min,
                     "z_max": b.bounds.z_max,
                 },
-                "center": list(b.center),
-                "scan_normal": list(b.scan_face_normal),
-                "recommended_scan_pos": list(b.recommended_scan_pos),
             }
             for b in world.bins.values()
         ],
@@ -121,34 +159,16 @@ def serialize_world(world: World) -> dict[str, Any]:
                 "normal": list(m.normal),
                 "size_m": m.size_m,
                 "rack_id": m.rack_id,
-                "bay_index": m.bay_index,
             }
             for m in world.markers
         ],
         "pads": [
-            {
-                "id": p.id,
-                "position": list(p.position),
-                "radius": p.radius,
-            }
+            {"id": p.id, "position": list(p.position), "radius": p.radius}
             for p in world.pads
         ],
         "charging_stations": [
-            {
-                "id": cs.id,
-                "position": list(cs.position),
-                "charge_rate_kw": cs.charge_rate_kw,
-            }
-            for cs in world.charging_stations
-        ],
-        "doors": [
-            {
-                "id": d.id,
-                "position": list(d.position),
-                "width": d.width,
-                "height": d.height,
-            }
-            for d in world.doors
+            {"id": c.id, "position": list(c.position), "charge_rate_kw": c.charge_rate_kw}
+            for c in world.charging_stations
         ],
         "no_fly_zones": [
             {
@@ -169,33 +189,12 @@ def serialize_world(world: World) -> dict[str, Any]:
             }
             for pz in world.people_zones
         ],
-        "static_obstacles": [
-            {
-                "id": obs.id,
-                "type": obs.type,
-                "bounds": {
-                    "x_min": obs.bounds.x_min,
-                    "x_max": obs.bounds.x_max,
-                    "y_min": obs.bounds.y_min,
-                    "y_max": obs.bounds.y_max,
-                    "z_min": obs.bounds.z_min,
-                    "z_max": obs.bounds.z_max,
-                },
-            }
-            for obs in world.static_obstacles
-        ],
-        "dynamic_obstacles": [
-            {
-                "id": dyn.id,
-                "type": dyn.type,
-                "path": [list(pt) for pt in dyn.path],
-                "speed_mps": dyn.speed_mps,
-                "schedule_start_s": dyn.schedule_start_s,
-                "schedule_end_s": dyn.schedule_end_s,
-            }
-            for dyn in world.dynamic_obstacles
-        ],
     }
+
+
+# ============================================================================
+# Core API Routes
+# ============================================================================
 
 
 @app.get("/api/presets")
@@ -230,24 +229,7 @@ def get_schema() -> dict[str, Any]:
 @app.get("/api/world")
 def get_world(config: str = Query(default="medium")) -> dict[str, Any]:
     """Generate and return world geometry for a given preset name or config path."""
-    # Check if preset name or direct file
-    candidates = [
-        Path(config),
-        PRESETS_DIR / f"{config}.yaml",
-        PRESETS_DIR / f"{config}.yml",
-    ]
-    target_path = None
-    for p in candidates:
-        if p.exists():
-            target_path = p
-            break
-
-    if target_path is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Configuration not found. Checked: {[str(c) for c in candidates]}",
-        )
-
+    target_path = _resolve_config_path(config)
     try:
         cfg = load_config(target_path)
         world = generate_world_from_config(cfg)
@@ -261,8 +243,6 @@ def get_world(config: str = Query(default="medium")) -> dict[str, Any]:
 @app.post("/api/import-csv")
 async def api_import_csv(file: UploadFile = File(...)) -> dict[str, Any]:
     """Import uploaded DRIMS CSV and return world layout."""
-    import tempfile
-
     suffix = Path(file.filename or "uploaded.csv").suffix
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         content = await file.read()
@@ -277,6 +257,429 @@ async def api_import_csv(file: UploadFile = File(...)) -> dict[str, Any]:
     finally:
         if tmp_path.exists():
             tmp_path.unlink()
+
+
+# ============================================================================
+# Phase 7: Extended API Endpoints
+# ============================================================================
+
+
+@app.get("/api/v1/config")
+def api_get_config(config: str = Query(default="medium")) -> dict[str, Any]:
+    """Retrieve full configuration payload and raw YAML for the config editor."""
+    target_path = _resolve_config_path(config)
+    yaml_text = target_path.read_text(encoding="utf-8")
+    cfg = load_config(target_path)
+    return {
+        "preset_id": target_path.stem,
+        "config": cfg.model_dump(),
+        "yaml_text": yaml_text,
+    }
+
+
+@app.post("/api/v1/config/validate")
+def api_validate_config(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+    """Validate configuration YAML or JSON dict against Pydantic schema."""
+    yaml_text = payload.get("yaml_text")
+    if yaml_text:
+        try:
+            data = yaml.safe_load(yaml_text)
+            cfg = WarehouseConfig.model_validate(data)
+            return {
+                "valid": True,
+                "site_id": cfg.site.id,
+                "site_name": cfg.site.name,
+                "aisles_count": len(cfg.layout.aisles),
+            }
+        except Exception as exc:
+            return {"valid": False, "error": str(exc)}
+    elif "config" in payload:
+        try:
+            cfg = WarehouseConfig.model_validate(payload["config"])
+            return {"valid": True, "site_id": cfg.site.id}
+        except Exception as exc:
+            return {"valid": False, "error": str(exc)}
+    return {"valid": False, "error": "Missing yaml_text or config payload"}
+
+
+@app.post("/api/v1/config/save")
+def api_save_config(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+    """Save custom configuration YAML to configs/presets/."""
+    preset_name = payload.get("preset_name", "custom").strip()
+    yaml_text = payload.get("yaml_text", "")
+    if not yaml_text:
+        raise HTTPException(status_code=400, detail="Empty yaml_text")
+
+    try:
+        data = yaml.safe_load(yaml_text)
+        WarehouseConfig.model_validate(data)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Validation failed: {exc}")
+
+    dest_file = PRESETS_DIR / f"{preset_name}.yaml"
+    dest_file.write_text(yaml_text, encoding="utf-8")
+    return {"saved": True, "path": str(dest_file), "preset_id": preset_name}
+
+
+@app.post("/api/v1/mission/plan")
+def api_mission_plan(
+    config: str = Query(default="medium"),
+    strategy: str = Query(default="serpentine"),
+) -> dict[str, Any]:
+    """Generate 4D waypoint mission plan."""
+    cfg_path = _resolve_config_path(config)
+    cfg = load_config(cfg_path)
+    world = generate_world_from_config(cfg)
+    planner = MissionPlanner(world, cfg)
+    mission = planner.plan_mission(strategy_name=strategy)
+
+    return {
+        "mission_id": mission.mission_id,
+        "site_id": world.site_id,
+        "strategy": strategy,
+        "total_flights": mission.total_flights,
+        "total_distance_m": round(mission.total_distance_m, 2),
+        "estimated_duration_s": round(mission.total_duration_s, 2),
+        "bins_scanned": mission.bins_scanned,
+        "bins_total": mission.bins_targeted,
+        "coverage_pct": mission.coverage_pct,
+        "flights": [
+            {
+                "flight_id": f.flight_id,
+                "departure_pad": f.departure_pad_id,
+                "arrival_pad": f.arrival_pad_id,
+                "waypoints_count": len(f.waypoints),
+                "distance_m": round(f.total_distance_m, 2),
+                "duration_s": round(f.estimated_duration_s, 2),
+                "waypoints": [
+                    {
+                        "id": wp.id,
+                        "pos": list(wp.position),
+                        "yaw_rad": round(wp.yaw_rad, 3),
+                        "speed_mps": round(wp.speed_mps, 2),
+                        "action": wp.action.value,
+                        "target_bin_id": wp.target_bin_id,
+                    }
+                    for wp in f.waypoints
+                ],
+            }
+            for f in mission.flights
+        ],
+    }
+
+
+@app.post("/api/v1/mission/run")
+def api_mission_run(
+    config: str = Query(default="medium"),
+    strategy: str = Query(default="serpentine"),
+    seed: int = Query(default=42),
+    wind_speed: float = Query(default=0.2),
+) -> dict[str, Any]:
+    """Execute kinematic simulation, scanning, and EKF localisation."""
+    cfg_path = _resolve_config_path(config)
+    cfg = load_config(cfg_path)
+    world = generate_world_from_config(cfg)
+
+    # 1. Plan Mission
+    planner = MissionPlanner(world, cfg)
+    mission = planner.plan_mission(strategy_name=strategy)
+    if not mission.flights:
+        raise HTTPException(status_code=400, detail="No flights generated in mission plan")
+
+    # 2. Scanning + Kinematic Flight Simulation
+    scanner_sim = ScanningMissionSimulator(
+        world=world,
+        config=cfg,
+        seed=seed,
+        wind_speed=wind_speed,
+    )
+    tracker, sim_results = scanner_sim.simulate_mission_scanning(mission)
+
+    # 3. Localisation EKF on primary flight
+    loc_estimator = LocalisationEstimator(world=world, config=cfg, seed=seed)
+    loc_res = loc_estimator.run_localisation(sim_results[0])
+
+    # 4. DRIMS Package Exporter
+    exporter = DRIMSExporter(config=cfg, drone_id="DRONE-ALPHA-01")
+    out_dir = Path("exports") / mission.mission_id
+    export_meta = exporter.export_mission(
+        world=world,
+        tracker=tracker,
+        sim_results=sim_results,
+        mission_id=mission.mission_id,
+        output_dir=out_dir,
+    )
+
+    # Downsample states for fast replay transmission (5Hz)
+    sampled_states = []
+    primary_sim = sim_results[0]
+    step = max(1, len(primary_sim.states) // 400)
+    for st in primary_sim.states[::step]:
+        sampled_states.append(
+            {
+                "t_s": round(st.timestamp_s, 2),
+                "position": [round(st.position[0], 3), round(st.position[1], 3), round(st.position[2], 3)],
+                "velocity": [round(st.velocity[0], 2), round(st.velocity[1], 2), round(st.velocity[2], 2)],
+                "speed_mps": round(st.speed_mps, 2),
+                "yaw_rad": round(st.attitude_rpy[2], 3),
+                "battery_pct": round(st.battery_pct, 1),
+                "action": st.action,
+                "target_bin_id": st.target_bin_id,
+            }
+        )
+
+    # Scans payload
+    scans_data = []
+    for b_id, rec in tracker.records.items():
+        if rec.scanned:
+            scans_data.append(
+                {
+                    "bin_id": b_id,
+                    "label_code": rec.label_code,
+                    "read_success": rec.read_success,
+                    "confidence": rec.confidence,
+                    "read_type": rec.read_type,
+                    "symbology": rec.symbology,
+                    "decoded_value": rec.decoded_value,
+                    "image_ref": rec.image_ref,
+                    "drone_pos": list(rec.drone_pos_at_scan),
+                    "bbox": rec.bbox,
+                    "flight_id": rec.flight_id,
+                }
+            )
+
+    # Cache run for replay / scan inspector
+    run_record = {
+        "mission_id": mission.mission_id,
+        "site_id": world.site_id,
+        "strategy": strategy,
+        "total_flights": len(sim_results),
+        "bins_targeted": tracker.total_bins,
+        "bins_scanned": tracker.scanned_bins,
+        "successful_reads": tracker.successful_reads,
+        "coverage_pct": tracker.coverage_pct,
+        "read_success_rate": tracker.read_success_rate,
+        "duration_s": round(primary_sim.total_time_s, 1),
+        "distance_m": round(primary_sim.total_distance_flown_m, 1),
+        "mean_tracking_error_cm": round(primary_sim.mean_tracking_error_m * 100, 2),
+        "mean_ekf_error_cm": round(loc_res.mean_ekf_error_m * 100, 2),
+        "p95_ekf_error_cm": round(loc_res.p95_ekf_error_m * 100, 2),
+        "idempotency_hash": export_meta["idempotency_hash"],
+        "export_dir": str(out_dir),
+        "states": sampled_states,
+        "waypoints": [
+            {"pos": list(wp.position), "yaw_rad": wp.yaw_rad, "action": wp.action.value}
+            for wp in mission.flights[0].waypoints
+        ],
+        "scans": scans_data,
+    }
+    MISSION_RUNS[mission.mission_id] = run_record
+
+    return run_record
+
+
+@app.get("/api/v1/mission/replay/{mission_id}")
+def api_mission_replay(mission_id: str) -> dict[str, Any]:
+    """Retrieve full 4D trajectory states and waypoint sequence for 3D/2D animation."""
+    run = MISSION_RUNS.get(mission_id)
+    if not run:
+        # Check if stored on disk in exports/
+        out_dir = Path("exports") / mission_id
+        if (out_dir / "mission.json").exists():
+            m_sum = json.loads((out_dir / "mission.json").read_text(encoding="utf-8"))
+            scans_j = json.loads((out_dir / "scans.json").read_text(encoding="utf-8")) if (out_dir / "scans.json").exists() else []
+            telem_j = json.loads((out_dir / "telemetry.json").read_text(encoding="utf-8")) if (out_dir / "telemetry.json").exists() else []
+            return {
+                "mission_id": mission_id,
+                "site_id": m_sum.get("siteId", "WH"),
+                "states": [
+                    {
+                        "t_s": t.get("t_s", 0),
+                        "position": [t["position"]["x"], t["position"]["y"], t["position"]["z"]],
+                        "speed_mps": t.get("speed_mps", 0),
+                        "battery_pct": t.get("battery_pct", 100),
+                        "action": t.get("action", "fly"),
+                    }
+                    for t in telem_j
+                ],
+                "scans": scans_j,
+            }
+        raise HTTPException(status_code=404, detail=f"Mission run '{mission_id}' not found")
+    return run
+
+
+@app.get("/api/v1/mission/scans/{mission_id}")
+def api_mission_scans(mission_id: str) -> dict[str, Any]:
+    """Retrieve scanned bin audit log and decoded label values."""
+    run = MISSION_RUNS.get(mission_id)
+    if not run:
+        out_dir = Path("exports") / mission_id
+        scans_path = out_dir / "scans.json"
+        if scans_path.exists():
+            scans_j = json.loads(scans_path.read_text(encoding="utf-8"))
+            return {"mission_id": mission_id, "total_scans": len(scans_j), "scans": scans_j}
+        raise HTTPException(status_code=404, detail=f"Mission scans for '{mission_id}' not found")
+    return {"mission_id": mission_id, "total_scans": len(run["scans"]), "scans": run["scans"]}
+
+
+@app.post("/api/v1/mission/compare")
+def api_mission_compare(config: str = Query(default="small")) -> dict[str, Any]:
+    """Execute strategy benchmark comparison matrix (Serpentine vs Nearest vs Min-Time)."""
+    cfg_path = _resolve_config_path(config)
+    cfg = load_config(cfg_path)
+    world = generate_world_from_config(cfg)
+    planner = MissionPlanner(world, cfg)
+    comparison = planner.compare_strategies()
+
+    return {
+        "site_id": world.site_id,
+        "total_bins": len(world.bins),
+        "strategies": [
+            {
+                "strategy": row.strategy,
+                "total_flights": row.total_flights,
+                "total_distance_m": round(row.total_distance_m, 2),
+                "estimated_duration_s": round(row.total_duration_s, 2),
+                "estimated_duration_min": round(row.total_duration_s / 60.0, 2),
+                "estimated_energy_wh": round(row.total_energy_wh, 2),
+                "bins_scanned": int(round(len(world.bins) * (row.coverage_pct / 100.0))),
+                "coverage_pct": round(row.coverage_pct, 1),
+            }
+            for row in comparison
+        ],
+    }
+
+
+@app.get("/api/v1/export/download/{mission_id}")
+def api_export_download(mission_id: str) -> Response:
+    """Download zipped DRIMS package (mission.json, scans.json, telemetry.json, ground_truth.json, complete)."""
+    out_dir = Path("exports") / mission_id
+    if not out_dir.exists() or not (out_dir / "mission.json").exists():
+        raise HTTPException(status_code=404, detail=f"Export package for mission '{mission_id}' not found")
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for f in out_dir.iterdir():
+            if f.is_file():
+                zf.writestr(f.name, f.read_bytes())
+    buf.seek(0)
+
+    headers = {"Content-Disposition": f'attachment; filename="drims_export_{mission_id}.zip"'}
+    return Response(content=buf.getvalue(), media_type="application/zip", headers=headers)
+
+
+@app.get("/api/v1/safety/scenarios")
+def api_safety_scenarios_list() -> list[dict[str, Any]]:
+    """List all 11 failure injection scenarios."""
+    from drone_nav.safety.models import FailureScenarioId
+
+    return [
+        {"id": 1, "code": FailureScenarioId.SCENARIO_1_STATIC_OBSTACLE.value, "name": "Static Obstacle Avoidance & Replanning"},
+        {"id": 2, "code": FailureScenarioId.SCENARIO_2_DYNAMIC_OBSTACLE.value, "name": "Dynamic Obstacle Conflict Detection"},
+        {"id": 3, "code": FailureScenarioId.SCENARIO_3_PEOPLE_ZONE_SPEED.value, "name": "People Zone Speed Limit Enforcement"},
+        {"id": 4, "code": FailureScenarioId.SCENARIO_4_MIN_RACK_CLEARANCE.value, "name": "Minimum Rack Clearance Buffer Enforcement"},
+        {"id": 5, "code": FailureScenarioId.SCENARIO_5_GEOFENCE_BREACH.value, "name": "3D Geofence Boundary Containment"},
+        {"id": 6, "code": FailureScenarioId.SCENARIO_6_BATTERY_RETURN_HOME.value, "name": "Battery Safe Reserve Return-to-Charge Trigger"},
+        {"id": 7, "code": FailureScenarioId.SCENARIO_7_CRITICAL_BATTERY_LAND.value, "name": "Critical Battery Low Emergency Landing"},
+        {"id": 8, "code": FailureScenarioId.SCENARIO_8_LINK_LOSS.value, "name": "Telemetry Link Loss Protocol"},
+        {"id": 9, "code": FailureScenarioId.SCENARIO_9_LOCALISATION_LOSS.value, "name": "Localisation Loss Protocol"},
+        {"id": 10, "code": FailureScenarioId.SCENARIO_10_EMERGENCY_STOP.value, "name": "Emergency Stop Deceleration Clamp"},
+        {"id": 11, "code": FailureScenarioId.SCENARIO_11_SOFTWARE_CRASH_WATCHDOG.value, "name": "Software Crash & Hardware Watchdog Failsafe"},
+    ]
+
+
+@app.post("/api/v1/safety/run")
+def api_safety_run(
+    config: str = Query(default="small"),
+    scenario: str = Query(default="all"),
+) -> dict[str, Any]:
+    """Execute failure injection scenario(s)."""
+    cfg_path = _resolve_config_path(config)
+    cfg = load_config(cfg_path)
+    world = generate_world_from_config(cfg)
+    framework = FailureInjectionFramework(world, cfg)
+
+    if scenario.lower() == "all":
+        results = framework.run_all_scenarios()
+    else:
+        try:
+            num = int(scenario)
+            matches = [m for m in dir(framework) if m.startswith(f"run_scenario_{num}_")]
+            if not matches:
+                raise HTTPException(status_code=400, detail=f"Scenario number {num} not found")
+            runner_fn = getattr(framework, matches[0])
+            results = [runner_fn()]
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid scenario; choose 1-11 or 'all'")
+
+    return {
+        "site_id": world.site_id,
+        "all_passed": all(r.passed for r in results),
+        "results": [
+            {
+                "scenario_id": r.scenario_id.value,
+                "name": r.name,
+                "description": r.description,
+                "passed": r.passed,
+                "trigger_time_s": r.trigger_time_s,
+                "response_time_s": r.response_time_s,
+                "action_taken": r.action_taken,
+                "details": r.details,
+                "events_log": r.events_log,
+            }
+            for r in results
+        ],
+    }
+
+
+@app.post("/api/v1/scenarios/sweep")
+def api_scenarios_sweep(
+    config: str = Query(default="small"),
+    sweep_type: str = Query(default="wind"),
+) -> dict[str, Any]:
+    """Execute parameter sweep (wind, speed, strategy) and return results + SVG plot."""
+    cfg_path = _resolve_config_path(config)
+    cfg = load_config(cfg_path)
+    world = generate_world_from_config(cfg)
+    runner = ScenarioRunner(world, cfg)
+
+    if sweep_type == "wind":
+        report = runner.run_wind_sweep()
+    elif sweep_type == "speed":
+        report = runner.run_speed_sweep()
+    elif sweep_type == "strategy":
+        report = runner.run_strategy_sweep()
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown sweep_type '{sweep_type}'")
+
+    svg_file = Path("docs/plots") / f"sweep_{sweep_type}_{world.site_id.lower()}.svg"
+    export_sweep_plot_svg(report, svg_file)
+    svg_content = svg_file.read_text(encoding="utf-8")
+
+    return {
+        "sweep_name": report.sweep_name,
+        "parameter_swept": report.parameter_swept,
+        "results": [
+            {
+                "iteration": r.iteration,
+                "params": r.params,
+                "distance_m": r.distance_m,
+                "flight_time_s": r.flight_time_s,
+                "energy_consumed_wh": r.energy_consumed_wh,
+                "mean_tracking_error_cm": r.mean_tracking_error_cm,
+                "p95_tracking_error_cm": r.p95_tracking_error_cm,
+                "bins_scanned": r.bins_scanned,
+                "coverage_pct": r.coverage_pct,
+            }
+            for r in report.results
+        ],
+        "svg_chart": svg_content,
+    }
+
+
+# ============================================================================
+# Web UI Index Page
+# ============================================================================
 
 
 @app.get("/", response_class=HTMLResponse)

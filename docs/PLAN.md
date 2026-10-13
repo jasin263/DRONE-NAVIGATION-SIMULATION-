@@ -375,12 +375,12 @@ graph TB
 - Unit tests
 
 #### Exit Criteria
-| Criterion | How to verify |
-|---|---|
-| All UI screens shown | Screenshots |
-| API test suite passes | `pytest` output |
-| Batch sweep with results table | Terminal output + plot |
-| Tests pass | `pytest` output |
+| Criterion | How to verify | Status |
+|---|---|---|
+| All UI screens shown | Web viewer with Three.js WebGL & OrbitControls | VERIFIED (3D Digital Twin, 2D Map, Runner, Inspector, Benchmark, Safety, Config) |
+| API test suite passes | `pytest` output | VERIFIED (All 15 viewer REST API tests passed) |
+| Batch sweep with results table | Terminal output + plot | VERIFIED (`drone-nav scenario` wind/speed/strategy with SVG charts) |
+| Tests pass | `pytest` output | VERIFIED (106 passed tests, 92% coverage) |
 
 ---
 

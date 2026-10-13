@@ -824,6 +824,88 @@ def safety(
 
 
 @app.command()
+def scenario(
+    config_path: Annotated[
+        Path, typer.Argument(help="Path to YAML configuration file")
+    ] = Path("configs/presets/small.yaml"),
+    sweep: Annotated[
+        str,
+        typer.Option("--sweep", "-s", help="Parameter sweep type: wind, speed, strategy"),
+    ] = "wind",
+    output_svg: Annotated[
+        Path | None,
+        typer.Option("--output-svg", help="Path to save SVG benchmark plot"),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Save sweep report JSON to path"),
+    ] = None,
+) -> None:
+    """Run batch scenario parameter sweeps and generate comparison reports and SVG plots."""
+    try:
+        from drone_nav.scenarios.plotter import export_sweep_plot_svg
+        from drone_nav.scenarios.runner import ScenarioRunner
+
+        config = load_config(config_path)
+        world = generate_world_from_config(config)
+        runner = ScenarioRunner(world, config)
+
+        sweep_type = sweep.lower()
+        if sweep_type == "wind":
+            report = runner.run_wind_sweep()
+        elif sweep_type == "speed":
+            report = runner.run_speed_sweep()
+        elif sweep_type == "strategy":
+            report = runner.run_strategy_sweep()
+        else:
+            console.print(
+                f"[bold red]Unknown sweep type '{sweep}'. Choose 'wind', 'speed', or 'strategy'.[/bold red]"
+            )
+            raise typer.Exit(code=1)
+
+        table = Table(title=f"Scenario Parameter Sweep ({report.sweep_name}): {world.site_id}")
+        table.add_column("Iter", style="cyan", justify="right")
+        table.add_column(f"Param ({report.parameter_swept})", style="white")
+        table.add_column("Flight Time (s)", style="magenta", justify="right")
+        table.add_column("Energy (Wh)", style="yellow", justify="right")
+        table.add_column("Mean Error (cm)", style="cyan", justify="right")
+        table.add_column("P95 Error (cm)", style="cyan", justify="right")
+        table.add_column("Bins Scanned", style="white", justify="right")
+        table.add_column("Coverage", style="green", justify="right")
+
+        for r in report.results:
+            param_val = ", ".join(f"{k}={v}" for k, v in r.params.items())
+            table.add_row(
+                str(r.iteration),
+                param_val,
+                f"{r.flight_time_s:.1f}s",
+                f"{r.energy_consumed_wh:.1f} Wh",
+                f"{r.mean_tracking_error_cm:.2f} cm",
+                f"{r.p95_tracking_error_cm:.2f} cm",
+                str(r.bins_scanned),
+                f"{r.coverage_pct:.1f}%",
+            )
+
+        console.print(table)
+
+        # SVG export
+        svg_target = output_svg or Path(f"docs/plots/sweep_{sweep_type}_{world.site_id.lower()}.svg")
+        export_sweep_plot_svg(report, svg_target)
+        console.print(f"[bold green][OK] Sweep benchmark SVG plot saved to:[/bold green] {svg_target}")
+
+        if output:
+            from dataclasses import asdict
+
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(json.dumps(asdict(report), indent=2), encoding="utf-8")
+            console.print(f"[bold green][OK] Sweep JSON report exported to:[/bold green] {output}")
+
+    except Exception as exc:
+        console.print(f"[bold red]Scenario Sweep Error:[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@app.command()
 def viewer(
     config: Annotated[
         str, typer.Option("--config", "-c", help="Preset name or path to config file")
