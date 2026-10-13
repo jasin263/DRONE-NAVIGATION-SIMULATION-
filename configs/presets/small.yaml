@@ -1,0 +1,239 @@
+version: "1.0"
+
+site:
+  id: "WH-SMALL"
+  name: "Small Micro-Fulfillment Center"
+  units: "metres"
+  coordinate_frame:
+    origin: [0.0, 0.0, 0.0]
+    x_axis: "east"
+    y_axis: "north"
+    z_axis: "up"
+    z_up: true
+  floor_bounds:
+    x_min: 0.0
+    x_max: 18.0
+    y_min: 0.0
+    y_max: 14.0
+  ceiling_height: 5.0
+  timezone: "UTC"
+
+layout:
+  zones:
+    - id: "Z01"
+      name: "Fast-Moving Goods"
+      bounds:
+        x_min: 1.0
+        x_max: 17.0
+        y_min: 1.0
+        y_max: 13.0
+  aisles:
+    - id: "A01"
+      name: "Aisle 1"
+      x_start: 3.5
+      y_start: 2.0
+      x_end: 3.5
+      y_end: 11.0
+      width: 1.8
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R01"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R02"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+
+    - id: "A02"
+      name: "Aisle 2"
+      x_start: 8.5
+      y_start: 2.0
+      x_end: 8.5
+      y_end: 11.0
+      width: 1.8
+      one_way: true
+      direction: "forward"
+      left_rack:
+        id: "R03"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R04"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+
+    - id: "A03"
+      name: "Aisle 3"
+      x_start: 13.5
+      y_start: 2.0
+      x_end: 13.5
+      y_end: 11.0
+      width: 1.8
+      one_way: true
+      direction: "backward"
+      left_rack:
+        id: "R05"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R06"
+        bays: 5
+        levels: 3
+        bay_width: 1.6
+        level_heights: [0.6, 1.6, 2.6]
+        depth: 0.8
+        bin_width: 1.5
+        bin_height: 0.8
+        bins_per_bay_level: 1
+
+  bin_numbering_template: "WH01-{aisle_id}-{rack_id}-L{level}-B{bay:02d}"
+
+  doors:
+    - id: "DOOR-MAIN"
+      position: [0.2, 7.0, 0.0]
+      width: 2.0
+      height: 3.0
+
+  charging_stations:
+    - id: "CHARGE-01"
+      position: [1.5, 1.5, 0.0]
+      charge_rate_kw: 0.8
+
+  takeoff_landing_pads:
+    - id: "PAD-HOME"
+      position: [1.5, 1.5, 0.0]
+      radius: 0.6
+
+  no_fly_zones:
+    - id: "NFZ-OFFICE"
+      name: "Supervisor Office"
+      polygon:
+        - [0.0, 11.5]
+        - [3.0, 11.5]
+        - [3.0, 14.0]
+        - [0.0, 14.0]
+      z_min: 0.0
+      z_max: 4.5
+
+  people_zones:
+    - id: "PZ-DISPATCH"
+      name: "Packing & Dispatch"
+      polygon:
+        - [15.5, 1.0]
+        - [17.5, 1.0]
+        - [17.5, 6.0]
+        - [15.5, 6.0]
+      max_speed_mps: 0.8
+
+obstacles:
+  static:
+    - id: "PALLET-01"
+      type: "pallet"
+      position: [5.8, 6.0, 0.0]
+      dimensions: [1.2, 0.8, 1.0]
+  dynamic: []
+  random_seed: 42
+  random_count: 0
+
+drone:
+  mass_kg: 2.2
+  max_speed_mps: 2.5
+  max_accel_mps2: 1.5
+  max_yaw_rate_radps: 1.57
+  battery:
+    capacity_wh: 120.0
+    hover_power_w: 180.0
+    forward_power_w_per_mps: 15.0
+    climb_power_w_per_mps: 25.0
+    safe_reserve_pct: 20.0
+    critical_reserve_pct: 10.0
+  camera:
+    resolution_w: 1920
+    resolution_h: 1080
+    hfov_deg: 72.0
+    vfov_deg: 48.0
+    mount_angle_deg: 0.0
+    standoff_distance_m: 0.9
+    exposure_time_s: 0.004
+    max_blur_speed_mps: 1.2
+  sensors:
+    imu_accel_bias: 0.015
+    imu_accel_noise: 0.03
+    imu_gyro_bias: 0.003
+    imu_gyro_noise: 0.008
+    marker_pos_noise: 0.015
+    marker_miss_prob: 0.03
+    lidar_range_max_m: 8.0
+    lidar_noise_m: 0.015
+
+localisation:
+  marker_size_m: 0.16
+  marker_spacing:
+    rack_ends: true
+    every_n_bays: 2
+  pose_noise: 0.02
+  drift_model:
+    walk_std_mps: 0.03
+  fusion_filter:
+    process_noise_pos: 0.01
+    process_noise_vel: 0.05
+    meas_noise_marker: 0.02
+    meas_noise_imu: 0.08
+
+mission:
+  target_zones: ["Z01"]
+  target_bins: []
+  priority: "normal"
+  scan_strategy: "serpentine"
+  max_flight_duration_s: 900.0
+  return_to_charge_rules:
+    threshold_pct: 25.0
+    pad_id: "PAD-HOME"
+
+safety:
+  min_rack_clearance_m: 0.4
+  geofence_margin_m: 0.5
+  battery_reserve_pct: 20.0
+  link_loss_behaviour: "hover_then_land"
+  localisation_loss_behaviour: "hover_then_land"
+  emergency_stop_decel_mps2: 3.5
+
+export:
+  drims_endpoint_url: null
+  auth_token: null
+  site_id_mapping: "WH01"
+  schema_version: "1.0"
+  mode: "file"
+  output_directory: "exports/small"

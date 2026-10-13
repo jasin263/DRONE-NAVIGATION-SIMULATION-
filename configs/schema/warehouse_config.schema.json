@@ -1,0 +1,1250 @@
+{
+  "$defs": {
+    "AisleConfig": {
+      "description": "Aisle layout definition with flanking racks.",
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "x_start": {
+          "title": "X Start",
+          "type": "number"
+        },
+        "y_start": {
+          "title": "Y Start",
+          "type": "number"
+        },
+        "x_end": {
+          "title": "X End",
+          "type": "number"
+        },
+        "y_end": {
+          "title": "Y End",
+          "type": "number"
+        },
+        "width": {
+          "description": "Clear flight corridor width in metres",
+          "exclusiveMinimum": 0.5,
+          "title": "Width",
+          "type": "number"
+        },
+        "one_way": {
+          "default": false,
+          "title": "One Way",
+          "type": "boolean"
+        },
+        "direction": {
+          "$ref": "#/$defs/AisleDirection",
+          "default": "bidirectional"
+        },
+        "left_rack": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RackConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "right_rack": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RackConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "x_start",
+        "y_start",
+        "x_end",
+        "y_end",
+        "width"
+      ],
+      "title": "AisleConfig",
+      "type": "object"
+    },
+    "AisleDirection": {
+      "enum": [
+        "forward",
+        "backward",
+        "bidirectional"
+      ],
+      "title": "AisleDirection",
+      "type": "string"
+    },
+    "BatteryConfig": {
+      "description": "Drone battery capacity and power consumption model.",
+      "properties": {
+        "capacity_wh": {
+          "description": "Total battery capacity in Watt-hours",
+          "exclusiveMinimum": 0.0,
+          "title": "Capacity Wh",
+          "type": "number"
+        },
+        "hover_power_w": {
+          "description": "Power consumed while hovering in Watts",
+          "exclusiveMinimum": 0.0,
+          "title": "Hover Power W",
+          "type": "number"
+        },
+        "forward_power_w_per_mps": {
+          "description": "Additional power per m/s forward speed",
+          "minimum": 0.0,
+          "title": "Forward Power W Per Mps",
+          "type": "number"
+        },
+        "climb_power_w_per_mps": {
+          "description": "Additional power per m/s climb speed",
+          "minimum": 0.0,
+          "title": "Climb Power W Per Mps",
+          "type": "number"
+        },
+        "safe_reserve_pct": {
+          "default": 20.0,
+          "description": "Safe battery reserve %",
+          "maximum": 50.0,
+          "minimum": 5.0,
+          "title": "Safe Reserve Pct",
+          "type": "number"
+        },
+        "critical_reserve_pct": {
+          "default": 10.0,
+          "description": "Emergency landing reserve %",
+          "maximum": 25.0,
+          "minimum": 2.0,
+          "title": "Critical Reserve Pct",
+          "type": "number"
+        }
+      },
+      "required": [
+        "capacity_wh",
+        "hover_power_w",
+        "forward_power_w_per_mps",
+        "climb_power_w_per_mps"
+      ],
+      "title": "BatteryConfig",
+      "type": "object"
+    },
+    "CameraConfig": {
+      "description": "Scanner camera payload specification.",
+      "properties": {
+        "resolution_w": {
+          "default": 1920,
+          "exclusiveMinimum": 0,
+          "title": "Resolution W",
+          "type": "integer"
+        },
+        "resolution_h": {
+          "default": 1080,
+          "exclusiveMinimum": 0,
+          "title": "Resolution H",
+          "type": "integer"
+        },
+        "hfov_deg": {
+          "default": 70.0,
+          "exclusiveMaximum": 180.0,
+          "exclusiveMinimum": 10.0,
+          "title": "Hfov Deg",
+          "type": "number"
+        },
+        "vfov_deg": {
+          "default": 45.0,
+          "exclusiveMaximum": 180.0,
+          "exclusiveMinimum": 10.0,
+          "title": "Vfov Deg",
+          "type": "number"
+        },
+        "mount_angle_deg": {
+          "default": 0.0,
+          "description": "Pitch angle relative to drone forward",
+          "maximum": 90.0,
+          "minimum": -90.0,
+          "title": "Mount Angle Deg",
+          "type": "number"
+        },
+        "standoff_distance_m": {
+          "default": 1.0,
+          "description": "Target distance to rack face",
+          "exclusiveMinimum": 0.2,
+          "title": "Standoff Distance M",
+          "type": "number"
+        },
+        "exposure_time_s": {
+          "default": 0.005,
+          "exclusiveMinimum": 0.0,
+          "title": "Exposure Time S",
+          "type": "number"
+        },
+        "max_blur_speed_mps": {
+          "default": 1.5,
+          "exclusiveMinimum": 0.0,
+          "title": "Max Blur Speed Mps",
+          "type": "number"
+        }
+      },
+      "title": "CameraConfig",
+      "type": "object"
+    },
+    "ChargingStationConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "position": {
+          "description": "[x, y, z]",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Position",
+          "type": "array"
+        },
+        "charge_rate_kw": {
+          "default": 0.5,
+          "exclusiveMinimum": 0.0,
+          "title": "Charge Rate Kw",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "position"
+      ],
+      "title": "ChargingStationConfig",
+      "type": "object"
+    },
+    "CoordinateFrameConfig": {
+      "description": "Warehouse coordinate frame definition.",
+      "properties": {
+        "origin": {
+          "description": "[x, y, z] origin offset in metres",
+          "items": {
+            "type": "number"
+          },
+          "title": "Origin",
+          "type": "array"
+        },
+        "x_axis": {
+          "default": "east",
+          "description": "Physical direction of positive X axis",
+          "title": "X Axis",
+          "type": "string"
+        },
+        "y_axis": {
+          "default": "north",
+          "description": "Physical direction of positive Y axis",
+          "title": "Y Axis",
+          "type": "string"
+        },
+        "z_axis": {
+          "default": "up",
+          "description": "Physical direction of positive Z axis",
+          "title": "Z Axis",
+          "type": "string"
+        },
+        "z_up": {
+          "default": true,
+          "description": "True if positive Z points upward",
+          "title": "Z Up",
+          "type": "boolean"
+        }
+      },
+      "title": "CoordinateFrameConfig",
+      "type": "object"
+    },
+    "DoorConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "position": {
+          "description": "[x, y, z]",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Position",
+          "type": "array"
+        },
+        "width": {
+          "exclusiveMinimum": 0.0,
+          "title": "Width",
+          "type": "number"
+        },
+        "height": {
+          "exclusiveMinimum": 0.0,
+          "title": "Height",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "position",
+        "width",
+        "height"
+      ],
+      "title": "DoorConfig",
+      "type": "object"
+    },
+    "DriftModelConfig": {
+      "properties": {
+        "walk_std_mps": {
+          "default": 0.03,
+          "description": "Random walk standard deviation",
+          "minimum": 0.0,
+          "title": "Walk Std Mps",
+          "type": "number"
+        }
+      },
+      "title": "DriftModelConfig",
+      "type": "object"
+    },
+    "DroneConfig": {
+      "description": "Drone physical properties, limits, and payload.",
+      "properties": {
+        "mass_kg": {
+          "description": "Total takeoff mass in kg",
+          "exclusiveMinimum": 0.1,
+          "maximum": 25.0,
+          "title": "Mass Kg",
+          "type": "number"
+        },
+        "max_speed_mps": {
+          "description": "Max horizontal flight speed",
+          "exclusiveMinimum": 0.1,
+          "maximum": 10.0,
+          "title": "Max Speed Mps",
+          "type": "number"
+        },
+        "max_accel_mps2": {
+          "description": "Max linear acceleration",
+          "exclusiveMinimum": 0.1,
+          "maximum": 5.0,
+          "title": "Max Accel Mps2",
+          "type": "number"
+        },
+        "max_yaw_rate_radps": {
+          "description": "Max rotational yaw rate",
+          "exclusiveMinimum": 0.1,
+          "maximum": 3.14,
+          "title": "Max Yaw Rate Radps",
+          "type": "number"
+        },
+        "battery": {
+          "$ref": "#/$defs/BatteryConfig"
+        },
+        "camera": {
+          "$ref": "#/$defs/CameraConfig"
+        },
+        "sensors": {
+          "$ref": "#/$defs/SensorNoiseConfig"
+        }
+      },
+      "required": [
+        "mass_kg",
+        "max_speed_mps",
+        "max_accel_mps2",
+        "max_yaw_rate_radps",
+        "battery"
+      ],
+      "title": "DroneConfig",
+      "type": "object"
+    },
+    "DynamicObstacleConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "default": "forklift",
+          "enum": [
+            "walker",
+            "forklift"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "path": {
+          "description": "List of [x, y, z] waypoints",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Path",
+          "type": "array"
+        },
+        "speed_mps": {
+          "exclusiveMinimum": 0.0,
+          "title": "Speed Mps",
+          "type": "number"
+        },
+        "schedule_start_s": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Schedule Start S",
+          "type": "number"
+        },
+        "schedule_end_s": {
+          "exclusiveMinimum": 0.0,
+          "title": "Schedule End S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "speed_mps",
+        "schedule_end_s"
+      ],
+      "title": "DynamicObstacleConfig",
+      "type": "object"
+    },
+    "EKFParamsConfig": {
+      "properties": {
+        "process_noise_pos": {
+          "default": 0.01,
+          "exclusiveMinimum": 0.0,
+          "title": "Process Noise Pos",
+          "type": "number"
+        },
+        "process_noise_vel": {
+          "default": 0.05,
+          "exclusiveMinimum": 0.0,
+          "title": "Process Noise Vel",
+          "type": "number"
+        },
+        "meas_noise_marker": {
+          "default": 0.03,
+          "exclusiveMinimum": 0.0,
+          "title": "Meas Noise Marker",
+          "type": "number"
+        },
+        "meas_noise_imu": {
+          "default": 0.1,
+          "exclusiveMinimum": 0.0,
+          "title": "Meas Noise Imu",
+          "type": "number"
+        }
+      },
+      "title": "EKFParamsConfig",
+      "type": "object"
+    },
+    "ExportConfig": {
+      "description": "DRIMS ingestion export settings.",
+      "properties": {
+        "drims_endpoint_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Drims Endpoint Url"
+        },
+        "auth_token": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Auth Token"
+        },
+        "site_id_mapping": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Site Id Mapping"
+        },
+        "schema_version": {
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/$defs/ExportMode",
+          "default": "file"
+        },
+        "output_directory": {
+          "default": "exports",
+          "title": "Output Directory",
+          "type": "string"
+        }
+      },
+      "title": "ExportConfig",
+      "type": "object"
+    },
+    "ExportMode": {
+      "enum": [
+        "file",
+        "api",
+        "dry_run"
+      ],
+      "title": "ExportMode",
+      "type": "string"
+    },
+    "FloorBounds": {
+      "description": "2D floor bounding box in metres.",
+      "properties": {
+        "x_min": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "X Min",
+          "type": "number"
+        },
+        "x_max": {
+          "description": "Warehouse width in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "X Max",
+          "type": "number"
+        },
+        "y_min": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "title": "Y Min",
+          "type": "number"
+        },
+        "y_max": {
+          "description": "Warehouse length in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "Y Max",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_max",
+        "y_max"
+      ],
+      "title": "FloorBounds",
+      "type": "object"
+    },
+    "LayoutConfig": {
+      "description": "Warehouse interior layout configuration.",
+      "properties": {
+        "zones": {
+          "items": {
+            "$ref": "#/$defs/ZoneConfig"
+          },
+          "title": "Zones",
+          "type": "array"
+        },
+        "aisles": {
+          "items": {
+            "$ref": "#/$defs/AisleConfig"
+          },
+          "minItems": 1,
+          "title": "Aisles",
+          "type": "array"
+        },
+        "bin_numbering_template": {
+          "default": "WH{site_id}-A{aisle_id}-R{rack_id}-L{level}-B{bay}",
+          "description": "Python str format template for bin label code",
+          "title": "Bin Numbering Template",
+          "type": "string"
+        },
+        "doors": {
+          "items": {
+            "$ref": "#/$defs/DoorConfig"
+          },
+          "title": "Doors",
+          "type": "array"
+        },
+        "charging_stations": {
+          "items": {
+            "$ref": "#/$defs/ChargingStationConfig"
+          },
+          "title": "Charging Stations",
+          "type": "array"
+        },
+        "takeoff_landing_pads": {
+          "items": {
+            "$ref": "#/$defs/TakeoffLandingPadConfig"
+          },
+          "minItems": 1,
+          "title": "Takeoff Landing Pads",
+          "type": "array"
+        },
+        "no_fly_zones": {
+          "items": {
+            "$ref": "#/$defs/NoFlyZoneConfig"
+          },
+          "title": "No Fly Zones",
+          "type": "array"
+        },
+        "people_zones": {
+          "items": {
+            "$ref": "#/$defs/PeopleZoneConfig"
+          },
+          "title": "People Zones",
+          "type": "array"
+        }
+      },
+      "required": [
+        "aisles",
+        "takeoff_landing_pads"
+      ],
+      "title": "LayoutConfig",
+      "type": "object"
+    },
+    "LinkLossBehaviour": {
+      "enum": [
+        "hover_then_land",
+        "return_home",
+        "emergency_stop"
+      ],
+      "title": "LinkLossBehaviour",
+      "type": "string"
+    },
+    "LocalisationConfig": {
+      "description": "Fiducial marker and sensor fusion configuration.",
+      "properties": {
+        "marker_size_m": {
+          "default": 0.15,
+          "exclusiveMinimum": 0.01,
+          "title": "Marker Size M",
+          "type": "number"
+        },
+        "marker_spacing": {
+          "$ref": "#/$defs/MarkerSpacingRule"
+        },
+        "pose_noise": {
+          "default": 0.02,
+          "minimum": 0.0,
+          "title": "Pose Noise",
+          "type": "number"
+        },
+        "drift_model": {
+          "$ref": "#/$defs/DriftModelConfig"
+        },
+        "fusion_filter": {
+          "$ref": "#/$defs/EKFParamsConfig"
+        }
+      },
+      "title": "LocalisationConfig",
+      "type": "object"
+    },
+    "LocalisationLossBehaviour": {
+      "enum": [
+        "hover_then_land",
+        "emergency_stop"
+      ],
+      "title": "LocalisationLossBehaviour",
+      "type": "string"
+    },
+    "MarkerSpacingRule": {
+      "properties": {
+        "rack_ends": {
+          "default": true,
+          "description": "Always place fiducials at rack start/end",
+          "title": "Rack Ends",
+          "type": "boolean"
+        },
+        "every_n_bays": {
+          "default": 2,
+          "description": "Spacing interval in bays",
+          "minimum": 1,
+          "title": "Every N Bays",
+          "type": "integer"
+        }
+      },
+      "title": "MarkerSpacingRule",
+      "type": "object"
+    },
+    "MissionConfig": {
+      "description": "Mission planning parameters.",
+      "properties": {
+        "target_zones": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Target Zones",
+          "type": "array"
+        },
+        "target_bins": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Target Bins",
+          "type": "array"
+        },
+        "priority": {
+          "default": "normal",
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "title": "Priority",
+          "type": "string"
+        },
+        "scan_strategy": {
+          "$ref": "#/$defs/ScanStrategy",
+          "default": "serpentine"
+        },
+        "max_flight_duration_s": {
+          "default": 1200.0,
+          "exclusiveMinimum": 60.0,
+          "title": "Max Flight Duration S",
+          "type": "number"
+        },
+        "return_to_charge_rules": {
+          "$ref": "#/$defs/ReturnToChargeRules"
+        }
+      },
+      "title": "MissionConfig",
+      "type": "object"
+    },
+    "NoFlyZoneConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "polygon": {
+          "description": "List of [x, y] coordinates forming polygon",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Polygon",
+          "type": "array"
+        },
+        "z_min": {
+          "default": 0.0,
+          "title": "Z Min",
+          "type": "number"
+        },
+        "z_max": {
+          "exclusiveMinimum": 0.0,
+          "title": "Z Max",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "polygon",
+        "z_max"
+      ],
+      "title": "NoFlyZoneConfig",
+      "type": "object"
+    },
+    "ObstaclesConfig": {
+      "description": "Obstacles specification in warehouse.",
+      "properties": {
+        "static": {
+          "items": {
+            "$ref": "#/$defs/StaticObstacleConfig"
+          },
+          "title": "Static",
+          "type": "array"
+        },
+        "dynamic": {
+          "items": {
+            "$ref": "#/$defs/DynamicObstacleConfig"
+          },
+          "title": "Dynamic",
+          "type": "array"
+        },
+        "random_seed": {
+          "default": 42,
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "random_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Random Count",
+          "type": "integer"
+        }
+      },
+      "title": "ObstaclesConfig",
+      "type": "object"
+    },
+    "PeopleZoneConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "polygon": {
+          "description": "List of [x, y] coordinates",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Polygon",
+          "type": "array"
+        },
+        "max_speed_mps": {
+          "description": "Drone speed limit in people zone",
+          "exclusiveMinimum": 0.0,
+          "maximum": 2.0,
+          "title": "Max Speed Mps",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "polygon",
+        "max_speed_mps"
+      ],
+      "title": "PeopleZoneConfig",
+      "type": "object"
+    },
+    "RackConfig": {
+      "description": "Rack specification flanking an aisle.",
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "bays": {
+          "description": "Number of bays along aisle",
+          "exclusiveMinimum": 0,
+          "title": "Bays",
+          "type": "integer"
+        },
+        "levels": {
+          "description": "Number of vertical storage levels",
+          "exclusiveMinimum": 0,
+          "title": "Levels",
+          "type": "integer"
+        },
+        "bay_width": {
+          "description": "Width of a single bay in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "Bay Width",
+          "type": "number"
+        },
+        "level_heights": {
+          "description": "Heights of beam levels from floor in metres",
+          "items": {
+            "type": "number"
+          },
+          "title": "Level Heights",
+          "type": "array"
+        },
+        "depth": {
+          "description": "Rack shelf depth in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "Depth",
+          "type": "number"
+        },
+        "bin_width": {
+          "description": "Individual bin width in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "Bin Width",
+          "type": "number"
+        },
+        "bin_height": {
+          "description": "Individual bin height in metres",
+          "exclusiveMinimum": 0.0,
+          "title": "Bin Height",
+          "type": "number"
+        },
+        "bins_per_bay_level": {
+          "default": 1,
+          "description": "Number of bins side-by-side per bay shelf",
+          "minimum": 1,
+          "title": "Bins Per Bay Level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "bays",
+        "levels",
+        "bay_width",
+        "level_heights",
+        "depth",
+        "bin_width",
+        "bin_height"
+      ],
+      "title": "RackConfig",
+      "type": "object"
+    },
+    "ReturnToChargeRules": {
+      "properties": {
+        "threshold_pct": {
+          "default": 25.0,
+          "maximum": 50.0,
+          "minimum": 10.0,
+          "title": "Threshold Pct",
+          "type": "number"
+        },
+        "pad_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pad Id"
+        }
+      },
+      "title": "ReturnToChargeRules",
+      "type": "object"
+    },
+    "SafetyConfig": {
+      "description": "Safety supervisor thresholds and fallback behaviours.",
+      "properties": {
+        "min_rack_clearance_m": {
+          "default": 0.5,
+          "exclusiveMinimum": 0.1,
+          "title": "Min Rack Clearance M",
+          "type": "number"
+        },
+        "geofence_margin_m": {
+          "default": 0.5,
+          "exclusiveMinimum": 0.1,
+          "title": "Geofence Margin M",
+          "type": "number"
+        },
+        "battery_reserve_pct": {
+          "default": 20.0,
+          "minimum": 5.0,
+          "title": "Battery Reserve Pct",
+          "type": "number"
+        },
+        "link_loss_behaviour": {
+          "$ref": "#/$defs/LinkLossBehaviour",
+          "default": "hover_then_land"
+        },
+        "localisation_loss_behaviour": {
+          "$ref": "#/$defs/LocalisationLossBehaviour",
+          "default": "hover_then_land"
+        },
+        "emergency_stop_decel_mps2": {
+          "default": 4.0,
+          "exclusiveMinimum": 1.0,
+          "title": "Emergency Stop Decel Mps2",
+          "type": "number"
+        }
+      },
+      "title": "SafetyConfig",
+      "type": "object"
+    },
+    "ScanStrategy": {
+      "enum": [
+        "serpentine",
+        "nearest",
+        "minimum_time"
+      ],
+      "title": "ScanStrategy",
+      "type": "string"
+    },
+    "SensorNoiseConfig": {
+      "description": "Noise and bias parameters for simulated sensors.",
+      "properties": {
+        "imu_accel_bias": {
+          "default": 0.02,
+          "minimum": 0.0,
+          "title": "Imu Accel Bias",
+          "type": "number"
+        },
+        "imu_accel_noise": {
+          "default": 0.05,
+          "minimum": 0.0,
+          "title": "Imu Accel Noise",
+          "type": "number"
+        },
+        "imu_gyro_bias": {
+          "default": 0.005,
+          "minimum": 0.0,
+          "title": "Imu Gyro Bias",
+          "type": "number"
+        },
+        "imu_gyro_noise": {
+          "default": 0.01,
+          "minimum": 0.0,
+          "title": "Imu Gyro Noise",
+          "type": "number"
+        },
+        "marker_pos_noise": {
+          "default": 0.02,
+          "minimum": 0.0,
+          "title": "Marker Pos Noise",
+          "type": "number"
+        },
+        "marker_miss_prob": {
+          "default": 0.05,
+          "exclusiveMaximum": 1.0,
+          "minimum": 0.0,
+          "title": "Marker Miss Prob",
+          "type": "number"
+        },
+        "lidar_range_max_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 10.0,
+          "title": "Lidar Range Max M"
+        },
+        "lidar_noise_m": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0.02,
+          "title": "Lidar Noise M"
+        }
+      },
+      "title": "SensorNoiseConfig",
+      "type": "object"
+    },
+    "SiteConfig": {
+      "description": "Warehouse site metadata and boundary definitions.",
+      "properties": {
+        "id": {
+          "description": "Site identifier, e.g. WH01",
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human readable warehouse name",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "units": {
+          "const": "metres",
+          "default": "metres",
+          "title": "Units",
+          "type": "string"
+        },
+        "coordinate_frame": {
+          "$ref": "#/$defs/CoordinateFrameConfig"
+        },
+        "floor_bounds": {
+          "$ref": "#/$defs/FloorBounds"
+        },
+        "ceiling_height": {
+          "description": "Ceiling height in metres",
+          "exclusiveMinimum": 1.0,
+          "title": "Ceiling Height",
+          "type": "number"
+        },
+        "timezone": {
+          "default": "UTC",
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "floor_bounds",
+        "ceiling_height"
+      ],
+      "title": "SiteConfig",
+      "type": "object"
+    },
+    "StaticObstacleConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "default": "pallet",
+          "enum": [
+            "pallet",
+            "pillar",
+            "blocked_aisle",
+            "box"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "position": {
+          "description": "[x, y, z]",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Position",
+          "type": "array"
+        },
+        "dimensions": {
+          "description": "[dx, dy, dz]",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Dimensions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "position",
+        "dimensions"
+      ],
+      "title": "StaticObstacleConfig",
+      "type": "object"
+    },
+    "TakeoffLandingPadConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "position": {
+          "description": "[x, y, z]",
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Position",
+          "type": "array"
+        },
+        "radius": {
+          "default": 0.5,
+          "exclusiveMinimum": 0.0,
+          "title": "Radius",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "position"
+      ],
+      "title": "TakeoffLandingPadConfig",
+      "type": "object"
+    },
+    "ZoneConfig": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "bounds": {
+          "$ref": "#/$defs/FloorBounds"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "bounds"
+      ],
+      "title": "ZoneConfig",
+      "type": "object"
+    }
+  },
+  "description": "Root configuration model for drone-nav.",
+  "properties": {
+    "version": {
+      "default": "1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "site": {
+      "$ref": "#/$defs/SiteConfig"
+    },
+    "layout": {
+      "$ref": "#/$defs/LayoutConfig"
+    },
+    "obstacles": {
+      "$ref": "#/$defs/ObstaclesConfig"
+    },
+    "drone": {
+      "$ref": "#/$defs/DroneConfig"
+    },
+    "localisation": {
+      "$ref": "#/$defs/LocalisationConfig"
+    },
+    "mission": {
+      "$ref": "#/$defs/MissionConfig"
+    },
+    "safety": {
+      "$ref": "#/$defs/SafetyConfig"
+    },
+    "export": {
+      "$ref": "#/$defs/ExportConfig"
+    }
+  },
+  "required": [
+    "site",
+    "layout",
+    "drone"
+  ],
+  "title": "WarehouseConfig",
+  "type": "object"
+}

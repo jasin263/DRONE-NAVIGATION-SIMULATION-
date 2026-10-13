@@ -1,0 +1,14 @@
+services:
+  drone-nav:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: drone-nav
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../configs:/app/configs:ro
+      - ../data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["viewer", "--config", "configs/presets/medium.yaml", "--host", "0.0.0.0", "--port", "8000"]

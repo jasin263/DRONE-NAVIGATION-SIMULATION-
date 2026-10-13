@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drone-nav | Warehouse Simulation Viewer v0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0d13;
+      --panel-bg: rgba(18, 23, 34, 0.85);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --grid-line: rgba(255, 255, 255, 0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+    }
+
+    #viewport-container {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas#mapCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    canvas#mapCanvas:active {
+      cursor: grabbing;
+    }
+
+    /* Floating Header HUD */
+    .header-hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      z-index: 10;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .preset-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    select#presetSelect {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+    select#presetSelect:hover {
+      border-color: var(--accent-blue);
+    }
+
+    /* Right Sidebar HUD */
+    .sidebar-hud {
+      width: 360px;
+      height: 100%;
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .sidebar-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .site-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Stat Cards Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .stat-card .val {
+      font-size: 20px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+    }
+    .stat-card .lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Layers Toggle */
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .layers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .layer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      background: rgba(30, 41, 59, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+    .layer-item label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .layer-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Inspector Card */
+    .inspector-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 12px;
+    }
+    .inspector-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .inspect-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .inspect-key {
+      color: var(--text-muted);
+    }
+    .inspect-val {
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+    }
+
+    /* Bottom Control Bar on Canvas */
+    .map-controls {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .ctrl-btn {
+      background: var(--panel-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: var(--accent-blue);
+    }
+
+    /* Legend Box */
+    .legend-hud {
+      position: absolute;
+      bottom: 16px;
+      right: 376px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 11px;
+      display: flex;
+      gap: 16px;
+      z-index: 10;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="viewport-container">
+    <div class="header-hud">
+      <div class="brand-title">
+        <span class="brand-badge">SIM v0</span>
+        <span class="brand-name">drone-nav</span>
+      </div>
+      <div class="preset-selector-wrapper">
+        <label for="presetSelect" style="font-size: 12px; color: var(--text-muted);">Preset:</label>
+        <select id="presetSelect">
+          <option value="small">Small (90 Bins)</option>
+          <option value="medium" selected>Medium (512 Bins)</option>
+          <option value="large">Large (5,120 Bins)</option>
+        </select>
+      </div>
+      <button class="ctrl-btn" id="reloadBtn" style="padding: 6px 12px; font-size: 12px;">Refresh</button>
+    </div>
+
+    <canvas id="mapCanvas"></canvas>
+
+    <div class="map-controls">
+      <button class="ctrl-btn" id="zoomInBtn">+ Zoom In</button>
+      <button class="ctrl-btn" id="zoomOutBtn">- Zoom Out</button>
+      <button class="ctrl-btn" id="resetViewBtn">Reset Fit</button>
+    </div>
+
+    <div class="legend-hud">
+      <div class="legend-item"><span class="legend-color" style="background: #3b82f6;"></span> Racks / Bins</div>
+      <div class="legend-item"><span class="legend-color" style="background: #10b981;"></span> Aisle Flightway</div>
+      <div class="legend-item"><span class="legend-color" style="background: #eab308;"></span> Fiducials</div>
+      <div class="legend-item"><span class="legend-color" style="background: #06b6d4;"></span> Pads</div>
+      <div class="legend-item"><span class="legend-color" style="background: #ef4444; opacity: 0.6;"></span> No-Fly Zone</div>
+      <div class="legend-item"><span class="legend-color" style="background: #d97706; opacity: 0.6;"></span> People Zone</div>
+    </div>
+  </div>
+
+  <div class="sidebar-hud">
+    <div class="sidebar-header">
+      <h2>Warehouse Inspector</h2>
+      <div class="site-title" id="siteTitle">Loading...</div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="val" id="statBins">-</div>
+          <div class="lbl">Storage Bins</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="statRacks">-</div>
+          <div class="lbl">Racks</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="statAisles">-</div>
+          <div class="lbl">Aisles</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="statMarkers">-</div>
+          <div class="lbl">Fiducials</div>
+        </div>
+      </div>
+
+      <div class="section-title">Layers</div>
+      <div class="layers-list">
+        <div class="layer-item">
+          <label><span class="layer-color-dot" style="background: #10b981;"></span> Aisles & Flightways</label>
+          <input type="checkbox" id="layerAisles" checked>
+        </div>
+        <div class="layer-item">
+          <label><span class="layer-color-dot" style="background: #3b82f6;"></span> Racks & Bins</label>
+          <input type="checkbox" id="layerRacks" checked>
+        </div>
+        <div class="layer-item">
+          <label><span class="layer-color-dot" style="background: #eab308;"></span> Fiducial Markers</label>
+          <input type="checkbox" id="layerMarkers" checked>
+        </div>
+        <div class="layer-item">
+          <label><span class="layer-color-dot" style="background: #06b6d4;"></span> Pads & Chargers</label>
+          <input type="checkbox" id="layerPads" checked>
+        </div>
+        <div class="layer-item">
+          <label><span class="layer-color-dot" style="background: #ef4444;"></span> Safety Zones & Obstacles</label>
+          <input type="checkbox" id="layerZones" checked>
+        </div>
+      </div>
+
+      <div class="section-title">Entity Details</div>
+      <div class="inspector-card" id="inspectorCard">
+        <h4 id="inspectTitle">Select an entity</h4>
+        <div id="inspectContent" style="color: var(--text-muted);">
+          Click any rack, bin, fiducial marker or zone to inspect coordinates and scan parameters.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('mapCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let worldData = null;
+    let camera = { x: 0, y: 0, scale: 20 };
+    let isDragging = false;
+    let dragStart = { x: 0, y: 0 };
+    let selectedEntity = null;
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+      draw();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // Transform helpers
+    function worldToScreen(wx, wy) {
+      return {
+        x: canvas.width / 2 + (wx - camera.x) * camera.scale,
+        y: canvas.height / 2 - (wy - camera.y) * camera.scale // Invert Y so up is positive
+      };
+    }
+    function screenToWorld(sx, sy) {
+      return {
+        x: (sx - canvas.width / 2) / camera.scale + camera.x,
+        y: (canvas.height / 2 - sy) / camera.scale + camera.y
+      };
+    }
+
+    async function loadPreset(presetName) {
+      try {
+        const resp = await fetch(`/api/world?config=${presetName}`);
+        if (!resp.ok) throw new Error(await resp.text());
+        worldData = await resp.json();
+        updateUI();
+        fitToView();
+      } catch (err) {
+        console.error('Failed to load world:', err);
+        alert('Error loading preset: ' + err.message);
+      }
+    }
+
+    function updateUI() {
+      if (!worldData) return;
+      document.getElementById('siteTitle').textContent = worldData.site_name;
+      document.getElementById('statBins').textContent = worldData.summary.total_bins.toLocaleString();
+      document.getElementById('statRacks').textContent = worldData.summary.total_racks.toLocaleString();
+      document.getElementById('statAisles').textContent = worldData.summary.total_aisles.toLocaleString();
+      document.getElementById('statMarkers').textContent = worldData.summary.total_markers.toLocaleString();
+    }
+
+    function fitToView() {
+      if (!worldData) return;
+      const fb = worldData.floor_bounds;
+      const w = fb.x_max - fb.x_min;
+      const h = fb.y_max - fb.y_min;
+      camera.x = (fb.x_min + fb.x_max) / 2;
+      camera.y = (fb.y_min + fb.y_max) / 2;
+      const scaleX = (canvas.width - 100) / w;
+      const scaleY = (canvas.height - 100) / h;
+      camera.scale = Math.min(scaleX, scaleY);
+      draw();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!worldData) return;
+
+      const fb = worldData.floor_bounds;
+
+      // 1. Grid & Floor
+      const origin = worldToScreen(fb.x_min, fb.y_min);
+      const topCorner = worldToScreen(fb.x_max, fb.y_max);
+      const floorW = (fb.x_max - fb.x_min) * camera.scale;
+      const floorH = (fb.y_max - fb.y_min) * camera.scale;
+
+      ctx.fillStyle = '#0f1420';
+      ctx.fillRect(origin.x, topCorner.y, floorW, floorH);
+      ctx.strokeStyle = '#243048';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(origin.x, topCorner.y, floorW, floorH);
+
+      // Grid meter lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 1;
+      const step = camera.scale > 25 ? 1 : 5;
+      for (let x = Math.ceil(fb.x_min); x <= fb.x_max; x += step) {
+        const p1 = worldToScreen(x, fb.y_min);
+        const p2 = worldToScreen(x, fb.y_max);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+      for (let y = Math.ceil(fb.y_min); y <= fb.y_max; y += step) {
+        const p1 = worldToScreen(fb.x_min, y);
+        const p2 = worldToScreen(fb.x_max, y);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      // 2. Aisles
+      if (document.getElementById('layerAisles').checked) {
+        worldData.aisles.forEach(a => {
+          const p1 = worldToScreen(a.x_start, a.y_start);
+          const p2 = worldToScreen(a.x_end, a.y_end);
+          const corridorW = a.width * camera.scale;
+
+          // Corridor flightway background
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.12)';
+          ctx.lineWidth = corridorW;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+
+          // Aisle Centerline
+          ctx.strokeStyle = '#10b981';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([6, 6]);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Aisle Label
+          ctx.fillStyle = '#6ee7b7';
+          ctx.font = '11px JetBrains Mono';
+          ctx.fillText(a.id, (p1.x + p2.x) / 2 - 10, p1.y + 16);
+        });
+      }
+
+      // 3. Safety Zones & Obstacles
+      if (document.getElementById('layerZones').checked) {
+        // No Fly Zones
+        worldData.no_fly_zones.forEach(nfz => {
+          if (nfz.polygon.length < 3) return;
+          ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          const start = worldToScreen(nfz.polygon[0][0], nfz.polygon[0][1]);
+          ctx.moveTo(start.x, start.y);
+          for (let i = 1; i < nfz.polygon.length; i++) {
+            const p = worldToScreen(nfz.polygon[i][0], nfz.polygon[i][1]);
+            ctx.lineTo(p.x, p.y);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#fca5a5';
+          ctx.font = '10px Inter';
+          ctx.fillText('NO-FLY: ' + nfz.name, start.x + 6, start.y + 14);
+        });
+
+        // People Zones
+        worldData.people_zones.forEach(pz => {
+          if (pz.polygon.length < 3) return;
+          ctx.fillStyle = 'rgba(217, 119, 6, 0.18)';
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          const start = worldToScreen(pz.polygon[0][0], pz.polygon[0][1]);
+          ctx.moveTo(start.x, start.y);
+          for (let i = 1; i < pz.polygon.length; i++) {
+            const p = worldToScreen(pz.polygon[i][0], pz.polygon[i][1]);
+            ctx.lineTo(p.x, p.y);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.setLineDash([]);
+        });
+
+        // Obstacles
+        worldData.static_obstacles.forEach(obs => {
+          const b = obs.bounds;
+          const pMin = worldToScreen(b.x_min, b.y_min);
+          const pMax = worldToScreen(b.x_max, b.y_max);
+          ctx.fillStyle = '#64748b';
+          ctx.strokeStyle = '#94a3b8';
+          ctx.lineWidth = 1;
+          ctx.fillRect(pMin.x, pMax.y, pMax.x - pMin.x, pMin.y - pMax.y);
+          ctx.strokeRect(pMin.x, pMax.y, pMax.x - pMin.x, pMin.y - pMax.y);
+        });
+      }
+
+      // 4. Racks & Bins
+      if (document.getElementById('layerRacks').checked) {
+        worldData.racks.forEach(r => {
+          const b = r.bounds;
+          const pMin = worldToScreen(b.x_min, b.y_min);
+          const pMax = worldToScreen(b.x_max, b.y_max);
+          const rw = pMax.x - pMin.x;
+          const rh = pMin.y - pMax.y;
+
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(pMin.x, pMax.y, rw, rh);
+          ctx.strokeStyle = '#3b82f6';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(pMin.x, pMax.y, rw, rh);
+
+          // Rack Label
+          if (camera.scale > 8) {
+            ctx.fillStyle = '#93c5fd';
+            ctx.font = '10px JetBrains Mono';
+            ctx.fillText(r.id, pMin.x + 4, pMax.y + 12);
+          }
+        });
+
+        // If high zoom, render individual bins
+        if (camera.scale > 22 && worldData.bins) {
+          worldData.bins.forEach(bin => {
+            const bb = bin.bounds;
+            const p0 = worldToScreen(bb.x_min, bb.y_min);
+            const p1 = worldToScreen(bb.x_max, bb.y_max);
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+            ctx.lineWidth = 0.8;
+            ctx.strokeRect(p0.x, p1.y, p1.x - p0.x, p0.y - p1.y);
+
+            // Highlight selected bin
+            if (selectedEntity && selectedEntity.type === 'bin' && selectedEntity.data.id === bin.id) {
+              ctx.fillStyle = 'rgba(59, 130, 246, 0.45)';
+              ctx.fillRect(p0.x, p1.y, p1.x - p0.x, p0.y - p1.y);
+            }
+          });
+        }
+      }
+
+      // 5. Takeoff Pads & Charging Stations
+      if (document.getElementById('layerPads').checked) {
+        worldData.pads.forEach(pad => {
+          const pt = worldToScreen(pad.position[0], pad.position[1]);
+          const r = pad.radius * camera.scale;
+
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
+          ctx.fill();
+          ctx.strokeStyle = '#06b6d4';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // "H" pad marker
+          ctx.fillStyle = '#06b6d4';
+          ctx.font = 'bold 12px Inter';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('H', pt.x, pt.y);
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'alphabetic';
+        });
+
+        worldData.charging_stations.forEach(cs => {
+          const pt = worldToScreen(cs.position[0], cs.position[1]);
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // 6. Fiducial Markers
+      if (document.getElementById('layerMarkers').checked) {
+        worldData.markers.forEach(m => {
+          const pt = worldToScreen(m.position[0], m.position[1]);
+          ctx.fillStyle = '#eab308';
+          ctx.fillRect(pt.x - 3, pt.y - 3, 6, 6);
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(pt.x - 3, pt.y - 3, 6, 6);
+
+          if (camera.scale > 35) {
+            ctx.fillStyle = '#fef08a';
+            ctx.font = '9px JetBrains Mono';
+            ctx.fillText('T' + m.tag_id, pt.x + 5, pt.y + 3);
+          }
+        });
+      }
+    }
+
+    // Interactive Pan & Zoom
+    canvas.addEventListener('mousedown', e => {
+      isDragging = true;
+      dragStart = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStart.x;
+      const dy = e.clientY - dragStart.y;
+      camera.x -= dx / camera.scale;
+      camera.y += dy / camera.scale;
+      dragStart = { x: e.clientX, y: e.clientY };
+      draw();
+    });
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.15 : 0.87;
+      camera.scale = Math.max(2, Math.min(250, camera.scale * zoomFactor));
+      draw();
+    });
+
+    // Entity Click Inspection
+    canvas.addEventListener('click', e => {
+      if (!worldData) return;
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      const wPos = screenToWorld(clickX, clickY);
+
+      // Check click on markers
+      for (const m of worldData.markers) {
+        const d = Math.hypot(m.position[0] - wPos.x, m.position[1] - wPos.y);
+        if (d < 0.6) {
+          inspectEntity('marker', m);
+          draw();
+          return;
+        }
+      }
+
+      // Check click on bins
+      for (const b of worldData.bins) {
+        const bb = b.bounds;
+        if (wPos.x >= bb.x_min && wPos.x <= bb.x_max && wPos.y >= bb.y_min && wPos.y <= bb.y_max) {
+          inspectEntity('bin', b);
+          draw();
+          return;
+        }
+      }
+
+      // Check click on racks
+      for (const r of worldData.racks) {
+        const bb = r.bounds;
+        if (wPos.x >= bb.x_min && wPos.x <= bb.x_max && wPos.y >= bb.y_min && wPos.y <= bb.y_max) {
+          inspectEntity('rack', r);
+          draw();
+          return;
+        }
+      }
+
+      // Check pads
+      for (const p of worldData.pads) {
+        const d = Math.hypot(p.position[0] - wPos.x, p.position[1] - wPos.y);
+        if (d <= p.radius) {
+          inspectEntity('pad', p);
+          draw();
+          return;
+        }
+      }
+    });
+
+    function inspectEntity(type, data) {
+      selectedEntity = { type, data };
+      const title = document.getElementById('inspectTitle');
+      const content = document.getElementById('inspectContent');
+
+      if (type === 'bin') {
+        title.innerHTML = `📦 Bin: ${data.id}`;
+        content.innerHTML = `
+          <div class="inspect-row"><span class="inspect-key">Label Code:</span><span class="inspect-val">${data.label_code}</span></div>
+          <div class="inspect-row"><span class="inspect-key">Aisle / Rack:</span><span class="inspect-val">${data.aisle_id} / ${data.rack_id}</span></div>
+          <div class="inspect-row"><span class="inspect-key">Bay / Level:</span><span class="inspect-val">Bay ${data.bay_index+1}, Lv ${data.level_index+1}</span></div>
+          <div class="inspect-row"><span class="inspect-key">Center [X,Y,Z]:</span><span class="inspect-val">[${data.center.map(v => v.toFixed(2)).join(', ')}]m</span></div>
+          <div class="inspect-row"><span class="inspect-key">Scan Pose [X,Y,Z]:</span><span class="inspect-val">[${data.recommended_scan_pos.map(v => v.toFixed(2)).join(', ')}]m</span></div>
+          <div class="inspect-row"><span class="inspect-key">Face Normal:</span><span class="inspect-val">[${data.scan_normal.join(', ')}]</span></div>
+        `;
+      } else if (type === 'marker') {
+        title.innerHTML = `🏷️ Fiducial: ${data.id}`;
+        content.innerHTML = `
+          <div class="inspect-row"><span class="inspect-key">Tag ID:</span><span class="inspect-val">${data.tag_id}</span></div>
+          <div class="inspect-row"><span class="inspect-key">Position [X,Y,Z]:</span><span class="inspect-val">[${data.position.map(v => v.toFixed(2)).join(', ')}]m</span></div>
+          <div class="inspect-row"><span class="inspect-key">Face Normal:</span><span class="inspect-val">[${data.normal.join(', ')}]</span></div>
+          <div class="inspect-row"><span class="inspect-key">Size:</span><span class="inspect-val">${(data.size_m * 100).toFixed(0)} cm</span></div>
+          <div class="inspect-row"><span class="inspect-key">Rack / Bay:</span><span class="inspect-val">${data.rack_id || 'N/A'} (Bay ${data.bay_index+1})</span></div>
+        `;
+      } else if (type === 'rack') {
+        title.innerHTML = `🏗️ Rack: ${data.id}`;
+        content.innerHTML = `
+          <div class="inspect-row"><span class="inspect-key">Aisle:</span><span class="inspect-val">${data.aisle_id} (${data.side})</span></div>
+          <div class="inspect-row"><span class="inspect-key">Bays x Levels:</span><span class="inspect-val">${data.bays} bays x ${data.levels} lvls</span></div>
+          <div class="inspect-row"><span class="inspect-key">Total Bins:</span><span class="inspect-val">${data.bin_count}</span></div>
+          <div class="inspect-row"><span class="inspect-key">Height (Z):</span><span class="inspect-val">${data.bounds.z_max.toFixed(2)}m</span></div>
+        `;
+      } else if (type === 'pad') {
+        title.innerHTML = `🚁 Takeoff/Landing Pad: ${data.id}`;
+        content.innerHTML = `
+          <div class="inspect-row"><span class="inspect-key">Coordinates:</span><span class="inspect-val">[${data.position.join(', ')}]m</span></div>
+          <div class="inspect-row"><span class="inspect-key">Safety Radius:</span><span class="inspect-val">${data.radius}m</span></div>
+        `;
+      }
+    }
+
+    // UI Controls
+    document.getElementById('presetSelect').addEventListener('change', e => loadPreset(e.target.value));
+    document.getElementById('reloadBtn').addEventListener('click', () => loadPreset(document.getElementById('presetSelect').value));
+    document.getElementById('zoomInBtn').addEventListener('click', () => { camera.scale *= 1.25; draw(); });
+    document.getElementById('zoomOutBtn').addEventListener('click', () => { camera.scale *= 0.8; draw(); });
+    document.getElementById('resetViewBtn').addEventListener('click', fitToView);
+
+    ['layerAisles', 'layerRacks', 'layerMarkers', 'layerPads', 'layerZones'].forEach(id => {
+      document.getElementById(id).addEventListener('change', draw);
+    });
+
+    // Initial load
+    window.addEventListener('load', () => {
+      resizeCanvas();
+      loadPreset('medium');
+    });
+  </script>
+</body>
+</html>
