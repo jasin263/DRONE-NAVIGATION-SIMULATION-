@@ -1,0 +1,15 @@
+.git
+.venv
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+Amazonbindata.zip
+Amazonbindata/
+exports/
+.DS_Store
+Thumbs.db

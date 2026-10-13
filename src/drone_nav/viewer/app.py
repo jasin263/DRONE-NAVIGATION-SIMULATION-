@@ -685,7 +685,12 @@ def api_scenarios_sweep(
 @app.get("/", response_class=HTMLResponse)
 def index_page() -> str:
     """Serve top-down interactive viewer application."""
-    html_path = Path(__file__).parent / "templates" / "index.html"
-    if html_path.exists():
-        return html_path.read_text(encoding="utf-8")
+    candidates = [
+        Path(__file__).parent / "templates" / "index.html",
+        Path("src/drone_nav/viewer/templates/index.html"),
+        Path("/app/src/drone_nav/viewer/templates/index.html"),
+    ]
+    for p in candidates:
+        if p.exists():
+            return p.read_text(encoding="utf-8")
     return "<h1>Viewer UI template not found</h1>"
