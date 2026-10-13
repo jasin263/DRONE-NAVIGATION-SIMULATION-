@@ -1,0 +1,77 @@
+{
+  "additionalProperties": false,
+  "description": "Summary record exported at conclusion of inventory scanning flight.",
+  "properties": {
+    "schemaVersion": {
+      "default": "1.0",
+      "title": "Schemaversion",
+      "type": "string"
+    },
+    "missionId": {
+      "title": "Missionid",
+      "type": "string"
+    },
+    "droneId": {
+      "title": "Droneid",
+      "type": "string"
+    },
+    "siteId": {
+      "title": "Siteid",
+      "type": "string"
+    },
+    "startTime": {
+      "title": "Starttime",
+      "type": "string"
+    },
+    "endTime": {
+      "title": "Endtime",
+      "type": "string"
+    },
+    "totalFlights": {
+      "minimum": 1,
+      "title": "Totalflights",
+      "type": "integer"
+    },
+    "binsScanned": {
+      "minimum": 0,
+      "title": "Binsscanned",
+      "type": "integer"
+    },
+    "binsTotal": {
+      "minimum": 0,
+      "title": "Binstotal",
+      "type": "integer"
+    },
+    "coveragePct": {
+      "maximum": 100.0,
+      "minimum": 0.0,
+      "title": "Coveragepct",
+      "type": "number"
+    },
+    "readSuccessRate": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Readsuccessrate",
+      "type": "number"
+    },
+    "configSnapshot": {
+      "additionalProperties": true,
+      "title": "Configsnapshot",
+      "type": "object"
+    }
+  },
+  "required": [
+    "missionId",
+    "droneId",
+    "siteId",
+    "startTime",
+    "endTime",
+    "totalFlights",
+    "binsScanned",
+    "binsTotal",
+    "coveragePct",
+    "readSuccessRate"
+  ],
+  "title": "DRIMSMissionSummary",
+  "type": "object"
+}

@@ -191,3 +191,46 @@ def test_cli_localise_with_dropout():
     assert "Injected Marker Dropout" in result.output
 
 
+def test_cli_scan_command(tmp_path: Path):
+    export_dir = tmp_path / "cli_export"
+    result = runner.invoke(
+        app,
+        [
+            "scan",
+            "configs/presets/small.yaml",
+            "--strategy",
+            "serpentine",
+            "--output-dir",
+            str(export_dir),
+            "--mission-id",
+            "MIS-CLI-TEST",
+        ],
+    )
+    assert result.exit_code == 0
+    assert "DRIMS Inventory Scan & Export" in result.output
+    assert "Coverage Pct" in result.output
+    assert (export_dir / "mission.json").exists()
+    assert (export_dir / "scans.json").exists()
+    assert (export_dir / "complete").exists()
+
+
+def test_cli_scan_api_mode_fallback(tmp_path: Path):
+    export_dir = tmp_path / "cli_api_export"
+    result = runner.invoke(
+        app,
+        [
+            "scan",
+            "configs/presets/small.yaml",
+            "--mode",
+            "api",
+            "--output-dir",
+            str(export_dir),
+            "--mission-id",
+            "MIS-CLI-API",
+        ],
+    )
+    assert result.exit_code == 0
+    assert "DRIMS API Status" in result.output
+    assert (export_dir / "complete").exists()
+
+

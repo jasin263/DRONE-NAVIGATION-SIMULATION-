@@ -1,6 +1,7 @@
 """Command-line interface for drone-nav."""
 
 import json
+from datetime import UTC
 from pathlib import Path
 from typing import Annotated
 
@@ -52,11 +53,25 @@ def schema(
     output: Annotated[
         Path | None, typer.Option("--output", "-o", help="File to write JSON Schema to")
     ] = None,
+    output_dir: Annotated[
+        Path | None, typer.Option("--output-dir", "-d", help="Directory to export all schemas to")
+    ] = None,
 ) -> None:
-    """Export the official JSON Schema for warehouse configurations."""
-    out_path = output or Path("configs/schema/warehouse_config.schema.json")
-    saved = save_json_schema(out_path)
-    console.print(f"[bold green][OK] JSON Schema exported to:[/bold green] {saved}")
+    """Export official JSON Schemas for warehouse configs and DRIMS contracts."""
+    from drone_nav.export.schemas import export_drims_json_schemas
+
+    schema_dir = output_dir or Path("configs/schema")
+    if output:
+        saved = save_json_schema(output)
+        console.print(f"[bold green][OK] Config schema exported to:[/bold green] {saved}")
+    else:
+        schema_dir.mkdir(parents=True, exist_ok=True)
+        conf_path = schema_dir / "warehouse_config.schema.json"
+        saved = save_json_schema(conf_path)
+        scan_s, miss_s = export_drims_json_schemas(schema_dir)
+        console.print(f"[bold green][OK] Config schema exported to:[/bold green] {saved}")
+        console.print(f"[bold green][OK] DRIMS ScanEvent schema exported to:[/bold green] {scan_s}")
+        console.print(f"[bold green][OK] DRIMS MissionSummary schema exported to:[/bold green] {miss_s}")
 
 
 @layout_app.command("generate")
@@ -575,6 +590,146 @@ def localise(
 
     except Exception as exc:
         console.print(f"[bold red]Localisation Error:[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@app.command()
+def scan(
+    config_path: Annotated[Path, typer.Argument(help="Path to YAML configuration file")],
+    strategy: Annotated[
+        str,
+        typer.Option(
+            "--strategy",
+            "-s",
+            help="Scan sequencing strategy (serpentine, naive, nearest, minimum_time)",
+        ),
+    ] = "serpentine",
+    seed: Annotated[int, typer.Option("--seed", help="Deterministic random seed")] = 42,
+    output_dir: Annotated[
+        Path,
+        typer.Option("--output-dir", "-o", help="Destination folder for exported DRIMS package"),
+    ] = Path("exports"),
+    mode: Annotated[
+        str,
+        typer.Option("--mode", "-m", help="Export mode: 'file' (default) or 'api'"),
+    ] = "file",
+    flight_id: Annotated[
+        int | None,
+        typer.Option(
+            "--flight-id",
+            "-f",
+            help="Specific flight sortie to simulate (simulates all sorties if omitted)",
+        ),
+    ] = None,
+    drone_id: Annotated[
+        str,
+        typer.Option("--drone-id", help="Autonomous inventory drone asset identifier"),
+    ] = "DRONE-ALPHA-01",
+    mission_id: Annotated[
+        str | None,
+        typer.Option("--mission-id", help="Explicit mission ID override for reproducible runs"),
+    ] = None,
+) -> None:
+    """Simulate barcode/QR scanning and export DRIMS v1 ingestion package."""
+    try:
+        from datetime import datetime
+
+        from drone_nav.config.models import ExportMode
+        from drone_nav.export.exporter import DRIMSExporter
+        from drone_nav.planner.planner import MissionPlanner
+        from drone_nav.scanning.service import ScanningMissionSimulator
+
+        config = load_config(config_path)
+        try:
+            config.export.mode = ExportMode(mode.lower())
+        except ValueError:
+            console.print(
+                f"[bold red]Invalid mode '{mode}'. Choose from: file, api, dry_run[/bold red]"
+            )
+            raise typer.Exit(code=1)
+
+        world = generate_world_from_config(config)
+        planner = MissionPlanner(world, config)
+        mission = planner.plan_mission(strategy_name=strategy)
+
+        if mission_id is not None:
+            mission.mission_id = mission_id
+            start_iso = "2026-10-13T08:00:00Z"
+            end_iso = "2026-10-13T08:45:00Z"
+        else:
+            now_iso = datetime.now(UTC).isoformat()
+            start_iso = now_iso
+            end_iso = now_iso
+
+        if not mission.flights:
+            console.print("[bold red]No flights generated in mission plan.[/bold red]")
+            raise typer.Exit(code=1)
+
+        flight_ids = [flight_id] if flight_id is not None else None
+        if flight_id is not None and (flight_id < 1 or flight_id > len(mission.flights)):
+            console.print(
+                f"[bold red]Flight ID {flight_id} out of bounds (total flights: {len(mission.flights)}).[/bold red]"
+            )
+            raise typer.Exit(code=1)
+
+        simulator = ScanningMissionSimulator(
+            world=world,
+            config=config,
+            seed=seed,
+            wind_speed=0.2,
+        )
+        tracker, sim_results = simulator.simulate_mission_scanning(
+            mission_plan=mission, flight_ids=flight_ids, start_time_iso=start_iso
+        )
+
+        exporter = DRIMSExporter(config=config, drone_id=drone_id)
+        export_meta = exporter.export_mission(
+            world=world,
+            tracker=tracker,
+            sim_results=sim_results,
+            mission_id=mission.mission_id,
+            output_dir=output_dir,
+            start_time_iso=start_iso,
+            end_time_iso=end_iso,
+        )
+
+        table = Table(title=f"DRIMS Inventory Scan & Export: {world.site_id}")
+        table.add_column("Metric", style="cyan", no_wrap=True)
+        table.add_column("Value", style="magenta")
+
+        table.add_row("Mission ID", mission.mission_id)
+        table.add_row("Drone ID", drone_id)
+        table.add_row("Scan Strategy", strategy)
+        table.add_row("Flights Simulated", f"{len(sim_results)} of {mission.total_flights}")
+        table.add_row("Bins Targeted", str(tracker.total_bins))
+        table.add_row("Bins Visited", str(tracker.visited_bins))
+        table.add_row("Bins Scanned", str(tracker.scanned_bins))
+        table.add_row("Successful Reads", f"[bold green]{tracker.successful_reads}[/bold green]")
+        table.add_row(
+            "Coverage Pct",
+            f"[bold green]{tracker.coverage_pct:.1f}%[/bold green]",
+        )
+        table.add_row(
+            "Read Success Rate",
+            f"[bold green]{tracker.read_success_rate * 100:.1f}%[/bold green]",
+        )
+        table.add_row(
+            "Idempotency Hash (scans.json)",
+            f"[bold yellow]{export_meta['idempotency_hash'][:16]}...[/bold yellow]",
+        )
+        table.add_row("Export Directory", str(export_meta["export_dir"]))
+        table.add_row("DRIMS API Status", export_meta["api_status"])
+
+        console.print(table)
+
+        console.print(
+            f"\n[bold green][OK] DRIMS v1 Package Exported ({len(export_meta['files'])} files):[/bold green]"
+        )
+        for fpath in export_meta["files"]:
+            console.print(f"  * {fpath}")
+
+    except Exception as exc:
+        console.print(f"[bold red]Scanning / Export Error:[/bold red] {exc}")
         raise typer.Exit(code=1) from exc
 
 

@@ -1,0 +1,158 @@
+{
+  "$defs": {
+    "DRIMSBBox": {
+      "description": "2D pixel coordinates and dimensions of detected label inside frame.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "integer"
+        },
+        "y": {
+          "title": "Y",
+          "type": "integer"
+        },
+        "w": {
+          "title": "W",
+          "type": "integer"
+        },
+        "h": {
+          "title": "H",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "title": "DRIMSBBox",
+      "type": "object"
+    },
+    "DRIMSPosition": {
+      "description": "3D coordinates in warehouse frame of reference.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        },
+        "frame": {
+          "default": "warehouse_origin",
+          "title": "Frame",
+          "type": "string"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "DRIMSPosition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Individual barcode/QR scan detection record sent to DRIMS inventory app.",
+  "properties": {
+    "schemaVersion": {
+      "default": "1.0",
+      "description": "DRIMS data contract schema version",
+      "title": "Schemaversion",
+      "type": "string"
+    },
+    "missionId": {
+      "description": "UUID string of flight mission",
+      "title": "Missionid",
+      "type": "string"
+    },
+    "eventId": {
+      "description": "Deterministic UUID v5 per scan occurrence",
+      "title": "Eventid",
+      "type": "string"
+    },
+    "droneId": {
+      "description": "Autonomous inventory drone asset identifier",
+      "title": "Droneid",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "ISO 8601 UTC timestamp of scan",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "readType": {
+      "enum": [
+        "BARCODE",
+        "QR",
+        "RFID",
+        "IMAGE_COUNT"
+      ],
+      "title": "Readtype",
+      "type": "string"
+    },
+    "symbology": {
+      "description": "Barcode format: CODE128, QRCODE, DATAMATRIX",
+      "title": "Symbology",
+      "type": "string"
+    },
+    "value": {
+      "description": "Decoded label value",
+      "title": "Value",
+      "type": "string"
+    },
+    "confidence": {
+      "description": "Read confidence score",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "locationTag": {
+      "description": "Warehouse bin location code",
+      "title": "Locationtag",
+      "type": "string"
+    },
+    "position": {
+      "$ref": "#/$defs/DRIMSPosition"
+    },
+    "imageRef": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Path to captured bin image",
+      "title": "Imageref"
+    },
+    "bbox": {
+      "$ref": "#/$defs/DRIMSBBox"
+    }
+  },
+  "required": [
+    "missionId",
+    "eventId",
+    "droneId",
+    "timestamp",
+    "readType",
+    "symbology",
+    "value",
+    "confidence",
+    "locationTag",
+    "position",
+    "bbox"
+  ],
+  "title": "DRIMSScanEvent",
+  "type": "object"
+}

@@ -298,7 +298,8 @@ graph TB
 
 ### Phase 5: Scanning and DRIMS Export
 **Duration estimate**: 1 session  
-**Depends on**: Phase 4
+**Depends on**: Phase 4  
+**Status**: VERIFIED (See [PHASE_5_VERIFICATION.md](verification/PHASE_5_VERIFICATION.md))
 
 #### Deliverables
 - Camera model: bins in view based on position, FOV, mount angle; image quality model (distance, angle, motion blur)
@@ -315,13 +316,13 @@ graph TB
 - Unit tests
 
 #### Exit Criteria
-| Criterion | How to verify |
-|---|---|
-| Full mission exported | File listing + sample payload |
-| JSON Schema validation passes | jsonschema CLI or test |
-| Coverage and read-rate stats | Terminal output |
-| Idempotency test | Hash comparison |
-| Tests pass | `pytest` output |
+| Criterion | How to verify | Status |
+|---|---|---|
+| Full mission exported | File listing + sample payload | VERIFIED (`mission.json`, `scans.json`, `telemetry.json`, `ground_truth.json`, `/complete`) |
+| JSON Schema validation passes | jsonschema CLI or test | VERIFIED (`drims_scan_event.schema.json`, `drims_mission_summary.schema.json`) |
+| Coverage and read-rate stats | Terminal output | VERIFIED (Small: 100% cov, 88.9% read rate; Med: 100% cov, 78.9% read rate) |
+| Idempotency test | Hash comparison | VERIFIED (Bit-for-bit SHA-256 digest match) |
+| Tests pass | `pytest` output | VERIFIED (86 passed tests, 94% coverage) |
 
 ---
 
