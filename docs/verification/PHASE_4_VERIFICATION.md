@@ -2,7 +2,7 @@
 
 > **Date**: 2026-10-13  
 > **Status**: VERIFIED (Pasted proof below)  
-> **Commit**: `PENDING` (`feat(phase-4): Localisation - 9-state EKF, IMU dead-reckoning, marker detection, and drift analysis`)
+> **Commit**: `b5f3005` (`feat(phase-4): Localisation - 9-state EKF, IMU dead-reckoning, marker detection, and drift analysis`)
 
 ---
 
