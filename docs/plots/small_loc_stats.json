@@ -1,0 +1,12 @@
+{
+  "mission_id": "MIS-99294B3B",
+  "flight_id": 1,
+  "markers_in_map": 18,
+  "marker_detections": 2177,
+  "mean_ekf_error_m": 0.0416,
+  "p95_ekf_error_m": 0.076,
+  "max_ekf_error_m": 0.113,
+  "mean_dr_error_m": 13362.3067,
+  "max_dr_error_m": 49048.2225,
+  "expected_drims_error_m": 0.076
+}

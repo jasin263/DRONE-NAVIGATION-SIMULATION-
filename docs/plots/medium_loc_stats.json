@@ -1,0 +1,12 @@
+{
+  "mission_id": "MIS-81FEC930",
+  "flight_id": 1,
+  "markers_in_map": 80,
+  "marker_detections": 12158,
+  "mean_ekf_error_m": 0.042,
+  "p95_ekf_error_m": 0.0919,
+  "max_ekf_error_m": 0.1661,
+  "mean_dr_error_m": 799314.5617,
+  "max_dr_error_m": 2874936.2244,
+  "expected_drims_error_m": 0.0919
+}

@@ -135,3 +135,59 @@ def test_cli_simulate_invalid_flight_id():
     assert result.exit_code == 1
     assert "out of bounds" in result.output
 
+
+def test_cli_localise_command(tmp_path):
+    p_traj = tmp_path / "loc_traj.svg"
+    p_err = tmp_path / "loc_err.svg"
+    p_json = tmp_path / "loc_stats.json"
+
+    result = runner.invoke(
+        app,
+        [
+            "localise",
+            "configs/presets/small.yaml",
+            "--flight-id",
+            "1",
+            "--plot-traj",
+            str(p_traj),
+            "--plot-error",
+            str(p_err),
+            "-o",
+            str(p_json),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Localisation EKF Fusion" in result.output
+    assert "Mean EKF Position Error" in result.output
+    assert p_traj.exists()
+    assert p_err.exists()
+    assert p_json.exists()
+
+
+def test_cli_localise_spacing_sweep():
+    result = runner.invoke(
+        app,
+        ["localise", "configs/presets/small.yaml", "--spacing-sweep"],
+    )
+    assert result.exit_code == 0
+    assert "Marker Spacing Benchmark" in result.output
+    assert "Every 1 bays" in result.output
+    assert "PASS" in result.output
+
+
+def test_cli_localise_with_dropout():
+    result = runner.invoke(
+        app,
+        [
+            "localise",
+            "configs/presets/small.yaml",
+            "--drop-start",
+            "60",
+            "--drop-duration",
+            "30",
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Injected Marker Dropout" in result.output
+
+

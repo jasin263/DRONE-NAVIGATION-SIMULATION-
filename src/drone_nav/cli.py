@@ -385,6 +385,200 @@ def simulate(
 
 
 @app.command()
+def localise(
+    config_path: Annotated[Path, typer.Argument(help="Path to YAML configuration file")],
+    strategy: Annotated[
+        str,
+        typer.Option(
+            "--strategy",
+            "-s",
+            help="Scan sequencing strategy (serpentine, naive, nearest, minimum_time)",
+        ),
+    ] = "serpentine",
+    flight_id: Annotated[
+        int,
+        typer.Option("--flight-id", "-f", help="Flight sortie ID to evaluate (1-indexed)"),
+    ] = 1,
+    spacing_sweep: Annotated[
+        bool,
+        typer.Option(
+            "--spacing-sweep",
+            help="Sweep fiducial marker bay spacing (N=1, 2, 4, 8) and compare accuracy",
+        ),
+    ] = False,
+    drop_start: Annotated[
+        float | None,
+        typer.Option("--drop-start", help="Start time in seconds to inject marker loss gap"),
+    ] = None,
+    drop_duration: Annotated[
+        float,
+        typer.Option("--drop-duration", help="Duration in seconds of injected marker loss gap"),
+    ] = 60.0,
+    seed: Annotated[
+        int, typer.Option("--seed", help="Deterministic random seed for sensor noise")
+    ] = 42,
+    plot_traj: Annotated[
+        Path | None,
+        typer.Option("--plot-traj", help="Path to export Ground Truth vs EKF trajectory SVG"),
+    ] = None,
+    plot_error: Annotated[
+        Path | None,
+        typer.Option("--plot-error", help="Path to export EKF error and 3-sigma envelope SVG"),
+    ] = None,
+    output_json: Annotated[
+        Path | None,
+        typer.Option("--output-json", "-o", help="Path to export evaluation metrics JSON"),
+    ] = None,
+) -> None:
+    """Evaluate EKF sensor fusion of IMU dead-reckoning with visual fiducial marker fixes."""
+    try:
+        from drone_nav.localisation.estimator import (
+            LocalisationEstimator,
+            run_marker_spacing_sweep,
+        )
+        from drone_nav.localisation.plots import (
+            export_localisation_error_svg,
+            export_localisation_trajectory_svg,
+        )
+        from drone_nav.planner.planner import MissionPlanner
+        from drone_nav.simulator.sim import FlightSimulator
+
+        config = load_config(config_path)
+        world = generate_world_from_config(config)
+        planner = MissionPlanner(world, config)
+        mission = planner.plan_mission(strategy_name=strategy)
+
+        if not mission.flights:
+            console.print("[bold red]No flights found in mission plan.[/bold red]")
+            raise typer.Exit(code=1)
+
+        flight_idx = flight_id - 1
+        if flight_idx < 0 or flight_idx >= len(mission.flights):
+            console.print(
+                f"[bold red]Flight ID {flight_id} out of bounds (total flights: {len(mission.flights)}).[/bold red]"
+            )
+            raise typer.Exit(code=1)
+
+        flight = mission.flights[flight_idx]
+
+        if spacing_sweep:
+            sweep_results = run_marker_spacing_sweep(
+                world_base=world, config=config, flight_plan=flight, seed=seed
+            )
+            table = Table(title=f"Marker Spacing Benchmark: {world.site_name} (Sweep N=1, 2, 4, 8 Bays)")
+            table.add_column("Spacing (Bays)", style="cyan", no_wrap=True)
+            table.add_column("Markers in Map", style="yellow")
+            table.add_column("Fixes Count", style="blue")
+            table.add_column("Mean Error", style="green")
+            table.add_column("P95 Error", style="magenta")
+            table.add_column("Max Error", style="white")
+            table.add_column("Max DR Drift", style="red")
+            table.add_column("Status", style="bold")
+
+            for r in sweep_results:
+                status_fmt = (
+                    f"[bold green]{r.status}[/bold green]"
+                    if r.status == "PASS"
+                    else f"[bold yellow]{r.status}[/bold yellow]"
+                )
+                table.add_row(
+                    f"Every {r.spacing_bays} bays",
+                    str(r.total_markers),
+                    str(r.marker_detections),
+                    f"{r.mean_error_m * 100:.2f} cm",
+                    f"{r.p95_error_m * 100:.2f} cm",
+                    f"{r.max_error_m * 100:.2f} cm",
+                    f"{r.max_drift_m:.1f} m",
+                    status_fmt,
+                )
+            console.print(table)
+            return
+
+        # Pre-simulate flight
+        sim = FlightSimulator(world=world, config=config, dt=0.05, seed=seed)
+        sim_res = sim.simulate_flight(flight, mission_id=mission.mission_id)
+
+        # Injected marker dropout gap if requested
+        drop_interval = (
+            (drop_start, drop_start + drop_duration) if drop_start is not None else None
+        )
+
+        estimator = LocalisationEstimator(world=world, config=config, seed=seed)
+        loc_res = estimator.run_localisation(sim_res, marker_drop_interval=drop_interval)
+
+        table = Table(
+            title=f"Localisation EKF Fusion: Flight {flight.flight_id}/{mission.total_flights}"
+        )
+        table.add_column("Metric", style="cyan", no_wrap=True)
+        table.add_column("Value", style="magenta")
+
+        dur_min = loc_res.total_time_s / 60.0
+        table.add_row("Mission ID", mission.mission_id)
+        table.add_row("Flight Duration", f"{dur_min:.2f} min ({loc_res.total_time_s:.1f} s)")
+        table.add_row("Total Markers in Warehouse", str(loc_res.total_markers_in_map))
+        table.add_row("Visual Marker Detections", str(loc_res.total_marker_detections))
+        table.add_row(
+            "Mean EKF Position Error",
+            f"[bold green]{loc_res.mean_ekf_error_m * 100:.2f} cm[/bold green]",
+        )
+        table.add_row(
+            "P95 EKF Position Error", f"{loc_res.p95_ekf_error_m * 100:.2f} cm"
+        )
+        table.add_row("Max EKF Position Error", f"{loc_res.max_ekf_error_m * 100:.2f} cm")
+        table.add_row(
+            "Raw Dead-Reckoning Max Drift",
+            f"[bold red]{loc_res.max_dr_error_m:.2f} m[/bold red] (unconstrained)",
+        )
+        table.add_row(
+            "Expected DRIMS Telemetry Error",
+            f"[bold green]+/- {loc_res.expected_drims_error_m * 100:.2f} cm (P95)[/bold green]",
+        )
+
+        if drop_interval is not None:
+            table.add_row(
+                "Injected Marker Dropout",
+                f"[bold red]{drop_interval[0]:.1f}s - {drop_interval[1]:.1f}s ({drop_duration:.1f}s gap)[/bold red]",
+            )
+
+        console.print(table)
+
+        if plot_traj:
+            p = export_localisation_trajectory_svg(world, loc_res, plot_traj)
+            console.print(
+                f"[bold green][OK] Localisation trajectory SVG saved:[/bold green] {p}"
+            )
+
+        if plot_error:
+            e = export_localisation_error_svg(loc_res, plot_error)
+            console.print(
+                f"[bold green][OK] Position error envelope SVG saved:[/bold green] {e}"
+            )
+
+        if output_json:
+            output_json.parent.mkdir(parents=True, exist_ok=True)
+            summary_data = {
+                "mission_id": mission.mission_id,
+                "flight_id": flight.flight_id,
+                "markers_in_map": loc_res.total_markers_in_map,
+                "marker_detections": loc_res.total_marker_detections,
+                "mean_ekf_error_m": loc_res.mean_ekf_error_m,
+                "p95_ekf_error_m": loc_res.p95_ekf_error_m,
+                "max_ekf_error_m": loc_res.max_ekf_error_m,
+                "mean_dr_error_m": loc_res.mean_dr_error_m,
+                "max_dr_error_m": loc_res.max_dr_error_m,
+                "expected_drims_error_m": loc_res.expected_drims_error_m,
+            }
+            output_json.write_text(json.dumps(summary_data, indent=2), encoding="utf-8")
+            console.print(
+                f"[bold green][OK] Localisation metrics JSON saved:[/bold green] {output_json}"
+            )
+
+    except Exception as exc:
+        console.print(f"[bold red]Localisation Error:[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@app.command()
 def viewer(
     config: Annotated[
         str, typer.Option("--config", "-c", help="Preset name or path to config file")
