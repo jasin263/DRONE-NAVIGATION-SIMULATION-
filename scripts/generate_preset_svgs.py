@@ -1,6 +1,7 @@
 """Generate standalone SVG top-down visual warehouse maps for all presets."""
 
 import os
+
 from drone_nav.config.loader import load_config
 from drone_nav.world.generator import generate_world_from_config
 

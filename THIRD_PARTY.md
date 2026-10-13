@@ -24,3 +24,4 @@ This project makes use of the following open-source software libraries, models, 
 | **AprilTag** | (Optional adapter asset) Fiducial marker system | BSD-2-Clause | https://github.com/AprilRobotics/apriltag |
 | **PX4 Autopilot** | (Optional adapter) SITL flight control | BSD-3-Clause | https://github.com/PX4/PX4-Autopilot |
 | **MAVSDK-Python** | (Optional adapter) MAVLink drone API | BSD-3-Clause | https://github.com/mavlink/MAVSDK-Python |
+| **Amazon Bin Image Dataset** | Bin images & item count/ASIN metadata | CC-BY-4.0 | https://registry.opendata.aws/amazon-bin-execution/ |

@@ -57,3 +57,11 @@ exports/
 .env
 .env.*
 !.env.example
+
+# Large binary datasets and archives
+*.zip
+*.tar.gz
+Amazonbindata/
+*.sqlite
+*.sqlite3
+

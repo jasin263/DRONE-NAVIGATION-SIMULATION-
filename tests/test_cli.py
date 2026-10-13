@@ -64,3 +64,34 @@ def test_cli_csv_export_and_import(tmp_path: Path):
     assert res2.exit_code == 0
     assert "Imported successfully" in res2.output
     assert "90" in res2.output
+
+
+def test_cli_plan_command(tmp_path: Path):
+    plot_path = tmp_path / "plan_plot.svg"
+    json_path = tmp_path / "plan.json"
+    result = runner.invoke(
+        app,
+        [
+            "plan",
+            "configs/presets/small.yaml",
+            "--strategy",
+            "serpentine",
+            "--plot",
+            str(plot_path),
+            "-o",
+            str(json_path),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Mission Plan" in result.output
+    assert plot_path.exists()
+    assert json_path.exists()
+
+
+def test_cli_plan_compare():
+    result = runner.invoke(app, ["plan", "configs/presets/small.yaml", "--compare"])
+    assert result.exit_code == 0
+    assert "Scan Strategy Benchmark" in result.output
+    assert "SERPENTINE" in result.output
+    assert "NAIVE" in result.output
+
