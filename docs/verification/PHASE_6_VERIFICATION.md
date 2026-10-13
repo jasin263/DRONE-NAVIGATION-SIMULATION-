@@ -2,6 +2,7 @@
 
 > **Date**: 2026-10-13  
 > **Status**: VERIFIED (Pasted terminal proof below)  
+> **Commit**: `049fec4` (`feat(phase-6): Safety supervisor, obstacle replanning, geofence, and 11 failure scenarios`)  
 > **Phase**: Phase 6 of 9 (Obstacle Avoidance and Safety)  
 
 ---
