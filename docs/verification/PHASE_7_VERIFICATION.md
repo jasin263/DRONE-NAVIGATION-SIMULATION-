@@ -2,6 +2,7 @@
 
 > **Date**: 2026-10-13  
 > **Status**: VERIFIED (Pasted terminal proof below)  
+> **Commit**: `caef778` (`feat(phase-7): Full viewer web app with Three.js 3D, REST API, and scenario parameter sweeps`)  
 > **Phase**: Phase 7 of 9 (Viewer, API, and Scenario Runner)  
 
 ---
