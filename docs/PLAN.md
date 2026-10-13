@@ -328,7 +328,8 @@ graph TB
 
 ### Phase 6: Obstacle Avoidance and Safety
 **Duration estimate**: 1 session  
-**Depends on**: Phases 3, 4, 5
+**Depends on**: Phases 3, 4, 5  
+**Status**: VERIFIED (See [PHASE_6_VERIFICATION.md](verification/PHASE_6_VERIFICATION.md))
 
 #### Deliverables
 - Static obstacle avoidance (blocked aisles, pallets, pillars) with replanning
@@ -346,12 +347,12 @@ graph TB
 - Unit tests
 
 #### Exit Criteria
-| Criterion | How to verify |
-|---|---|
-| Failure injection table (11 scenarios) | All pass/fail with logs |
-| Each safety behaviour demonstrated | Logs or viewer screenshots |
-| Replanning on blocked aisle shown | Before/after path |
-| Tests pass | `pytest` output |
+| Criterion | How to verify | Status |
+|---|---|---|
+| Failure injection table (11 scenarios) | All pass/fail with logs | VERIFIED (All 11 scenarios PASS on Small & Medium presets) |
+| Each safety behaviour demonstrated | Logs or viewer screenshots | VERIFIED (Documented with latency and action taken) |
+| Replanning on blocked aisle shown | Before/after path | VERIFIED (Original A01 path -> Rerouted via A02) |
+| Tests pass | `pytest` output | VERIFIED (94 passed tests, 94% coverage) |
 
 ---
 

@@ -734,6 +734,96 @@ def scan(
 
 
 @app.command()
+def safety(
+    config_path: Annotated[Path, typer.Argument(help="Path to YAML configuration file")],
+    scenario: Annotated[
+        str,
+        typer.Option("--scenario", "-s", help="Scenario number (1-11) or 'all' to run full suite"),
+    ] = "all",
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Save failure injection results JSON to path"),
+    ] = None,
+) -> None:
+    """Execute safety supervisor failure injection benchmarks and fail-safe protocols."""
+    try:
+        from drone_nav.safety.injector import FailureInjectionFramework
+
+        config = load_config(config_path)
+        world = generate_world_from_config(config)
+        framework = FailureInjectionFramework(world, config)
+
+        if scenario.lower() == "all":
+            results = framework.run_all_scenarios()
+        else:
+            try:
+                num = int(scenario)
+                method_name = f"run_scenario_{num}_"
+                matches = [m for m in dir(framework) if m.startswith(method_name)]
+                if not matches:
+                    console.print(f"[bold red]Unknown scenario number: {scenario}. Choose 1-11.[/bold red]")
+                    raise typer.Exit(code=1)
+                runner_fn = getattr(framework, matches[0])
+                results = [runner_fn()]
+            except ValueError:
+                console.print(f"[bold red]Invalid scenario: '{scenario}'. Choose 1-11 or 'all'.[/bold red]")
+                raise typer.Exit(code=1)
+
+        table = Table(title=f"Safety Supervisor Failure Injection Benchmark (11 Scenarios): {world.site_id}")
+        table.add_column("#", style="cyan", justify="right")
+        table.add_column("Failure Scenario", style="white")
+        table.add_column("Safety Action / Response", style="yellow")
+        table.add_column("Latency", style="magenta", justify="right")
+        table.add_column("Status", style="bold", justify="center")
+
+        for idx, res in enumerate(results, 1):
+            status_str = "[bold green]PASS[/bold green]" if res.passed else "[bold red]FAIL[/bold red]"
+            table.add_row(
+                str(idx),
+                res.name,
+                res.action_taken,
+                f"{res.response_time_s * 1000:.0f} ms",
+                status_str,
+            )
+
+        console.print(table)
+
+        all_passed = all(r.passed for r in results)
+        if all_passed:
+            console.print(
+                f"\n[bold green][OK] All {len(results)} Safety Failure Injection Scenarios PASSED![/bold green]"
+            )
+        else:
+            console.print("\n[bold red][FAIL] One or more safety scenarios failed.[/bold red]")
+
+        if output:
+            output.parent.mkdir(parents=True, exist_ok=True)
+            export_payload = [
+                {
+                    "scenario_id": r.scenario_id.value,
+                    "name": r.name,
+                    "description": r.description,
+                    "passed": r.passed,
+                    "trigger_time_s": r.trigger_time_s,
+                    "response_time_s": r.response_time_s,
+                    "action_taken": r.action_taken,
+                    "details": r.details,
+                    "events_log": r.events_log,
+                }
+                for r in results
+            ]
+            output.write_text(json.dumps(export_payload, indent=2), encoding="utf-8")
+            console.print(f"[green][OK] Failure injection logs exported to:[/green] {output}")
+
+        if not all_passed:
+            raise typer.Exit(code=1)
+
+    except Exception as exc:
+        console.print(f"[bold red]Safety Benchmark Error:[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@app.command()
 def viewer(
     config: Annotated[
         str, typer.Option("--config", "-c", help="Preset name or path to config file")

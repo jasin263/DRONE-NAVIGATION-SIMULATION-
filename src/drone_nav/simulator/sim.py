@@ -1,6 +1,7 @@
 """Kinematic flight simulator with physics limits, battery drain, and wind disturbances."""
 
 import math
+from typing import Any
 
 import numpy as np
 
@@ -27,12 +28,14 @@ class FlightSimulator:
         dt: float = 0.05,
         seed: int = 42,
         wind_speed: float = 0.2,
+        supervisor: Any | None = None,
     ) -> None:
         self.world = world
         self.config = config
         self.dt = dt
         self.seed = seed
         self.wind_speed = wind_speed
+        self.supervisor = supervisor
 
         self.controller = TrajectoryTrackingController(config.drone)
         self.wind_model = WindModel(
@@ -148,10 +151,30 @@ class FlightSimulator:
 
             # Kinematic numerical integration
             vel += acc_net * self.dt
+
+            action_label = target_wp.action.value
+            if self.supervisor is not None:
+                failsafe, safe_vel, speed_override = self.supervisor.evaluate_step(
+                    timestamp_s=t_sim,
+                    position=_to_f3(pos),
+                    velocity=_to_f3(vel),
+                    battery_pct=self.battery_sim.percentage,
+                )
+                vel = np.array(safe_vel, dtype=float)
+                max_spd = (
+                    min(self.config.drone.max_speed_mps, speed_override)
+                    if speed_override is not None
+                    else self.config.drone.max_speed_mps
+                )
+                if failsafe.value != "none":
+                    action_label = f"failsafe_{failsafe.value}"
+            else:
+                max_spd = self.config.drone.max_speed_mps
+
             # Enforce max speed limit
             speed = float(np.linalg.norm(vel))
-            if speed > self.config.drone.max_speed_mps:
-                vel = (vel / speed) * self.config.drone.max_speed_mps
+            if speed > max_spd:
+                vel = (vel / speed) * max_spd
 
             step_dist = float(np.linalg.norm(vel * self.dt))
             total_dist_flown += step_dist
@@ -180,7 +203,7 @@ class FlightSimulator:
                     battery_wh=self.battery_sim.remaining_wh,
                     battery_pct=self.battery_sim.percentage,
                     waypoint_index=wp_idx,
-                    action=target_wp.action.value,
+                    action=action_label,
                     target_bin_id=target_wp.target_bin_id,
                 )
             )

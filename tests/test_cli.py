@@ -234,3 +234,29 @@ def test_cli_scan_api_mode_fallback(tmp_path: Path):
     assert (export_dir / "complete").exists()
 
 
+def test_cli_safety_all():
+    result = runner.invoke(app, ["safety", "configs/presets/small.yaml"])
+    assert result.exit_code == 0
+    assert "Safety Supervisor Failure Injection Benchmark" in result.output
+    assert "Static Obstacle" in result.output
+    assert "All 11 Safety Failure Injection Scenarios PASSED" in result.output
+
+
+def test_cli_safety_single_scenario():
+    result = runner.invoke(app, ["safety", "configs/presets/small.yaml", "--scenario", "1"])
+    assert result.exit_code == 0
+    assert "Static Obstacle" in result.output
+    assert "PASS" in result.output
+
+
+def test_cli_safety_json_export(tmp_path: Path):
+    out_file = tmp_path / "safety_results.json"
+    result = runner.invoke(
+        app, ["safety", "configs/presets/small.yaml", "-o", str(out_file)]
+    )
+    assert result.exit_code == 0
+    assert out_file.exists()
+    assert "SCENARIO_1_STATIC_OBSTACLE" in out_file.read_text(encoding="utf-8")
+
+
+
