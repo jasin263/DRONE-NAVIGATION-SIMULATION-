@@ -95,3 +95,43 @@ def test_cli_plan_compare():
     assert "SERPENTINE" in result.output
     assert "NAIVE" in result.output
 
+
+def test_cli_simulate_command(tmp_path):
+    telemetry_file = tmp_path / "telemetry.jsonl"
+    traj_svg = tmp_path / "traj.svg"
+    bat_svg = tmp_path / "bat.svg"
+
+    result = runner.invoke(
+        app,
+        [
+            "simulate",
+            "configs/presets/small.yaml",
+            "--flight-id",
+            "1",
+            "--seed",
+            "42",
+            "-o",
+            str(telemetry_file),
+            "--plot-path",
+            str(traj_svg),
+            "--plot-battery",
+            str(bat_svg),
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Kinematic Flight Simulation" in result.output
+    assert "Mean Tracking Error" in result.output
+    assert "Reproducibility Hash" in result.output
+    assert telemetry_file.exists()
+    assert traj_svg.exists()
+    assert bat_svg.exists()
+
+
+def test_cli_simulate_invalid_flight_id():
+    result = runner.invoke(
+        app,
+        ["simulate", "configs/presets/small.yaml", "--flight-id", "99"],
+    )
+    assert result.exit_code == 1
+    assert "out of bounds" in result.output
+

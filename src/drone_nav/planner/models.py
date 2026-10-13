@@ -50,6 +50,10 @@ class FlightPlan:
     estimated_energy_wh: float = 0.0
     scanned_bin_ids: list[str] = field(default_factory=list)
 
+    @property
+    def distance_m(self) -> float:
+        return self.total_distance_m
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "flight_id": self.flight_id,

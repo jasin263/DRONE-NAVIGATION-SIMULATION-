@@ -256,6 +256,135 @@ def plan(
 
 
 @app.command()
+def simulate(
+    config_path: Annotated[Path, typer.Argument(help="Path to YAML configuration file")],
+    strategy: Annotated[
+        str,
+        typer.Option(
+            "--strategy",
+            "-s",
+            help="Scan sequencing strategy (serpentine, naive, nearest, minimum_time)",
+        ),
+    ] = "serpentine",
+    flight_id: Annotated[
+        int,
+        typer.Option("--flight-id", "-f", help="Flight sortie ID to simulate (1-indexed)"),
+    ] = 1,
+    seed: Annotated[
+        int, typer.Option("--seed", help="Deterministic random seed for wind & noise")
+    ] = 42,
+    wind_speed: Annotated[
+        float, typer.Option("--wind-speed", help="Turbulence gust intensity (m/s)")
+    ] = 0.2,
+    dt: Annotated[
+        float, typer.Option("--dt", help="Simulation time step in seconds")
+    ] = 0.05,
+    output_telemetry: Annotated[
+        Path | None,
+        typer.Option("--output-telemetry", "-o", help="Path to export JSONL telemetry file"),
+    ] = None,
+    plot_path: Annotated[
+        Path | None,
+        typer.Option("--plot-path", help="Path to export planned vs flown trajectory SVG"),
+    ] = None,
+    plot_battery: Annotated[
+        Path | None,
+        typer.Option("--plot-battery", help="Path to export battery discharge curve SVG"),
+    ] = None,
+) -> None:
+    """Execute kinematic flight simulation with tracking controller, wind, and battery drain."""
+    try:
+        from drone_nav.planner.planner import MissionPlanner
+        from drone_nav.simulator.plots import (
+            export_battery_curve_svg,
+            export_flight_trajectory_comparison_svg,
+        )
+        from drone_nav.simulator.sim import FlightSimulator
+
+        config = load_config(config_path)
+        world = generate_world_from_config(config)
+        planner = MissionPlanner(world, config)
+        mission = planner.plan_mission(strategy_name=strategy)
+
+        if not mission.flights:
+            console.print("[bold red]No flights generated in mission plan.[/bold red]")
+            raise typer.Exit(code=1)
+
+        flight_idx = flight_id - 1
+        if flight_idx < 0 or flight_idx >= len(mission.flights):
+            console.print(
+                f"[bold red]Flight ID {flight_id} out of bounds (total flights: {len(mission.flights)}).[/bold red]"
+            )
+            raise typer.Exit(code=1)
+
+        flight = mission.flights[flight_idx]
+
+        sim = FlightSimulator(
+            world=world, config=config, dt=dt, seed=seed, wind_speed=wind_speed
+        )
+        sim_res = sim.simulate_flight(flight, mission_id=mission.mission_id)
+
+        table = Table(
+            title=f"Kinematic Flight Simulation: Flight {flight.flight_id}/{mission.total_flights}"
+        )
+        table.add_column("Metric", style="cyan", no_wrap=True)
+        table.add_column("Value", style="magenta")
+
+        dur_min = sim_res.total_time_s / 60.0
+        table.add_row("Mission ID", sim_res.mission_id)
+        table.add_row("Flight Sortie", f"{sim_res.flight_id} of {mission.total_flights}")
+        table.add_row("Planned Distance", f"{flight.distance_m:.2f} m")
+        table.add_row("Flown Distance", f"{sim_res.total_distance_flown_m:.2f} m")
+        table.add_row(
+            "Flight Time", f"{dur_min:.2f} min ({sim_res.total_time_s:.1f} s)"
+        )
+        table.add_row("Samples Recorded", str(sim_res.sample_count))
+        table.add_row(
+            "Mean Tracking Error", f"[bold green]{sim_res.mean_tracking_error_m * 100:.2f} cm[/bold green]"
+        )
+        table.add_row("P95 Tracking Error", f"{sim_res.p95_tracking_error_m * 100:.2f} cm")
+        table.add_row("Max Tracking Error", f"{sim_res.max_tracking_error_m * 100:.2f} cm")
+        table.add_row("Initial Battery", f"{sim_res.initial_battery_wh:.2f} Wh (100.0%)")
+        table.add_row(
+            "Final Battery",
+            f"{sim_res.final_battery_wh:.2f} Wh ({sim_res.final_battery_pct:.1f}%)",
+        )
+        table.add_row("Energy Consumed", f"{sim_res.energy_consumed_wh:.2f} Wh")
+        table.add_row("Reproducibility Hash", f"[bold yellow]{sim_res.reproducibility_hash[:16]}...[/bold yellow]")
+
+        console.print(table)
+
+        if output_telemetry:
+            output_telemetry.parent.mkdir(parents=True, exist_ok=True)
+            lines = [json.dumps(s.to_telemetry_dict()) for s in sim_res.states]
+            output_telemetry.write_text("\n".join(lines), encoding="utf-8")
+            console.print(
+                f"[bold green][OK] Telemetry exported ({len(lines)} records):[/bold green] {output_telemetry}"
+            )
+
+        if plot_path:
+            p = export_flight_trajectory_comparison_svg(world, flight, sim_res, plot_path)
+            console.print(
+                f"[bold green][OK] Trajectory comparison SVG saved:[/bold green] {p}"
+            )
+
+        if plot_battery:
+            b = export_battery_curve_svg(
+                sim_res,
+                plot_battery,
+                safe_reserve_pct=config.drone.battery.safe_reserve_pct,
+                critical_reserve_pct=config.drone.battery.critical_reserve_pct,
+            )
+            console.print(
+                f"[bold green][OK] Battery discharge curve SVG saved:[/bold green] {b}"
+            )
+
+    except Exception as exc:
+        console.print(f"[bold red]Simulation Error:[/bold red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+
+@app.command()
 def viewer(
     config: Annotated[
         str, typer.Option("--config", "-c", help="Preset name or path to config file")

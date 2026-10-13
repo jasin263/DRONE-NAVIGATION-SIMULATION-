@@ -53,6 +53,7 @@ coverage.xml
 data/
 output/
 exports/
+docs/telemetry/*.jsonl
 *.log
 .env
 .env.*
