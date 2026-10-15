@@ -1504,6 +1504,12 @@
             <button class="toolbar-btn" id="dispatchForkliftBtn" title="Dispatch Forklift to start Multi-Aisle Patrol from active Drone Aisle">⚡ Patrol from Drone Aisle</button>
             <button class="toolbar-btn" id="toggleTrafficModeBtn" title="Toggle between All-Aisles Weaving Patrol and Perimeter Cross-Docks">🔄 All Aisles / Crossway</button>
           </div>
+
+          <!-- Bridge Crane Dynamic Motion Control -->
+          <div class="toolbar-group" id="craneControlGroup" style="display:none;">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Crane:</span>
+            <button class="toolbar-btn active" id="toggleCraneBtn" title="Toggle 30-Ton Overhead Bridge Crane Front/Back Travel">🏗️ Bridge Crane: Active</button>
+          </div>
         </div>
 
         <!-- Floating Bin Hover Tooltip -->
@@ -2515,6 +2521,13 @@ let playSpeed = 5;
     let worldBinsMap = new Map();
     let audioCtx = null;
 
+    // Dynamic Overhead Bridge Crane (Front & Back Travel)
+    let bridgeCraneBridge = null;
+    let bridgeCraneTrolley = null;
+    let bridgeCraneHook = null;
+    let bridgeCraneStrobes = [];
+    let isBridgeCraneActive = true;
+
     function playScanChirp() {
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2834,6 +2847,16 @@ let playSpeed = 5;
         });
       }
 
+      // Overhead Bridge Crane front/back travel toggle
+      const toggleCraneBtn = document.getElementById('toggleCraneBtn');
+      if (toggleCraneBtn) {
+        toggleCraneBtn.addEventListener('click', () => {
+          isBridgeCraneActive = !isBridgeCraneActive;
+          toggleCraneBtn.classList.toggle('active', isBridgeCraneActive);
+          toggleCraneBtn.innerText = isBridgeCraneActive ? '🏗️ Bridge Crane: Active' : '🏗️ Bridge Crane: Parked';
+        });
+      }
+
       const btnMinAmz = document.getElementById('amzHudMinimizeBtn');
       if (btnMinAmz) {
         btnMinAmz.addEventListener('click', () => {
@@ -3107,6 +3130,14 @@ let playSpeed = 5;
       evasiveClimbOffset = 0.0;
       const alertBanner = document.getElementById('trafficAlertBanner');
       if (alertBanner) alertBanner.style.display = 'none';
+
+      // Bridge Crane Resets
+      bridgeCraneBridge = null;
+      bridgeCraneTrolley = null;
+      bridgeCraneHook = null;
+      bridgeCraneStrobes = [];
+      const craneBtnGrp = document.getElementById('craneControlGroup');
+      if (craneBtnGrp) craneBtnGrp.style.display = 'none';
     }
 
     function buildDroneMesh() {
@@ -3832,43 +3863,122 @@ let playSpeed = 5;
       if (isSteelCoil) {
         const craneMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.35, metalness: 0.4 });
         const craneSteel = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.5, metalness: 0.8 });
-        const craneGroup = new THREE.Group();
         const craneZ = ch - 1.4;
 
-        // Long runway I-beams on left and right walls
-        const beamL = new THREE.Mesh(new THREE.BoxGeometry(0.4, fH, 0.6), craneSteel);
+        // Long runway I-beams on left and right walls (STATIC RUNWAYS)
+        const beamL = new THREE.Mesh(new THREE.BoxGeometry(0.45, fH, 0.6), craneSteel);
         beamL.position.set(fb.x_min + 1.2, cy, craneZ);
-        craneGroup.add(beamL);
+        beamL.receiveShadow = true;
+        worldGroup.add(beamL);
 
-        const beamR = new THREE.Mesh(new THREE.BoxGeometry(0.4, fH, 0.6), craneSteel);
+        const beamR = new THREE.Mesh(new THREE.BoxGeometry(0.45, fH, 0.6), craneSteel);
         beamR.position.set(fb.x_max - 1.2, cy, craneZ);
-        craneGroup.add(beamR);
+        beamR.receiveShadow = true;
+        worldGroup.add(beamR);
 
-        // Twin Yellow Box Girders spanning across warehouse width
-        const girderSpan = fW - 2.4;
-        const girderY = cy;
-        [-0.8, 0.8].forEach(gy => {
-          const girder = new THREE.Mesh(new THREE.BoxGeometry(girderSpan, 0.55, 1.1), craneMat);
-          girder.position.set(cx, girderY + gy, craneZ + 0.45);
-          craneGroup.add(girder);
+        // Runway steel rail on top of each beam
+        [-0.45, 0.45].forEach((rx, idx) => {
+          const railX = (idx === 0) ? (fb.x_min + 1.2) : (fb.x_max - 1.2);
+          const rail = new THREE.Mesh(new THREE.BoxGeometry(0.08, fH, 0.05), craneSteel);
+          rail.position.set(railX, cy, craneZ + 0.32);
+          worldGroup.add(rail);
         });
 
-        // Hoist Crab Trolley
-        const trolley = new THREE.Mesh(new THREE.BoxGeometry(2.0, 2.2, 0.6), craneSteel);
-        trolley.position.set(cx, girderY, craneZ + 1.1);
-        craneGroup.add(trolley);
+        // MOVING BRIDGE ASSEMBLY (travels front and back along Y-axis)
+        bridgeCraneBridge = new THREE.Group();
+        bridgeCraneBridge.position.set(0, cy, 0); // initial Y at cy
 
-        // Hanging Cables and Coil Lifting C-Hook Tongs
-        const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 2.4), craneSteel);
-        cable.position.set(cx, girderY, craneZ - 0.3);
-        craneGroup.add(cable);
+        const girderSpan = fW - 2.4;
 
-        const cHook = new THREE.Mesh(new THREE.TorusGeometry(0.65, 0.12, 8, 16, Math.PI * 1.5), craneMat);
-        cHook.rotation.z = Math.PI / 2;
-        cHook.position.set(cx, girderY, craneZ - 1.5);
-        craneGroup.add(cHook);
+        // Twin Yellow Box Girders spanning across warehouse width
+        [-0.8, 0.8].forEach(gy => {
+          const girder = new THREE.Mesh(new THREE.BoxGeometry(girderSpan, 0.55, 1.1), craneMat);
+          girder.position.set(cx, gy, craneZ + 0.45);
+          girder.castShadow = true;
+          bridgeCraneBridge.add(girder);
 
-        worldGroup.add(craneGroup);
+          // Top rail for hoist trolley
+          const tRail = new THREE.Mesh(new THREE.BoxGeometry(girderSpan * 0.98, 0.06, 0.04), craneSteel);
+          tRail.position.set(cx, gy, craneZ + 1.02);
+          bridgeCraneBridge.add(tRail);
+        });
+
+        // Heavy End-Truck Carriages riding on the runway rails
+        [fb.x_min + 1.2, fb.x_max - 1.2].forEach(tx => {
+          const truck = new THREE.Mesh(new THREE.BoxGeometry(0.7, 2.8, 0.5), craneMat);
+          truck.position.set(tx, 0, craneZ + 0.5);
+          truck.castShadow = true;
+          bridgeCraneBridge.add(truck);
+
+          // Steel flanged wheels
+          [-1.1, 1.1].forEach(wy => {
+            const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.12, 16), craneSteel);
+            wheel.rotation.z = Math.PI / 2;
+            wheel.position.set(tx, wy, craneZ + 0.32);
+            bridgeCraneBridge.add(wheel);
+          });
+
+          // Flashing Amber Warning Strobe on each end truck
+          const strobeBase = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.06, 12), craneSteel);
+          strobeBase.position.set(tx, 0, craneZ + 0.8);
+          strobeBase.rotation.x = Math.PI / 2;
+          bridgeCraneBridge.add(strobeBase);
+
+          const strobeDome = new THREE.Mesh(
+            new THREE.SphereGeometry(0.08, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+            new THREE.MeshBasicMaterial({ color: 0xffaa00 })
+          );
+          strobeDome.position.set(tx, 0, craneZ + 0.83);
+          strobeDome.rotation.x = -Math.PI / 2;
+          bridgeCraneBridge.add(strobeDome);
+
+          const strobeLight = new THREE.PointLight(0xffaa00, 1.8, 8.0);
+          strobeLight.position.set(tx, 0, craneZ + 1.0);
+          bridgeCraneBridge.add(strobeLight);
+
+          bridgeCraneStrobes.push({ dome: strobeDome, light: strobeLight });
+        });
+
+        // MOVING HOIST CRAB TROLLEY (travels crosswise on top of bridge girders)
+        bridgeCraneTrolley = new THREE.Group();
+        bridgeCraneTrolley.position.set(cx, 0, 0);
+
+        const trolleyFrame = new THREE.Mesh(new THREE.BoxGeometry(2.0, 2.2, 0.6), craneSteel);
+        trolleyFrame.position.set(0, 0, craneZ + 1.1);
+        trolleyFrame.castShadow = true;
+        bridgeCraneTrolley.add(trolleyFrame);
+
+        // Winch drum / motor casing
+        const drum = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.4, 16), craneMat);
+        drum.rotation.z = Math.PI / 2;
+        drum.position.set(0, 0, craneZ + 1.48);
+        bridgeCraneTrolley.add(drum);
+
+        // Hanging Steel Wire Cables
+        const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 2.5), craneSteel);
+        cable.position.set(0, 0, craneZ - 0.35);
+        bridgeCraneTrolley.add(cable);
+
+        // Coil Lifting Hook / C-Hook Tongs (IMG_5814)
+        bridgeCraneHook = new THREE.Group();
+        bridgeCraneHook.position.set(0, 0, craneZ - 1.6);
+
+        const cHookMesh = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.12, 8, 20, Math.PI * 1.5), craneMat);
+        cHookMesh.rotation.z = Math.PI / 2;
+        bridgeCraneHook.add(cHookMesh);
+
+        // Hook nose counter-prong
+        const prong = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.8, 0.18), craneMat);
+        prong.position.set(0, 0.35, -0.6);
+        bridgeCraneHook.add(prong);
+
+        bridgeCraneTrolley.add(bridgeCraneHook);
+        bridgeCraneBridge.add(bridgeCraneTrolley);
+        worldGroup.add(bridgeCraneBridge);
+
+        // Show toolbar control
+        const craneBtnGrp = document.getElementById('craneControlGroup');
+        if (craneBtnGrp) craneBtnGrp.style.display = 'flex';
 
         // Dual Floor Transfer Rails (IMG_5814, IMG_5815)
         const railMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 });
@@ -4160,6 +4270,35 @@ let playSpeed = 5;
           ent.mesh.userData.beaconLight.intensity = Math.sin(time * 14 + idx) * 0.9 + 1.3;
         }
       });
+
+      // Moving Overhead Bridge Crane Animation (Travel Front & Back along Y-axis)
+      if (bridgeCraneBridge && isBridgeCraneActive && warehouseBounds) {
+        const { cy, fH, cx, fW } = warehouseBounds;
+        const travelRange = fH * 0.38; // Front and back travel range within warehouse bounds
+        const craneY = cy + Math.sin(time * 0.22) * travelRange;
+        bridgeCraneBridge.position.y = craneY;
+
+        // Hoist crab trolley cross-travel (left & right across girders)
+        if (bridgeCraneTrolley) {
+          const crossRange = fW * 0.28;
+          bridgeCraneTrolley.position.x = cx + Math.sin(time * 0.38 + 1.0) * crossRange;
+        }
+
+        // Hook gentle pendulum sway
+        if (bridgeCraneHook) {
+          bridgeCraneHook.rotation.y = Math.sin(time * 0.8) * 0.05;
+          bridgeCraneHook.rotation.x = Math.cos(time * 0.22) * 0.04;
+        }
+
+        // Flashing amber warning beacons on end-trucks
+        if (bridgeCraneStrobes && bridgeCraneStrobes.length > 0) {
+          const isStrobeOn = Math.sin(time * 10) > 0;
+          bridgeCraneStrobes.forEach(st => {
+            st.light.intensity = isStrobeOn ? 2.5 : 0.2;
+            st.dome.material.color.setHex(isStrobeOn ? 0xffaa00 : 0x78350f);
+          });
+        }
+      }
 
       // Update drone position & camera tracking during playback
       if (droneMesh) {
