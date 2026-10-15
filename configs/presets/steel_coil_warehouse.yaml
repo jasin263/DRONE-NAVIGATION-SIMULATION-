@@ -1,0 +1,305 @@
+version: "1.0"
+
+site:
+  id: "WH-STEEL-COIL"
+  name: "Heavy Metal Coil & Sheet Processing Center"
+  units: "metres"
+  coordinate_frame:
+    origin: [0.0, 0.0, 0.0]
+    x_axis: "east"
+    y_axis: "north"
+    z_axis: "up"
+    z_up: true
+  floor_bounds:
+    x_min: 0.0
+    x_max: 42.0
+    y_min: 0.0
+    y_max: 32.0
+  ceiling_height: 9.5
+  timezone: "UTC"
+
+layout:
+  zones:
+    - id: "Z-BAY-B"
+      name: "Bay B Master Coils (USS & Cliffs)"
+      bounds:
+        x_min: 1.0
+        x_max: 13.0
+        y_min: 2.0
+        y_max: 30.0
+    - id: "Z-BAY-C"
+      name: "Bay C Master Coils (ArcelorMittal & PRO-TEC)"
+      bounds:
+        x_min: 13.0
+        x_max: 25.0
+        y_min: 2.0
+        y_max: 30.0
+    - id: "Z-BAY-D"
+      name: "Bay D Slit Coils, Sheet Blanks & Rail Transfer"
+      bounds:
+        x_min: 25.0
+        x_max: 41.0
+        y_min: 2.0
+        y_max: 30.0
+
+  aisles:
+    - id: "A01"
+      name: "Aisle B11-B13 (USS vs ArcelorMittal)"
+      x_start: 7.0
+      y_start: 4.0
+      x_end: 7.0
+      y_end: 28.0
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-COIL-B1"
+        bays: 12
+        levels: 1
+        bay_width: 2.0
+        level_heights: [0.8]
+        depth: 1.6
+        bin_width: 1.8
+        bin_height: 1.6
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-COIL-B2"
+        bays: 12
+        levels: 1
+        bay_width: 2.0
+        level_heights: [0.8]
+        depth: 1.6
+        bin_width: 1.8
+        bin_height: 1.6
+        bins_per_bay_level: 1
+
+    - id: "A02"
+      name: "Aisle C12-C14 (PRO-TEC & Galvanized Master Rows)"
+      x_start: 17.5
+      y_start: 4.0
+      x_end: 17.5
+      y_end: 28.0
+      width: 2.4
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-COIL-C1"
+        bays: 12
+        levels: 1
+        bay_width: 2.0
+        level_heights: [0.8]
+        depth: 1.6
+        bin_width: 1.8
+        bin_height: 1.6
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-COIL-C2"
+        bays: 12
+        levels: 1
+        bay_width: 2.0
+        level_heights: [0.8]
+        depth: 1.6
+        bin_width: 1.8
+        bin_height: 1.6
+        bins_per_bay_level: 1
+
+    - id: "A03"
+      name: "Aisle D12-D14 (Slit Coils & Stamped Sheet Blanks)"
+      x_start: 28.0
+      y_start: 4.0
+      x_end: 28.0
+      y_end: 28.0
+      width: 2.4
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-COIL-D1"
+        bays: 12
+        levels: 1
+        bay_width: 2.0
+        level_heights: [0.8]
+        depth: 1.6
+        bin_width: 1.8
+        bin_height: 1.6
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-BLANK-D2"
+        bays: 12
+        levels: 2
+        bay_width: 2.0
+        level_heights: [0.5, 1.4]
+        depth: 1.5
+        bin_width: 1.8
+        bin_height: 0.7
+        bins_per_bay_level: 1
+
+  bin_numbering_template: "COIL-{aisle_id}-{rack_id}-B{bay:02d}"
+
+  doors:
+    - id: "DOOR-HIGH-BAY"
+      position: [0.2, 16.0, 0.0]
+      width: 4.5
+      height: 5.0
+
+  charging_stations:
+    - id: "CHARGE-01"
+      position: [2.5, 2.5, 0.0]
+      charge_rate_kw: 1.2
+
+  takeoff_landing_pads:
+    - id: "PAD-HOME"
+      position: [2.5, 2.5, 0.0]
+      radius: 0.8
+
+  no_fly_zones:
+    - id: "NFZ-CRANE-CLEARANCE"
+      name: "Overhead 30-Ton Bridge Crane Operating Envelope"
+      polygon:
+        - [0.0, 0.0]
+        - [42.0, 0.0]
+        - [42.0, 32.0]
+        - [0.0, 32.0]
+      z_min: 4.5
+      z_max: 9.5
+
+  people_zones:
+    - id: "PZ-INSPECTION-DESK"
+      name: "Coil Slitting & Inspection Desk"
+      polygon:
+        - [37.0, 1.0]
+        - [41.0, 1.0]
+        - [41.0, 6.0]
+        - [37.0, 6.0]
+      max_speed_mps: 0.8
+
+obstacles:
+  static:
+    - id: "COL-B10"
+      type: "pillar"
+      position: [5.0, 2.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-B12"
+      type: "pillar"
+      position: [5.0, 16.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-B14"
+      type: "pillar"
+      position: [5.0, 30.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-C09"
+      type: "pillar"
+      position: [15.5, 2.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-C12"
+      type: "pillar"
+      position: [15.5, 16.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-C14"
+      type: "pillar"
+      position: [15.5, 30.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-D12"
+      type: "pillar"
+      position: [26.0, 16.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+    - id: "COL-D14"
+      type: "pillar"
+      position: [26.0, 30.0, 0.0]
+      dimensions: [0.6, 0.6, 9.5]
+  dynamic:
+    - id: "FORKLIFT-COIL-HAULER"
+      type: "forklift"
+      path:
+        - [7.0, 29.0, 0.0]
+        - [7.0, 3.0, 0.0]
+        - [17.5, 3.0, 0.0]
+        - [17.5, 29.0, 0.0]
+        - [28.0, 29.0, 0.0]
+        - [28.0, 3.0, 0.0]
+        - [7.0, 3.0, 0.0]
+        - [7.0, 29.0, 0.0]
+      speed_mps: 1.1
+      schedule_start_s: 0.0
+      schedule_end_s: 1200.0
+    - id: "AMR-TRANSFER-TROLLEY"
+      type: "walker"
+      path:
+        - [36.0, 28.0, 0.0]
+        - [36.0, 4.0, 0.0]
+        - [36.0, 28.0, 0.0]
+      speed_mps: 0.8
+      schedule_start_s: 0.0
+      schedule_end_s: 1200.0
+  random_seed: 42
+  random_count: 0
+
+drone:
+  mass_kg: 2.8
+  max_speed_mps: 2.2
+  max_accel_mps2: 1.4
+  max_yaw_rate_radps: 1.57
+  battery:
+    capacity_wh: 150.0
+    hover_power_w: 190.0
+    forward_power_w_per_mps: 18.0
+    climb_power_w_per_mps: 26.0
+    safe_reserve_pct: 20.0
+    critical_reserve_pct: 10.0
+  camera:
+    resolution_w: 1920
+    resolution_h: 1080
+    hfov_deg: 72.0
+    vfov_deg: 48.0
+    mount_angle_deg: 0.0
+    standoff_distance_m: 1.1
+    exposure_time_s: 0.003
+    max_blur_speed_mps: 1.2
+  sensors:
+    imu_accel_bias: 0.015
+    imu_accel_noise: 0.03
+    imu_gyro_bias: 0.003
+    imu_gyro_noise: 0.008
+    marker_pos_noise: 0.015
+    marker_miss_prob: 0.03
+    lidar_range_max_m: 10.0
+    lidar_noise_m: 0.015
+
+localisation:
+  marker_size_m: 0.20
+  marker_spacing:
+    rack_ends: true
+    every_n_bays: 2
+  pose_noise: 0.02
+  drift_model:
+    walk_std_mps: 0.03
+  fusion_filter:
+    process_noise_pos: 0.01
+    process_noise_vel: 0.05
+    meas_noise_marker: 0.02
+    meas_noise_imu: 0.08
+
+mission:
+  target_zones: ["Z-BAY-B", "Z-BAY-C"]
+  target_bins: []
+  priority: "normal"
+  scan_strategy: "serpentine"
+  max_flight_duration_s: 1200.0
+  return_to_charge_rules:
+    threshold_pct: 25.0
+    pad_id: "PAD-HOME"
+
+safety:
+  min_rack_clearance_m: 0.5
+  geofence_margin_m: 0.6
+  battery_reserve_pct: 20.0
+  link_loss_behaviour: "hover_then_land"
+  localisation_loss_behaviour: "hover_then_land"
+  emergency_stop_decel_mps2: 3.5
+
+export:
+  drims_endpoint_url: null
+  auth_token: null
+  site_id_mapping: "WH-STEEL-COIL"
+  schema_version: "1.0"
+  mode: "file"
+  output_directory: "exports/steel_coil"

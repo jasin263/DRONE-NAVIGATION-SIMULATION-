@@ -1397,6 +1397,7 @@
           <option value="medium" selected>WH-MEDIUM (8 Aisles, ~500 Bins)</option>
           <option value="large">WH-LARGE (20 Aisles, ~5,000 Bins)</option>
           <option value="mega">WH-MEGA (50 Aisles, 50,000 Bins)</option>
+          <option value="steel_coil_warehouse">WH-STEEL-COIL (Client Metal Coils & Blanks)</option>
         </select>
       </div>
     </div>
@@ -2702,10 +2703,17 @@ let playSpeed = 5;
             hoverBoxHelper.visible = true;
 
             if (tooltip) {
-              bttCode.innerText = `📦 ${bin.id}`;
-              bttLoc.innerText = `Aisle ${bin.aisle_id} • Rack ${bin.rack_id} • Level ${bin.level_index + 1} (Bay ${bin.bay_index + 1})`;
-              const itemsCount = bin.amazon_items ? bin.amazon_items.reduce((acc, it) => acc + (it.quantity || 1), 0) : (bin.amazon_expected_qty || 0);
-              bttItems.innerText = `Contents: ${itemsCount} items (${bin.amazon_items ? bin.amazon_items.length : 0} ASINs)`;
+              const isCoil = !!bin.coil_img_id || (bin.coil_supplier != null);
+              if (isCoil) {
+                bttCode.innerText = `🌀 ${bin.id} (${bin.label_code})`;
+                bttLoc.innerText = `Floor Bay ${bin.coil_floor_bay || 'R75'} • Column ${bin.coil_landmark || 'B12'} • Aisle ${bin.aisle_id}`;
+                bttItems.innerText = `${bin.coil_supplier || 'Steel Mill'} • ${(bin.coil_weight_kg || 21800).toLocaleString()} kg (${bin.coil_form_factor || 'Master Coil'})`;
+              } else {
+                bttCode.innerText = `📦 ${bin.id}`;
+                bttLoc.innerText = `Aisle ${bin.aisle_id} • Rack ${bin.rack_id} • Level ${bin.level_index + 1} (Bay ${bin.bay_index + 1})`;
+                const itemsCount = bin.amazon_items ? bin.amazon_items.reduce((acc, it) => acc + (it.quantity || 1), 0) : (bin.amazon_expected_qty || 0);
+                bttItems.innerText = `Contents: ${itemsCount} items (${bin.amazon_items ? bin.amazon_items.length : 0} ASINs)`;
+              }
               tooltip.style.left = `${e.clientX}px`;
               tooltip.style.top = `${e.clientY}px`;
               tooltip.style.display = 'block';
@@ -3363,6 +3371,50 @@ let playSpeed = 5;
       return new THREE.CanvasTexture(c);
     }
 
+    // Helper: Create procedural column stencil texture with landmark ID and safety signage
+    function createColumnStencilTexture(colId) {
+      const c = document.createElement('canvas');
+      c.width = 128; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 0, 128, 256);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 38px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const cleanId = (colId || 'COL').replace('COL-', '');
+      ctx.fillText(cleanId, 64, 70);
+      if (cleanId === 'B12') {
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(14, 175, 100, 55);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText('EYE WASH', 64, 202);
+      } else {
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(14, 185, 100, 36);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('FIRE EXT', 64, 203);
+      }
+      return new THREE.CanvasTexture(c);
+    }
+
+    // Helper: Create floor bay stencil texture (e.g., R74, R75, R76)
+    function createFloorBayTexture(text) {
+      const c = document.createElement('canvas');
+      c.width = 128; c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = 'rgba(0,0,0,0)';
+      ctx.fillRect(0, 0, 128, 64);
+      ctx.fillStyle = '#1d4ed8'; // Industrial blue stencil
+      ctx.font = 'bold 26px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, 64, 32);
+      return new THREE.CanvasTexture(c);
+    }
+
     function build3DWorld(world) {
       cleanUp3DScene();
 
@@ -3437,24 +3489,27 @@ let playSpeed = 5;
       // ----------------------------------------------------
       // 1. Warehouse Floor & Industrial Guide Markings
       // ----------------------------------------------------
+      const isSteelCoil = (world.site_id && world.site_id.toLowerCase().includes('coil')) ||
+                          (world.site_name && world.site_name.toLowerCase().includes('coil'));
+
       const floorGeo = new THREE.PlaneGeometry(fW + 6, fH + 6);
       const floorMat = new THREE.MeshStandardMaterial({
-        color: 0x090d15,
-        roughness: 0.88,
-        metalness: 0.12
+        color: isSteelCoil ? 0xd4d4d8 : 0x090d15, // Smooth concrete epoxy floor in steel processing facilities
+        roughness: isSteelCoil ? 0.38 : 0.88,
+        metalness: isSteelCoil ? 0.22 : 0.12
       });
       const floor = new THREE.Mesh(floorGeo, floorMat);
       floor.position.set(cx, cy, 0);
       floor.receiveShadow = true;
       worldGroup.add(floor);
 
-      const grid = new THREE.GridHelper(Math.max(fW, fH) + 10, Math.round(Math.max(fW, fH)), 0x1e293b, 0x101726);
+      const grid = new THREE.GridHelper(Math.max(fW, fH) + 10, Math.round(Math.max(fW, fH)), isSteelCoil ? 0x94a3b8 : 0x1e293b, isSteelCoil ? 0xcbd5e1 : 0x101726);
       grid.rotation.x = Math.PI / 2;
       grid.position.set(cx, cy, 0.01);
       worldGroup.add(grid);
 
       // Perimeter Warehouse Walls (subtle dark structure)
-      const wallMat = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: 0.95 });
+      const wallMat = new THREE.MeshStandardMaterial({ color: isSteelCoil ? 0x1e293b : 0x0c111a, roughness: 0.95 });
       const wallThickness = 0.4;
       const wallH = ch;
 
@@ -3477,7 +3532,11 @@ let playSpeed = 5;
 
       // Aisle Floor Lines & Runway Markings
       if (world.aisles) {
-        const stripeMat = new THREE.MeshBasicMaterial({ color: 0xeab308, transparent: true, opacity: 0.8 });
+        const stripeMat = new THREE.MeshBasicMaterial({
+          color: isSteelCoil ? 0x2563eb : 0xeab308, // Vivid blue boundary borders as seen in client images
+          transparent: true,
+          opacity: 0.85
+        });
         const arrowMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.45 });
 
         world.aisles.forEach(a => {
@@ -3487,14 +3546,26 @@ let playSpeed = 5;
           const halfW = a.width / 2;
 
           // Left caution boundary line
-          const lineLeft = new THREE.Mesh(new THREE.PlaneGeometry(0.1, aLen), stripeMat);
+          const lineLeft = new THREE.Mesh(new THREE.PlaneGeometry(0.12, aLen), stripeMat);
           lineLeft.position.set(aMidX - halfW, aMidY, 0.015);
           worldGroup.add(lineLeft);
 
           // Right caution boundary line
-          const lineRight = new THREE.Mesh(new THREE.PlaneGeometry(0.1, aLen), stripeMat);
+          const lineRight = new THREE.Mesh(new THREE.PlaneGeometry(0.12, aLen), stripeMat);
           lineRight.position.set(aMidX + halfW, aMidY, 0.015);
           worldGroup.add(lineRight);
+
+          // Stenciled bay floor markings (e.g. R74, R75, R76) along blue boundary line
+          if (isSteelCoil) {
+            const bayStencils = ['R74', 'R75', 'R76', 'R77'];
+            for (let bs = 0; bs < 4; bs++) {
+              const byPos = a.y_start + (aLen * (bs + 0.5) / 4);
+              const bayTex = createFloorBayTexture(bayStencils[bs]);
+              const bayMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.45), new THREE.MeshBasicMaterial({ map: bayTex, transparent: true }));
+              bayMesh.position.set(aMidX - halfW + 0.5, byPos, 0.02);
+              worldGroup.add(bayMesh);
+            }
+          }
 
           // Directional flow indicator chevron markers
           const arrowSteps = Math.max(2, Math.floor(aLen / 8));
@@ -3547,9 +3618,30 @@ let playSpeed = 5;
       }
 
       // ----------------------------------------------------
-      // 2. High-Bay Storage Racks (Structural Columns & Orange Beams)
+      // 2. High-Bay Storage Racks / Steel Coil Floor Cradles
       // ----------------------------------------------------
-      if (world.racks && world.racks.length > 0) {
+      if (isSteelCoil && world.racks) {
+        // Floor-based wooden saddles and rubber cradle chocks (as seen in IMG_5805, IMG_5808)
+        const chockMat = new THREE.MeshStandardMaterial({ color: 0x3d271d, roughness: 0.9 });
+        world.racks.forEach(r => {
+          const ry = r.bounds.y_max - r.bounds.y_min;
+          const bays = Math.max(1, r.bays || 12);
+          const baySpacing = ry / bays;
+          const rMidX = (r.bounds.x_min + r.bounds.x_max) / 2;
+
+          for (let b = 0; b < bays; b++) {
+            const cyPos = r.bounds.y_min + (b + 0.5) * baySpacing;
+            // Left wooden chock
+            const chockL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.4, 0.16), chockMat);
+            chockL.position.set(rMidX - 0.45, cyPos, 0.08);
+            racksGroup.add(chockL);
+            // Right wooden chock
+            const chockR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.4, 0.16), chockMat);
+            chockR.position.set(rMidX + 0.45, cyPos, 0.08);
+            racksGroup.add(chockR);
+          }
+        });
+      } else if (world.racks && world.racks.length > 0) {
         const uprightMat = new THREE.MeshStandardMaterial({
           color: 0x1e293b,
           metalness: 0.65,
@@ -3621,22 +3713,22 @@ let playSpeed = 5;
       }
 
       // ----------------------------------------------------
-      // 3. Thousands of High-Performance Instanced Bins
+      // 3. Thousands of High-Performance Instanced Bins / Coils
       // ----------------------------------------------------
       if (world.bins && world.bins.length > 0) {
         binDataList = world.bins;
         const binCount = world.bins.length;
 
-        // Shared geometry & PBR material for thousands of bins in a single draw call
-        const unitBoxGeo = new THREE.BoxGeometry(1, 1, 1);
+        // Shared geometry & PBR material
+        const unitGeo = isSteelCoil ? new THREE.CylinderGeometry(0.72, 0.72, 1.35, 24) : new THREE.BoxGeometry(1, 1, 1);
         const instancedBinMat = new THREE.MeshStandardMaterial({
-          color: BIN_COLOR_DEFAULT,
-          roughness: 0.55,
-          metalness: 0.12
+          color: isSteelCoil ? 0xd1d5db : BIN_COLOR_DEFAULT,
+          roughness: isSteelCoil ? 0.25 : 0.55,
+          metalness: isSteelCoil ? 0.9 : 0.12
         });
 
-        instancedBins = new THREE.InstancedMesh(unitBoxGeo, instancedBinMat, binCount);
-        instancedBins.castShadow = (binCount < 6000); // Shadow enabled for 500 & 5000 bins
+        instancedBins = new THREE.InstancedMesh(unitGeo, instancedBinMat, binCount);
+        instancedBins.castShadow = true;
         instancedBins.receiveShadow = true;
 
         const dummy = new THREE.Object3D();
@@ -3653,16 +3745,28 @@ let playSpeed = 5;
           dummy.position.set(
             (b.bounds.x_min + b.bounds.x_max) / 2,
             (b.bounds.y_min + b.bounds.y_max) / 2,
-            (b.bounds.z_min + b.bounds.z_max) / 2
+            isSteelCoil ? (b.level_index > 0 ? (b.bounds.z_min + 0.4) : 0.75) : ((b.bounds.z_min + b.bounds.z_max) / 2)
           );
-          dummy.scale.set(bx * 0.88, by * 0.88, bz * 0.84);
-          dummy.rotation.set(0, 0, 0);
+
+          if (isSteelCoil) {
+            dummy.rotation.set(Math.PI / 2, 0, 0); // Horizontal cylindrical coil aligned with corridor
+            dummy.scale.set(1.0, 1.0, 1.0);
+          } else {
+            dummy.scale.set(bx * 0.88, by * 0.88, bz * 0.84);
+            dummy.rotation.set(0, 0, 0);
+          }
           dummy.updateMatrix();
 
           instancedBins.setMatrixAt(i, dummy.matrix);
 
-          // Initial Color based on mode
-          if (activeVisualMode === 'heatmap') {
+          // Initial Color based on mode / coil supplier wrap
+          if (isSteelCoil) {
+            if (b.coil_supplier && b.coil_supplier.includes('Arcelor')) color.setHex(0xf8fafc); // ArcelorMittal white wrap
+            else if (b.coil_supplier && b.coil_supplier.includes('United States')) color.setHex(0x93c5fd); // USS steel-blue wrap
+            else if (b.coil_supplier && b.coil_supplier.includes('Cliffs')) color.setHex(0x64748b); // Cleveland-Cliffs cold-rolled
+            else if (b.coil_supplier && b.coil_supplier.includes('PRO-TEC')) color.setHex(0x38bdf8); // PRO-TEC blue wrap
+            else color.setHex(0xcfd8dc); // Galvanized metallic spangle
+          } else if (activeVisualMode === 'heatmap') {
             const lvl = b.level_index || 0;
             color.setHex(BIN_COLOR_LEVELS[lvl % BIN_COLOR_LEVELS.length]);
           } else if (activeVisualMode === 'cyber') {
@@ -3676,6 +3780,103 @@ let playSpeed = 5;
         instancedBins.instanceMatrix.needsUpdate = true;
         if (instancedBins.instanceColor) instancedBins.instanceColor.needsUpdate = true;
         binsGroup.add(instancedBins);
+
+        // Additional visual details for steel coils: hollow inner eye & black strapping bands
+        if (isSteelCoil) {
+          const eyeGeo = new THREE.CylinderGeometry(0.24, 0.24, 1.37, 20);
+          const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+          const eyeInst = new THREE.InstancedMesh(eyeGeo, eyeMat, binCount);
+          for (let i = 0; i < binCount; i++) {
+            const b = world.bins[i];
+            dummy.position.set(
+              (b.bounds.x_min + b.bounds.x_max) / 2,
+              (b.bounds.y_min + b.bounds.y_max) / 2,
+              b.level_index > 0 ? (b.bounds.z_min + 0.4) : 0.75
+            );
+            dummy.rotation.set(Math.PI / 2, 0, 0);
+            dummy.scale.set(1, 1, 1);
+            dummy.updateMatrix();
+            eyeInst.setMatrixAt(i, dummy.matrix);
+          }
+          eyeInst.instanceMatrix.needsUpdate = true;
+          binsGroup.add(eyeInst);
+        }
+      }
+
+      // Structural Steel Columns (Pillars with Stencils like B10, B12, C14, D13)
+      if (world.static_obstacles) {
+        const colMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.75, roughness: 0.35 });
+        world.static_obstacles.forEach(so => {
+          if (so.type === 'pillar') {
+            const bw = so.bounds.x_max - so.bounds.x_min;
+            const bd = so.bounds.y_max - so.bounds.y_min;
+            const colX = (so.bounds.x_min + so.bounds.x_max) / 2;
+            const colY = (so.bounds.y_min + so.bounds.y_max) / 2;
+
+            const pillarMesh = new THREE.Mesh(new THREE.BoxGeometry(bw, bd, ch), colMat);
+            pillarMesh.position.set(colX, colY, ch / 2);
+            pillarMesh.castShadow = true;
+            racksGroup.add(pillarMesh);
+
+            // Stencil plate attached to column
+            const stencilTex = createColumnStencilTexture(so.id);
+            const stencilMat = new THREE.MeshBasicMaterial({ map: stencilTex, transparent: true });
+            const plate = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 1.4), stencilMat);
+            plate.position.set(colX, colY - bd / 2 - 0.015, 2.2);
+            racksGroup.add(plate);
+          }
+        });
+      }
+
+      // 30-Ton Yellow Overhead Bridge Crane & Runway Beams (IMG_5814, IMG_5818)
+      if (isSteelCoil) {
+        const craneMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.35, metalness: 0.4 });
+        const craneSteel = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.5, metalness: 0.8 });
+        const craneGroup = new THREE.Group();
+        const craneZ = ch - 1.4;
+
+        // Long runway I-beams on left and right walls
+        const beamL = new THREE.Mesh(new THREE.BoxGeometry(0.4, fH, 0.6), craneSteel);
+        beamL.position.set(fb.x_min + 1.2, cy, craneZ);
+        craneGroup.add(beamL);
+
+        const beamR = new THREE.Mesh(new THREE.BoxGeometry(0.4, fH, 0.6), craneSteel);
+        beamR.position.set(fb.x_max - 1.2, cy, craneZ);
+        craneGroup.add(beamR);
+
+        // Twin Yellow Box Girders spanning across warehouse width
+        const girderSpan = fW - 2.4;
+        const girderY = cy;
+        [-0.8, 0.8].forEach(gy => {
+          const girder = new THREE.Mesh(new THREE.BoxGeometry(girderSpan, 0.55, 1.1), craneMat);
+          girder.position.set(cx, girderY + gy, craneZ + 0.45);
+          craneGroup.add(girder);
+        });
+
+        // Hoist Crab Trolley
+        const trolley = new THREE.Mesh(new THREE.BoxGeometry(2.0, 2.2, 0.6), craneSteel);
+        trolley.position.set(cx, girderY, craneZ + 1.1);
+        craneGroup.add(trolley);
+
+        // Hanging Cables and Coil Lifting C-Hook Tongs
+        const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 2.4), craneSteel);
+        cable.position.set(cx, girderY, craneZ - 0.3);
+        craneGroup.add(cable);
+
+        const cHook = new THREE.Mesh(new THREE.TorusGeometry(0.65, 0.12, 8, 16, Math.PI * 1.5), craneMat);
+        cHook.rotation.z = Math.PI / 2;
+        cHook.position.set(cx, girderY, craneZ - 1.5);
+        craneGroup.add(cHook);
+
+        worldGroup.add(craneGroup);
+
+        // Dual Floor Transfer Rails (IMG_5814, IMG_5815)
+        const railMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 });
+        [-0.45, 0.45].forEach(rx => {
+          const rail = new THREE.Mesh(new THREE.BoxGeometry(0.08, fH * 0.9, 0.03), railMat);
+          rail.position.set(36.0 + rx, cy, 0.02);
+          worldGroup.add(rail);
+        });
       }
 
       // ----------------------------------------------------
@@ -4329,11 +4530,17 @@ let playSpeed = 5;
     }
 
     // ----------------------------------------------------------
-    // Real Amazon Bin Image HUD Updater
+    // Real Amazon & Client Steel Coil Image HUD Updater
     // ----------------------------------------------------------
     function updateAmazonBinHUD(bin, scanRecord, isLiveScan = false) {
       const hud = document.getElementById('amazonBinHudCard');
       if (!hud || !bin) return;
+
+      const isCoil = !!bin.coil_img_id || (bin.coil_supplier != null);
+      const hudTitleEl = document.querySelector('.amz-hud-title');
+      if (hudTitleEl) {
+        hudTitleEl.innerText = isCoil ? 'Steel Coil Vision HUD' : 'Amazon Bin Vision HUD';
+      }
 
       const statusPill = document.getElementById('amzHudStatus');
       const laserSweep = document.getElementById('amzLaserSweep');
@@ -4347,14 +4554,17 @@ let playSpeed = 5;
       const confValEl = document.getElementById('amzHudConfVal');
       const opticsEl = document.getElementById('amzHudOptics');
 
-      // 1. Image reference & shelf photo
-      const imgId = bin.amazon_img_id || (scanRecord ? scanRecord.image_ref : null) || '439407';
-      const imgUrl = bin.amazon_img_url || `/img/amazon/${imgId}.jpg`;
+      // 1. Image reference & photo
+      const imgId = isCoil ? bin.coil_img_id : (bin.amazon_img_id || (scanRecord ? scanRecord.image_ref : null) || '439407');
+      const imgUrl = isCoil
+        ? (bin.coil_img_url || `/img/client/${bin.coil_img_id}.jpg`)
+        : (bin.amazon_img_url || `/img/amazon/${imgId}.jpg`);
+
       if (imgEl) imgEl.src = imgUrl;
-      if (imgIdEl) imgIdEl.innerText = `IMG #${imgId}`;
+      if (imgIdEl) imgIdEl.innerText = isCoil ? `${bin.coil_img_id}` : `IMG #${imgId}`;
       if (binIdEl) binIdEl.innerText = bin.id;
 
-      const decodedCode = (scanRecord && scanRecord.decoded_value) || bin.label_code || `AMZN-${imgId}`;
+      const decodedCode = (scanRecord && scanRecord.decoded_value) || bin.label_code || (isCoil ? bin.coil_img_id : `AMZN-${imgId}`);
       if (barcodeEl) barcodeEl.innerText = decodedCode;
 
       // 2. Scan status badge and sweeping laser
@@ -4367,7 +4577,7 @@ let playSpeed = 5;
         setTimeout(() => {
           if (statusPill) {
             statusPill.className = 'amz-status-pill amz-status-ready';
-            statusPill.innerText = 'AUDIT OK ✓';
+            statusPill.innerText = isCoil ? 'COIL AUDITED ✓' : 'AUDIT OK ✓';
           }
           if (laserSweep) laserSweep.classList.remove('active');
         }, 900);
@@ -4379,28 +4589,42 @@ let playSpeed = 5;
         if (laserSweep) laserSweep.classList.remove('active');
       }
 
-      // 3. Amazon catalog items and verified ASINs
+      // 3. Catalog items or Coil specifications
       if (itemsListEl) {
         itemsListEl.innerHTML = '';
-        const items = bin.amazon_items || [];
-        const totalQty = items.reduce((acc, it) => acc + (it.quantity || 1), 0) || (bin.amazon_expected_qty || 1);
-        if (itemCountEl) itemCountEl.innerText = `${totalQty} Item${totalQty === 1 ? '' : 's'}`;
-
-        if (items.length > 0) {
-          items.slice(0, 4).forEach(it => {
-            const row = document.createElement('div');
-            row.className = 'amz-item-row';
-            row.innerHTML = `
-              <div style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:6px;">
-                <span style="color:#94a3b8; font-family:monospace; font-size:10px;">${it.asin}</span>
-                <span style="color:#e2e8f0; font-size:11px; margin-left:4px;">${it.name.substring(0, 32)}${it.name.length > 32 ? '…' : ''}</span>
+        if (isCoil) {
+          if (itemCountEl) itemCountEl.innerText = `${(bin.coil_weight_kg || 21800).toLocaleString()} kg`;
+          itemsListEl.innerHTML = `
+            <div class="amz-item-row" style="flex-direction:column; align-items:flex-start; gap:4px; padding:6px 0;">
+              <div style="display:flex; justify-content:space-between; width:100%;">
+                <span style="color:#38bdf8; font-weight:700; font-size:11px;">${bin.coil_supplier || 'ArcelorMittal Calvert'}</span>
+                <span style="color:#10b981; font-weight:700; font-size:11px;">${bin.coil_grade || 'Galvanized CS'}</span>
               </div>
-              <span style="color:#38bdf8; font-weight:700; font-size:11px; white-space:nowrap;">×${it.quantity}</span>
-            `;
-            itemsListEl.appendChild(row);
-          });
+              <div style="color:#e2e8f0; font-size:10px;">${bin.coil_form_factor || 'Master Coil'} • Landmark: Column ${bin.coil_landmark || 'B12'}</div>
+              <div style="color:#94a3b8; font-size:9px; font-family:monospace;">Traceability: Verified Mill Batch • Floor Cradle Saddle</div>
+            </div>
+          `;
         } else {
-          itemsListEl.innerHTML = '<div style="color:var(--text-dim); font-size:10px; padding:4px 0;">Catalog sync verified for bin</div>';
+          const items = bin.amazon_items || [];
+          const totalQty = items.reduce((acc, it) => acc + (it.quantity || 1), 0) || (bin.amazon_expected_qty || 1);
+          if (itemCountEl) itemCountEl.innerText = `${totalQty} Item${totalQty === 1 ? '' : 's'}`;
+
+          if (items.length > 0) {
+            items.slice(0, 4).forEach(it => {
+              const row = document.createElement('div');
+              row.className = 'amz-item-row';
+              row.innerHTML = `
+                <div style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:6px;">
+                  <span style="color:#94a3b8; font-family:monospace; font-size:10px;">${it.asin}</span>
+                  <span style="color:#e2e8f0; font-size:11px; margin-left:4px;">${it.name.substring(0, 32)}${it.name.length > 32 ? '…' : ''}</span>
+                </div>
+                <span style="color:#38bdf8; font-weight:700; font-size:11px; white-space:nowrap;">×${it.quantity}</span>
+              `;
+              itemsListEl.appendChild(row);
+            });
+          } else {
+            itemsListEl.innerHTML = '<div style="color:var(--text-dim); font-size:10px; padding:4px 0;">Catalog sync verified for bin</div>';
+          }
         }
       }
 
@@ -4412,7 +4636,7 @@ let playSpeed = 5;
     }
 
     // ----------------------------------------------------------
-    // Amazon Bin Detail Popup
+    // Bin Detail Popup (Amazon Bins & Client Steel Coils)
     // ----------------------------------------------------------
     function showBinDetailPopup(bin) {
       let popup = document.getElementById('binDetailPopup');
@@ -4421,7 +4645,7 @@ let playSpeed = 5;
         popup.id = 'binDetailPopup';
         popup.style.cssText = `
           position:fixed; bottom:24px; right:24px; z-index:9999;
-          width:340px; background:rgba(10,15,28,0.97);
+          width:360px; background:rgba(10,15,28,0.97);
           border:1px solid rgba(56,189,248,0.35); border-radius:14px;
           backdrop-filter:blur(16px); padding:0; overflow:hidden;
           box-shadow:0 20px 60px rgba(0,0,0,0.7);
@@ -4431,41 +4655,60 @@ let playSpeed = 5;
         document.body.appendChild(popup);
       }
 
-      const imgUrl = bin.amazon_img_url
-        ? bin.amazon_img_url
-        : `https://placehold.co/340x180/1e293b/94a3b8?text=Bin+${encodeURIComponent(bin.id)}`;
+      const isCoil = !!bin.coil_img_id || (bin.coil_supplier != null);
+      const imgUrl = isCoil
+        ? (bin.coil_img_url || `/img/client/${bin.coil_img_id}.jpg`)
+        : (bin.amazon_img_url ? bin.amazon_img_url : `https://placehold.co/340x180/1e293b/94a3b8?text=Bin+${encodeURIComponent(bin.id)}`);
 
-      const itemsHtml = (bin.amazon_items && bin.amazon_items.length > 0)
-        ? bin.amazon_items.map(it => `
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;
-              padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-              <div style="flex:1;">
-                <div style="font-size:10px;color:#94a3b8;font-family:monospace;">${it.asin}</div>
-                <div style="font-size:11px;color:#e2e8f0;margin-top:2px;">${it.name.substring(0,55)}${it.name.length>55?'…':''}</div>
-              </div>
-              <div style="margin-left:10px;background:rgba(56,189,248,0.15);color:#38bdf8;
-                border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;white-space:nowrap;">
-                ×${it.quantity}
-              </div>
-            </div>`).join('')
-        : '<div style="color:#64748b;font-size:11px;padding:8px 0;">No catalog data</div>';
-
-      popup.innerHTML = `
-        <div style="position:relative;">
-          <img src="${imgUrl}"
-            onerror="this.src='https://placehold.co/340x180/1e293b/94a3b8?text=No+Image'"
-            style="width:100%;height:180px;object-fit:cover;display:block;">
-          <div style="position:absolute;top:8px;left:8px;
-            background:rgba(0,0,0,0.7);border-radius:6px;padding:3px 8px;
-            font-size:10px;color:#38bdf8;font-family:monospace;font-weight:600;">
-            📦 ${bin.id}
+      let bodyContentHtml = '';
+      if (isCoil) {
+        bodyContentHtml = `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div>
+              <div style="font-size:10px;color:#64748b;">Coil ID / Barcode</div>
+              <div style="font-family:monospace;font-size:13px;color:#38bdf8;font-weight:700;">${bin.label_code}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:#64748b;">Weight</div>
+              <div style="font-size:18px;font-weight:800;color:#10b981;">${(bin.coil_weight_kg || 21500).toLocaleString()} kg</div>
+            </div>
           </div>
-          <button onclick="document.getElementById('binDetailPopup').remove()"
-            style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);
-              border:none;color:#94a3b8;cursor:pointer;border-radius:6px;
-              padding:3px 8px;font-size:13px;">✕</button>
-        </div>
-        <div style="padding:14px;">
+          <div style="margin-bottom:10px;background:rgba(255,255,255,0.03);border-radius:8px;padding:8px 10px;">
+            <div style="font-size:11px;font-weight:600;color:#f8fafc;">${bin.coil_supplier || 'ArcelorMittal Calvert'}</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:2px;">${bin.coil_grade || 'Galvanized Automotive Grade'} • ${bin.coil_form_factor || 'Master Coil'}</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">FLOOR BAY</div>
+              <div style="font-size:11px;color:#e2e8f0;font-weight:600;">${bin.coil_floor_bay || 'R75'}</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">COLUMN</div>
+              <div style="font-size:11px;color:#e2e8f0;font-weight:600;">${bin.coil_landmark || 'B12'}</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">AISLE</div>
+              <div style="font-size:11px;color:#e2e8f0;font-weight:600;">${bin.aisle_id}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        const itemsHtml = (bin.amazon_items && bin.amazon_items.length > 0)
+          ? bin.amazon_items.map(it => `
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;
+                padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <div style="flex:1;">
+                  <div style="font-size:10px;color:#94a3b8;font-family:monospace;">${it.asin}</div>
+                  <div style="font-size:11px;color:#e2e8f0;margin-top:2px;">${it.name.substring(0,55)}${it.name.length>55?'…':''}</div>
+                </div>
+                <div style="margin-left:10px;background:rgba(56,189,248,0.15);color:#38bdf8;
+                  border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;white-space:nowrap;">
+                  ×${it.quantity}
+                </div>
+              </div>`).join('')
+          : '<div style="color:#64748b;font-size:11px;padding:8px 0;">No catalog data</div>';
+
+        bodyContentHtml = `
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
             <div>
               <div style="font-size:10px;color:#64748b;">ASIN / Label Code</div>
@@ -4492,6 +4735,26 @@ let playSpeed = 5;
               <div style="font-size:11px;color:#e2e8f0;">${bin.bay_index + 1}</div>
             </div>
           </div>
+        `;
+      }
+
+      popup.innerHTML = `
+        <div style="position:relative;">
+          <img src="${imgUrl}"
+            onerror="this.src='https://placehold.co/340x180/1e293b/94a3b8?text=No+Image'"
+            style="width:100%;height:185px;object-fit:cover;display:block;">
+          <div style="position:absolute;top:8px;left:8px;
+            background:rgba(0,0,0,0.75);border-radius:6px;padding:3px 8px;
+            font-size:10px;color:#38bdf8;font-family:monospace;font-weight:600;">
+            ${isCoil ? '🌀' : '📦'} ${bin.id}
+          </div>
+          <button onclick="document.getElementById('binDetailPopup').remove()"
+            style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.75);
+              border:none;color:#94a3b8;cursor:pointer;border-radius:6px;
+              padding:3px 8px;font-size:13px;">✕</button>
+        </div>
+        <div style="padding:14px;">
+          ${bodyContentHtml}
         </div>
       `;
     }

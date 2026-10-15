@@ -63,6 +63,14 @@ class Bin:
     amazon_items: list[BinItem] = field(default_factory=list)  # list[BinItem]
     amazon_expected_qty: int = 0
 
+    # Client Steel Coil Dataset fields (populated for steel coil warehouse)
+    coil_img_id: str | None = None  # e.g. "IMG_5805"
+    coil_supplier: str | None = None  # e.g. "ArcelorMittal Calvert"
+    coil_grade: str | None = None  # e.g. "Galvanized Automotive Grade"
+    coil_weight_kg: float | None = None  # e.g. 21800.0
+    coil_form_factor: str | None = None  # e.g. "Master Galvanized Coil"
+    coil_landmark: str | None = None  # e.g. "B12"
+
     @property
     def center(self) -> tuple[float, float, float]:
         return self.bounds.center

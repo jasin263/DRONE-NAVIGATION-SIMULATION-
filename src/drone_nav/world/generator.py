@@ -24,6 +24,7 @@ from drone_nav.world.models import (
     TakeoffLandingPad,
     World,
 )
+from drone_nav.scanning.coil_catalog import SteelCoilCatalog
 
 
 def generate_world_from_config(
@@ -49,6 +50,9 @@ def generate_world_from_config(
         floor_bounds=(fb.x_min, fb.x_max, fb.y_min, fb.y_max),
         ceiling_height=site.ceiling_height,
     )
+
+    is_steel_coil = "coil" in site.id.lower() or "coil" in site.name.lower()
+    coil_cat = SteelCoilCatalog() if is_steel_coil else None
 
     marker_counter = 1
 
@@ -200,8 +204,23 @@ def generate_world_from_config(
                         amazon_img_id: str | None = None
                         amazon_items: list = []
                         amazon_expected_qty: int = 0
+                        coil_img_id: str | None = None
+                        coil_supplier: str | None = None
+                        coil_grade: str | None = None
+                        coil_weight_kg: float | None = None
+                        coil_form_factor: str | None = None
+                        coil_landmark: str | None = None
 
-                        if catalog is not None and catalog.is_available:
+                        if coil_cat is not None:
+                            coil_rec = coil_cat.get_by_index(bin_counter)
+                            label_code = coil_rec.coil_id
+                            coil_img_id = coil_rec.img_id
+                            coil_supplier = coil_rec.mill_supplier
+                            coil_grade = coil_rec.finish_grade
+                            coil_weight_kg = coil_rec.approx_weight_kg
+                            coil_form_factor = coil_rec.form_factor
+                            coil_landmark = coil_rec.column_landmark
+                        elif catalog is not None and catalog.is_available:
                             amazon_rec = catalog.by_index(bin_counter)
                             if amazon_rec is not None:
                                 label_code = amazon_rec.primary_asin
@@ -245,6 +264,12 @@ def generate_world_from_config(
                             amazon_img_id=amazon_img_id,
                             amazon_items=amazon_items,
                             amazon_expected_qty=amazon_expected_qty,
+                            coil_img_id=coil_img_id,
+                            coil_supplier=coil_supplier,
+                            coil_grade=coil_grade,
+                            coil_weight_kg=coil_weight_kg,
+                            coil_form_factor=coil_form_factor,
+                            coil_landmark=coil_landmark,
                         )
                         rack.bins.append(bin_obj)
                         world.bins[bin_id] = bin_obj

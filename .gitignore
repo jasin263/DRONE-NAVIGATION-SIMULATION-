@@ -68,3 +68,6 @@ Amazonbindata/
 # Verification scratch logs
 *_check.txt
 pytest_baseline.txt
+
+# Client warehouse images
+Warehouse_images/

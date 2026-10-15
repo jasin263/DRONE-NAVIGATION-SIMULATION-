@@ -31,6 +31,7 @@ from drone_nav.localisation.estimator import LocalisationEstimator
 from drone_nav.planner.planner import MissionPlanner
 from drone_nav.safety.injector import FailureInjectionFramework
 from drone_nav.scanning.amazon_catalog import AmazonBinCatalog
+from drone_nav.scanning.coil_catalog import SteelCoilCatalog
 from drone_nav.scanning.service import ScanningMissionSimulator
 from drone_nav.scenarios.plotter import export_sweep_plot_svg
 from drone_nav.scenarios.runner import ScenarioRunner
@@ -59,6 +60,7 @@ AMAZON_CATALOG = AmazonBinCatalog(
     db_path="Amazonbindata/metadata.sqlite",
     img_dir="Amazonbindata/img",
 )
+CLIENT_COIL_CATALOG = SteelCoilCatalog()
 
 CONFIGS_DIR = Path("configs")
 PRESETS_DIR = CONFIGS_DIR / "presets"
@@ -67,6 +69,13 @@ PRESETS_DIR = CONFIGS_DIR / "presets"
 amazon_img_path = Path("Amazonbindata/img")
 if amazon_img_path.exists() and amazon_img_path.is_dir():
     app.mount("/img/amazon", StaticFiles(directory=str(amazon_img_path)), name="amazon_images")
+
+# Mount Client Warehouse Images statically if present
+client_img_path = Path("Warehouse_images/preview")
+if not client_img_path.exists():
+    client_img_path = Path("Warehouse_images/jpg")
+if client_img_path.exists() and client_img_path.is_dir():
+    app.mount("/img/client", StaticFiles(directory=str(client_img_path)), name="client_images")
 
 # In-memory mission runs cache
 MISSION_RUNS: dict[str, dict[str, Any]] = {}
@@ -183,6 +192,16 @@ def serialize_world(world: World) -> dict[str, Any]:
                     }
                     for it in b.amazon_items
                 ],
+                # Client Steel Coil Dataset fields
+                "coil_img_id": b.coil_img_id,
+                "coil_img_url": (
+                    f"/img/client/{b.coil_img_id}.jpg" if b.coil_img_id else None
+                ),
+                "coil_supplier": b.coil_supplier,
+                "coil_grade": b.coil_grade,
+                "coil_weight_kg": b.coil_weight_kg,
+                "coil_form_factor": b.coil_form_factor,
+                "coil_landmark": b.coil_landmark,
             }
             for b in world.bins.values()
         ],
@@ -235,12 +254,52 @@ def serialize_world(world: World) -> dict[str, Any]:
             }
             for do in world.dynamic_obstacles
         ],
+        "static_obstacles": [
+            {
+                "id": so.id,
+                "type": so.type,
+                "bounds": {
+                    "x_min": so.bounds.x_min,
+                    "x_max": so.bounds.x_max,
+                    "y_min": so.bounds.y_min,
+                    "y_max": so.bounds.y_max,
+                    "z_min": so.bounds.z_min,
+                    "z_max": so.bounds.z_max,
+                },
+            }
+            for so in world.static_obstacles
+        ],
     }
 
 
 # ============================================================================
 # Core API Routes
 # ============================================================================
+
+
+@app.get("/api/client-coils")
+def get_client_coils() -> dict[str, Any]:
+    """Client warehouse steel coil images and metadata catalog."""
+    records = CLIENT_COIL_CATALOG.all_records()
+    return {
+        "summary": CLIENT_COIL_CATALOG.summary(),
+        "coils": [
+            {
+                "img_id": r.img_id,
+                "coil_id": r.coil_id,
+                "barcode": r.barcode,
+                "mill_supplier": r.mill_supplier,
+                "form_factor": r.form_factor,
+                "finish_grade": r.finish_grade,
+                "weight_kg": r.approx_weight_kg,
+                "floor_bay": r.floor_bay,
+                "column_landmark": r.column_landmark,
+                "image_url": f"/img/client/{r.image_filename}",
+                "description": r.description,
+            }
+            for r in records
+        ],
+    }
 
 
 @app.get("/api/catalog")
