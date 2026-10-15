@@ -3,8 +3,13 @@
 All positions are 3D coordinates (x, y, z) in metres relative to the warehouse origin.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
+
+if TYPE_CHECKING:
+    from drone_nav.scanning.amazon_catalog import BinItem
 
 
 @dataclass(frozen=True)
@@ -53,6 +58,10 @@ class Bin:
     bounds: BoundingBox3D
     scan_face_normal: tuple[float, float, float]  # Vector pointing from bin toward aisle
     recommended_scan_pos: tuple[float, float, float]  # Position drone should hover to scan
+    # Real Amazon Bin Image Dataset fields (populated when catalog is available)
+    amazon_img_id: str | None = None   # e.g. "00005" → paired JPEG
+    amazon_items: list[BinItem] = field(default_factory=list)  # list[BinItem]
+    amazon_expected_qty: int = 0
 
     @property
     def center(self) -> tuple[float, float, float]:

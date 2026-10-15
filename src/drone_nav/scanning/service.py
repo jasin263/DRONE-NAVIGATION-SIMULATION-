@@ -42,7 +42,7 @@ class ScanningMissionSimulator:
 
         target_flights = (
             [f for f in mission_plan.flights if f.flight_id in flight_ids]
-            if flight_ids
+            if flight_ids is not None
             else mission_plan.flights
         )
 
@@ -78,7 +78,12 @@ class ScanningMissionSimulator:
                         state = cand_state
                     else:
                         matching_states = [s for s in sim_res.states if s.waypoint_index == wp_idx]
-                        state = matching_states[0] if matching_states else sim_res.states[0]
+                        if matching_states:
+                            state = matching_states[0]
+                        elif sim_res.states:
+                            state = sim_res.states[0]
+                        else:
+                            continue
 
                     drone_pos = state.position
                     drone_yaw = state.attitude_rpy[2]

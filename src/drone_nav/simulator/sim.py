@@ -99,6 +99,7 @@ class FlightSimulator:
                         # Hover control counteracting drag
                         acc = np.array([-a_drag[0], -a_drag[1], -a_drag[2]])
                         vel = vel * 0.9  # damp out velocity during hover
+                        total_dist_flown += float(np.linalg.norm(vel * self.dt))
                         pos += vel * self.dt
 
                         self.battery_sim.step(
@@ -205,6 +206,26 @@ class FlightSimulator:
                     waypoint_index=wp_idx,
                     action=action_label,
                     target_bin_id=target_wp.target_bin_id,
+                )
+            )
+
+        # Degenerate plans (e.g. a single waypoint already at the start position)
+        # never enter the integration loop; emit at least one state so downstream
+        # telemetry consumers always receive a non-empty trace.
+        if not states:
+            states.append(
+                DroneState(
+                    timestamp_s=t_sim,
+                    position=_to_f3(pos),
+                    velocity=_to_f3(vel),
+                    acceleration=_to_f3(acc),
+                    attitude_rpy=attitude,
+                    angular_velocity=(0.0, 0.0, yaw),
+                    battery_wh=self.battery_sim.remaining_wh,
+                    battery_pct=self.battery_sim.percentage,
+                    waypoint_index=0,
+                    action=first_wp.action.value,
+                    target_bin_id=first_wp.target_bin_id,
                 )
             )
 

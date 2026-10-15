@@ -86,7 +86,7 @@ class DRIMSExporter:
                     eventId=event_id,
                     droneId=self.drone_id,
                     timestamp=rec.timestamp_utc or now_utc,
-                    readType="BARCODE" if rec.read_type == "BARCODE" else "QR",
+                    readType=rec.read_type,
                     symbology=rec.symbology,
                     value=rec.decoded_value,
                     confidence=rec.confidence,
@@ -128,8 +128,7 @@ class DRIMSExporter:
             },
         )
 
-        # 3. Build Telemetry Sample Points (sampled at 1Hz from 20Hz sim)
-        # 3. Build Telemetry Sample Points (sampled at 1Hz from 20Hz sim)
+        # 3. Build Telemetry Sample Points (down-sampled to ~300 points per flight)
         from datetime import timedelta
         try:
             base_dt = datetime.fromisoformat(start_t.replace("Z", "+00:00"))

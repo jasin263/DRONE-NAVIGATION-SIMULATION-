@@ -50,8 +50,9 @@ class BatteryDischargeSimulator:
         total_power_w = p_hover + p_forward + p_climb + p_accel + payload_power_w
 
         delta_energy_wh = (total_power_w * dt) / 3600.0
-        self.remaining_wh = max(0.0, self.remaining_wh - delta_energy_wh)
-        self.total_consumed_wh += delta_energy_wh
+        energy_before = self.remaining_wh
+        self.remaining_wh = max(0.0, energy_before - delta_energy_wh)
+        self.total_consumed_wh += energy_before - self.remaining_wh
 
         return float(total_power_w)
 

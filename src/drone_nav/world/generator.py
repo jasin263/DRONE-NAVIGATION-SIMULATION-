@@ -8,6 +8,7 @@ import math
 from typing import Literal
 
 from drone_nav.config.models import RackConfig, WarehouseConfig
+from drone_nav.scanning.amazon_catalog import AmazonBinCatalog
 from drone_nav.world.models import (
     Aisle,
     Bin,
@@ -25,8 +26,16 @@ from drone_nav.world.models import (
 )
 
 
-def generate_world_from_config(config: WarehouseConfig) -> World:
-    """Generate a complete 3D World model from a validated WarehouseConfig."""
+def generate_world_from_config(
+    config: WarehouseConfig,
+    catalog: AmazonBinCatalog | None = None,
+) -> World:
+    """Generate a complete 3D World model from a validated WarehouseConfig.
+
+    If *catalog* is provided and loaded, real Amazon ASIN data is assigned to
+    each generated bin (label_code = primary ASIN, amazon_items populated).
+    Pass ``catalog=None`` (default) for purely synthetic label codes.
+    """
     site = config.site
     layout = config.layout
     fb = site.floor_bounds
@@ -184,16 +193,41 @@ def generate_world_from_config(config: WarehouseConfig) -> World:
                             bin_id = f"{rack.id}-B{b + 1:02d}-L{lv + 1}-S{s + 1}"
                         else:
                             bin_id = f"{rack.id}-B{b + 1:02d}-L{lv + 1}"
-                        # Generate label_code from template
-                        label_code = layout.bin_numbering_template.format(
-                            site_id=site.id,
-                            zone_id=layout.zones[0].id if layout.zones else "Z01",
-                            aisle_id=aisle_cfg.id,
-                            rack_id=rack.id,
-                            level=lv + 1,
-                            bay=b + 1,
-                            slot=s + 1,
+                        # Generate label_code: use real Amazon ASIN when catalog available
+                        bin_counter = (
+                            len(world.bins)  # global monotonic index across all bins
                         )
+                        amazon_img_id: str | None = None
+                        amazon_items: list = []
+                        amazon_expected_qty: int = 0
+
+                        if catalog is not None and catalog.is_available:
+                            amazon_rec = catalog.by_index(bin_counter)
+                            if amazon_rec is not None:
+                                label_code = amazon_rec.primary_asin
+                                amazon_img_id = amazon_rec.img_id
+                                amazon_items = list(amazon_rec.items)
+                                amazon_expected_qty = amazon_rec.expected_qty
+                            else:
+                                label_code = layout.bin_numbering_template.format(
+                                    site_id=site.id,
+                                    zone_id=layout.zones[0].id if layout.zones else "Z01",
+                                    aisle_id=aisle_cfg.id,
+                                    rack_id=rack.id,
+                                    level=lv + 1,
+                                    bay=b + 1,
+                                    slot=s + 1,
+                                )
+                        else:
+                            label_code = layout.bin_numbering_template.format(
+                                site_id=site.id,
+                                zone_id=layout.zones[0].id if layout.zones else "Z01",
+                                aisle_id=aisle_cfg.id,
+                                rack_id=rack.id,
+                                level=lv + 1,
+                                bay=b + 1,
+                                slot=s + 1,
+                            )
 
                         bin_obj = Bin(
                             id=bin_id,
@@ -208,6 +242,9 @@ def generate_world_from_config(config: WarehouseConfig) -> World:
                             bounds=bin_bbox,
                             scan_face_normal=norm,
                             recommended_scan_pos=(scan_x, scan_y, scan_z),
+                            amazon_img_id=amazon_img_id,
+                            amazon_items=amazon_items,
+                            amazon_expected_qty=amazon_expected_qty,
                         )
                         rack.bins.append(bin_obj)
                         world.bins[bin_id] = bin_obj

@@ -7,7 +7,16 @@ site_id, zone, aisle, rack, level, bin, label_code, x_min, x_max, y_min, y_max, 
 import csv
 from pathlib import Path
 
-from drone_nav.world.models import Aisle, Bin, BoundingBox3D, Rack, World
+from drone_nav.world.models import (
+    Aisle,
+    Bin,
+    BoundingBox3D,
+    ChargingStation,
+    FiducialMarker,
+    Rack,
+    TakeoffLandingPad,
+    World,
+)
 
 REQUIRED_CSV_COLUMNS = [
     "site_id",
@@ -138,41 +147,22 @@ def import_drims_csv(file_path: str | Path, default_ceiling_height: float = 6.0)
     for b in bins:
         world.bins[b.id] = b
 
-    # Create Rack objects
-    for r_id, r_bins in rack_bins.items():
-        rx0 = min(b.bounds.x_min for b in r_bins)
-        rx1 = max(b.bounds.x_max for b in r_bins)
-        ry0 = min(b.bounds.y_min for b in r_bins)
-        ry1 = max(b.bounds.y_max for b in r_bins)
-        rz0 = min(b.bounds.z_min for b in r_bins)
-        rz1 = max(b.bounds.z_max for b in r_bins)
-        bays_cnt = len({b.bay_index for b in r_bins})
-        levels_cnt = len({b.level_index for b in r_bins})
-
-        r_obj = Rack(
-            id=r_id,
-            aisle_id=r_bins[0].aisle_id,
-            side="left",
-            bays=bays_cnt,
-            levels=levels_cnt,
-            bounds=BoundingBox3D(x_min=rx0, x_max=rx1, y_min=ry0, y_max=ry1, z_min=rz0, z_max=rz1),
-            bins=r_bins,
-        )
-        world.racks.append(r_obj)
-
     # Create Aisle objects
+    aisle_centers: dict[str, float] = {}
     for a_id, a_bins in aisle_bins.items():
         ax0 = min(b.bounds.x_min for b in a_bins)
         ax1 = max(b.bounds.x_max for b in a_bins)
         ay0 = min(b.bounds.y_min for b in a_bins)
         ay1 = max(b.bounds.y_max for b in a_bins)
+        ax_center = (ax0 + ax1) / 2.0
+        aisle_centers[a_id] = ax_center
 
         aisle_obj = Aisle(
             id=a_id,
             name=f"Aisle {a_id}",
-            x_start=ax0,
+            x_start=ax_center,
             y_start=ay0,
-            x_end=ax0,
+            x_end=ax_center,
             y_end=ay1,
             width=2.0,
             one_way=False,
@@ -187,6 +177,76 @@ def import_drims_csv(file_path: str | Path, default_ceiling_height: float = 6.0)
             ),
         )
         world.aisles.append(aisle_obj)
+
+    # Create Rack objects and orient scan positions facing aisle
+    for r_id, r_bins in rack_bins.items():
+        rx0 = min(b.bounds.x_min for b in r_bins)
+        rx1 = max(b.bounds.x_max for b in r_bins)
+        ry0 = min(b.bounds.y_min for b in r_bins)
+        ry1 = max(b.bounds.y_max for b in r_bins)
+        rz0 = min(b.bounds.z_min for b in r_bins)
+        rz1 = max(b.bounds.z_max for b in r_bins)
+        r_center_x = (rx0 + rx1) / 2.0
+        aisle_id = r_bins[0].aisle_id
+        a_center = aisle_centers.get(aisle_id, r_center_x)
+
+        side = "left" if r_center_x <= a_center else "right"
+        normal = (1.0, 0.0, 0.0) if side == "left" else (-1.0, 0.0, 0.0)
+
+        # Update bin scan positions facing corridor
+        for b in r_bins:
+            b.scan_face_normal = normal
+            standoff_x = b.bounds.x_max + 1.0 if side == "left" else b.bounds.x_min - 1.0
+            b.recommended_scan_pos = (standoff_x, b.center[1], b.center[2])
+
+        bays_cnt = len({b.bay_index for b in r_bins})
+        levels_cnt = len({b.level_index for b in r_bins})
+
+        r_obj = Rack(
+            id=r_id,
+            aisle_id=aisle_id,
+            side=side,
+            bays=bays_cnt,
+            levels=levels_cnt,
+            bounds=BoundingBox3D(x_min=rx0, x_max=rx1, y_min=ry0, y_max=ry1, z_min=rz0, z_max=rz1),
+            bins=r_bins,
+        )
+        world.racks.append(r_obj)
+
+    # Add default takeoff/landing pad and charging station
+    pad_x = max(0.5, floor_bounds[0] + 1.0)
+    pad_y = max(0.5, floor_bounds[2] + 1.0)
+    world.pads.append(
+        TakeoffLandingPad(
+            id="PAD-01",
+            position=(pad_x, pad_y, 0.0),
+            radius=1.0,
+        )
+    )
+    world.charging_stations.append(
+        ChargingStation(
+            id="CHG-01",
+            position=(pad_x, pad_y, 0.0),
+            charge_rate_kw=1.0,
+        )
+    )
+
+    # Generate fiducial markers on rack ends for visual localization
+    marker_counter = 1
+    for r in world.racks:
+        mid_z = r.bounds.z_min + 0.3
+        world.markers.append(
+            FiducialMarker(
+                id=f"TAG-{site_id}-{r.id}",
+                tag_id=marker_counter,
+                position=(r.bounds.x_min, r.bounds.y_min, mid_z),
+                normal=(1.0, 0.0, 0.0) if r.side == "left" else (-1.0, 0.0, 0.0),
+                size_m=0.2,
+                rack_id=r.id,
+                bay_index=0,
+            )
+        )
+        marker_counter += 1
 
     return world
 

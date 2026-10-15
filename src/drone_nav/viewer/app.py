@@ -4,6 +4,7 @@ import io
 import json
 import tempfile
 import zipfile
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -13,12 +14,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 
+# Register YAML representers so Enums dump as plain clean strings without !!python tags
+def _enum_representer(dumper: Any, data: Enum) -> Any:
+    return dumper.represent_scalar("tag:yaml.org,2002:str", str(data.value))
+
+yaml.add_multi_representer(Enum, _enum_representer)
+yaml.SafeDumper.add_multi_representer(Enum, _enum_representer)
+if hasattr(yaml, "Dumper"):
+    yaml.Dumper.add_multi_representer(Enum, _enum_representer)
+
+
 from drone_nav.config.loader import ConfigError, get_json_schema, load_config
 from drone_nav.config.models import WarehouseConfig
 from drone_nav.export.exporter import DRIMSExporter
 from drone_nav.localisation.estimator import LocalisationEstimator
 from drone_nav.planner.planner import MissionPlanner
 from drone_nav.safety.injector import FailureInjectionFramework
+from drone_nav.scanning.amazon_catalog import AmazonBinCatalog
 from drone_nav.scanning.service import ScanningMissionSimulator
 from drone_nav.scenarios.plotter import export_sweep_plot_svg
 from drone_nav.scenarios.runner import ScenarioRunner
@@ -38,6 +50,14 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# ---------------------------------------------------------------------------
+# Amazon Bin Image Dataset catalog – loaded once at startup
+# ---------------------------------------------------------------------------
+AMAZON_CATALOG = AmazonBinCatalog(
+    db_path="Amazonbindata/metadata.sqlite",
+    img_dir="Amazonbindata/img",
 )
 
 CONFIGS_DIR = Path("configs")
@@ -148,6 +168,21 @@ def serialize_world(world: World) -> dict[str, Any]:
                     "z_min": b.bounds.z_min,
                     "z_max": b.bounds.z_max,
                 },
+                # Real Amazon Bin Image Dataset fields
+                "amazon_img_id": b.amazon_img_id,
+                "amazon_img_url": (
+                    f"/img/amazon/{b.amazon_img_id}.jpg" if b.amazon_img_id else None
+                ),
+                "amazon_expected_qty": b.amazon_expected_qty,
+                "amazon_items": [
+                    {
+                        "asin": it.asin,
+                        "name": it.name,
+                        "quantity": it.quantity,
+                        "weight_lb": it.weight_lb,
+                    }
+                    for it in b.amazon_items
+                ],
             }
             for b in world.bins.values()
         ],
@@ -189,12 +224,46 @@ def serialize_world(world: World) -> dict[str, Any]:
             }
             for pz in world.people_zones
         ],
+        "dynamic_obstacles": [
+            {
+                "id": do.id,
+                "type": do.type,
+                "path": [list(pt) for pt in do.path],
+                "speed_mps": do.speed_mps,
+                "schedule_start_s": do.schedule_start_s,
+                "schedule_end_s": do.schedule_end_s,
+            }
+            for do in world.dynamic_obstacles
+        ],
     }
 
 
 # ============================================================================
 # Core API Routes
 # ============================================================================
+
+
+@app.get("/api/catalog")
+def get_catalog_info() -> dict[str, Any]:
+    """Amazon Bin Image Dataset catalog status and statistics."""
+    summary = AMAZON_CATALOG.summary()
+    samples = []
+    if AMAZON_CATALOG.is_available:
+        for i in range(min(5, len(AMAZON_CATALOG))):
+            rec = AMAZON_CATALOG.by_index(i)
+            if rec:
+                samples.append({
+                    "img_id": rec.img_id,
+                    "primary_asin": rec.primary_asin,
+                    "expected_qty": rec.expected_qty,
+                    "item_count": len(rec.items),
+                    "image_url": f"/img/amazon/{rec.img_id}.jpg",
+                    "items": [
+                        {"asin": it.asin, "name": it.name[:60], "qty": it.quantity}
+                        for it in rec.items[:3]
+                    ],
+                })
+    return {"catalog": summary, "samples": samples}
 
 
 @app.get("/api/presets")
@@ -232,7 +301,7 @@ def get_world(config: str = Query(default="medium")) -> dict[str, Any]:
     target_path = _resolve_config_path(config)
     try:
         cfg = load_config(target_path)
-        world = generate_world_from_config(cfg)
+        world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
         return serialize_world(world)
     except ConfigError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
@@ -272,9 +341,20 @@ def api_get_config(config: str = Query(default="medium")) -> dict[str, Any]:
     cfg = load_config(target_path)
     return {
         "preset_id": target_path.stem,
-        "config": cfg.model_dump(),
+        "config": cfg.model_dump(mode="json"),
         "yaml_text": yaml_text,
     }
+
+
+def _clean_yaml_text(text: str) -> str:
+    """Sanitize legacy or unintended PyYAML object tags so safe_load succeeds."""
+    if not text:
+        return ""
+    import re
+    # Clean tags like !!python/object/apply:drone_nav.config.models.ScanStrategy\n- serpentine -> serpentine
+    cleaned = re.sub(r"!!python/object/apply:[^\s\n]+\s*\n\s*-\s*([^\n\r]+)", r"\1", text)
+    cleaned = re.sub(r"!!python/[^\s\n]+", "", cleaned)
+    return cleaned
 
 
 @app.post("/api/v1/config/validate")
@@ -283,20 +363,32 @@ def api_validate_config(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
     yaml_text = payload.get("yaml_text")
     if yaml_text:
         try:
-            data = yaml.safe_load(yaml_text)
+            sanitized = _clean_yaml_text(yaml_text)
+            data = yaml.safe_load(sanitized)
             cfg = WarehouseConfig.model_validate(data)
+            clean_yaml = yaml.safe_dump(cfg.model_dump(mode="json"), sort_keys=False)
             return {
                 "valid": True,
                 "site_id": cfg.site.id,
                 "site_name": cfg.site.name,
                 "aisles_count": len(cfg.layout.aisles),
+                "config": cfg.model_dump(mode="json"),
+                "yaml_text": clean_yaml,
             }
         except Exception as exc:
             return {"valid": False, "error": str(exc)}
     elif "config" in payload:
         try:
             cfg = WarehouseConfig.model_validate(payload["config"])
-            return {"valid": True, "site_id": cfg.site.id}
+            clean_yaml = yaml.safe_dump(cfg.model_dump(mode="json"), sort_keys=False)
+            return {
+                "valid": True,
+                "site_id": cfg.site.id,
+                "site_name": cfg.site.name,
+                "aisles_count": len(cfg.layout.aisles),
+                "config": cfg.model_dump(mode="json"),
+                "yaml_text": clean_yaml,
+            }
         except Exception as exc:
             return {"valid": False, "error": str(exc)}
     return {"valid": False, "error": "Missing yaml_text or config payload"}
@@ -307,17 +399,26 @@ def api_save_config(payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
     """Save custom configuration YAML to configs/presets/."""
     preset_name = payload.get("preset_name", "custom").strip()
     yaml_text = payload.get("yaml_text", "")
+    if not yaml_text and "config" in payload:
+        try:
+            cfg = WarehouseConfig.model_validate(payload["config"])
+            yaml_text = yaml.safe_dump(cfg.model_dump(mode="json"), sort_keys=False)
+        except Exception as exc:
+            raise HTTPException(status_code=400, detail=f"Validation failed: {exc}")
+
     if not yaml_text:
-        raise HTTPException(status_code=400, detail="Empty yaml_text")
+        raise HTTPException(status_code=400, detail="Empty yaml_text or config payload")
 
     try:
-        data = yaml.safe_load(yaml_text)
-        WarehouseConfig.model_validate(data)
+        sanitized = _clean_yaml_text(yaml_text)
+        data = yaml.safe_load(sanitized)
+        cfg = WarehouseConfig.model_validate(data)
+        clean_yaml = yaml.safe_dump(cfg.model_dump(mode="json"), sort_keys=False)
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Validation failed: {exc}")
 
     dest_file = PRESETS_DIR / f"{preset_name}.yaml"
-    dest_file.write_text(yaml_text, encoding="utf-8")
+    dest_file.write_text(clean_yaml, encoding="utf-8")
     return {"saved": True, "path": str(dest_file), "preset_id": preset_name}
 
 
@@ -329,7 +430,7 @@ def api_mission_plan(
     """Generate 4D waypoint mission plan."""
     cfg_path = _resolve_config_path(config)
     cfg = load_config(cfg_path)
-    world = generate_world_from_config(cfg)
+    world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
     planner = MissionPlanner(world, cfg)
     mission = planner.plan_mission(strategy_name=strategy)
 
@@ -378,7 +479,7 @@ def api_mission_run(
     """Execute kinematic simulation, scanning, and EKF localisation."""
     cfg_path = _resolve_config_path(config)
     cfg = load_config(cfg_path)
-    world = generate_world_from_config(cfg)
+    world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
 
     # 1. Plan Mission
     planner = MissionPlanner(world, cfg)
@@ -527,7 +628,7 @@ def api_mission_compare(config: str = Query(default="small")) -> dict[str, Any]:
     """Execute strategy benchmark comparison matrix (Serpentine vs Nearest vs Min-Time)."""
     cfg_path = _resolve_config_path(config)
     cfg = load_config(cfg_path)
-    world = generate_world_from_config(cfg)
+    world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
     planner = MissionPlanner(world, cfg)
     comparison = planner.compare_strategies()
 
@@ -596,7 +697,7 @@ def api_safety_run(
     """Execute failure injection scenario(s)."""
     cfg_path = _resolve_config_path(config)
     cfg = load_config(cfg_path)
-    world = generate_world_from_config(cfg)
+    world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
     framework = FailureInjectionFramework(world, cfg)
 
     if scenario.lower() == "all":
@@ -640,7 +741,7 @@ def api_scenarios_sweep(
     """Execute parameter sweep (wind, speed, strategy) and return results + SVG plot."""
     cfg_path = _resolve_config_path(config)
     cfg = load_config(cfg_path)
-    world = generate_world_from_config(cfg)
+    world = generate_world_from_config(cfg, catalog=AMAZON_CATALOG)
     runner = ScenarioRunner(world, cfg)
 
     if sweep_type == "wind":

@@ -72,15 +72,47 @@ class NearestNeighborStrategy:
         if not bins:
             return []
 
-        remaining = list(bins)
         # Start at first pad position or first bin
         curr_pos = (
-            world.pads[0].position if world.pads else remaining[0].recommended_scan_pos
+            world.pads[0].position if world.pads else bins[0].recommended_scan_pos
         )
-        ordered: list[Bin] = []
 
+        if len(bins) > 500:
+            import numpy as np
+            from scipy.spatial import cKDTree
+
+            coords = np.array([b.recommended_scan_pos for b in bins], dtype=float)
+            tree = cKDTree(coords)
+            visited = np.zeros(len(bins), dtype=bool)
+            ordered: list[Bin] = []
+            curr_pt = np.array(curr_pos, dtype=float)
+
+            for _ in range(len(bins)):
+                k_val = min(64, len(bins))
+                _, indices = tree.query(curr_pt, k=k_val)
+                if np.isscalar(indices):
+                    indices = [indices]
+                found = False
+                for idx in indices:
+                    if not visited[idx]:
+                        visited[idx] = True
+                        ordered.append(bins[idx])
+                        curr_pt = coords[idx]
+                        found = True
+                        break
+                if not found:
+                    unvisited = np.where(~visited)[0]
+                    diffs = coords[unvisited] - curr_pt
+                    dists_sq = np.sum(diffs ** 2, axis=1)
+                    idx = unvisited[int(np.argmin(dists_sq))]
+                    visited[idx] = True
+                    ordered.append(bins[idx])
+                    curr_pt = coords[idx]
+            return ordered
+
+        remaining = list(bins)
+        ordered = []
         while remaining:
-            # Find closest unvisited bin to current position
             closest_idx = 0
             best_dist = float("inf")
             for i, candidate in enumerate(remaining):

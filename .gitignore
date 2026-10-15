@@ -65,4 +65,6 @@ docs/telemetry/*.jsonl
 Amazonbindata/
 *.sqlite
 *.sqlite3
-
+# Verification scratch logs
+*_check.txt
+pytest_baseline.txt

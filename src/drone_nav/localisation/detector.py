@@ -16,9 +16,9 @@ class MarkerDetector:
         self.config = config
         self.rng = np.random.RandomState(seed)
 
-        # Optical navigation tracking camera with wide FOV for AprilTag/ArUco fiducials
-        self.hfov_rad = math.radians(max(config.drone.camera.hfov_deg, 100.0))
-        self.vfov_rad = math.radians(max(config.drone.camera.vfov_deg, 100.0))
+        # Use the configured navigation camera FOV (shared with the scanning camera)
+        self.hfov_rad = math.radians(config.drone.camera.hfov_deg)
+        self.vfov_rad = math.radians(config.drone.camera.vfov_deg)
         self.base_noise_m = config.drone.sensors.marker_pos_noise
         self.miss_prob = config.drone.sensors.marker_miss_prob
 

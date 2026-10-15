@@ -19,7 +19,7 @@ class ScenarioRunner:
 
     def run_wind_sweep(self, wind_speeds: list[float] | None = None) -> SweepReport:
         """Evaluate tracking error and energy drain across varying wind disturbance levels."""
-        speeds = wind_speeds or [0.0, 0.5, 1.0, 1.5, 2.0]
+        speeds = wind_speeds if wind_speeds is not None else [0.0, 0.5, 1.0, 1.5, 2.0]
         planner = MissionPlanner(self.world, self.base_config)
         mission = planner.plan_mission("serpentine")
         flight = mission.flights[0]
@@ -60,7 +60,7 @@ class ScenarioRunner:
 
     def run_speed_sweep(self, max_speeds: list[float] | None = None) -> SweepReport:
         """Evaluate mission flight time versus aerodynamic power consumption."""
-        speeds = max_speeds or [1.5, 2.0, 2.5, 3.0, 3.5]
+        speeds = max_speeds if max_speeds is not None else [1.5, 2.0, 2.5, 3.0, 3.5]
         results: list[SweepIterationResult] = []
 
         for idx, spd in enumerate(speeds, 1):
@@ -105,7 +105,7 @@ class ScenarioRunner:
 
     def run_strategy_sweep(self, strategies: list[str] | None = None) -> SweepReport:
         """Benchmark all scan-order waypoint sequencing strategies."""
-        strats = strategies or ["serpentine", "nearest", "minimum_time", "naive"]
+        strats = strategies if strategies is not None else ["serpentine", "nearest", "minimum_time", "naive"]
         results: list[SweepIterationResult] = []
 
         for idx, strat in enumerate(strats, 1):

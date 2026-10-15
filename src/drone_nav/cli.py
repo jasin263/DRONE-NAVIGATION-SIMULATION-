@@ -15,8 +15,19 @@ from drone_nav.config.loader import (
     load_config,
     save_json_schema,
 )
+from drone_nav.scanning.amazon_catalog import AmazonBinCatalog
 from drone_nav.world.csv_importer import CSVImportError, export_drims_csv, import_drims_csv
 from drone_nav.world.generator import generate_world_from_config
+
+# Catalog loaded once per CLI invocation (lazy-safe: no-op if DB absent)
+_CATALOG: AmazonBinCatalog | None = None
+
+
+def _get_catalog() -> AmazonBinCatalog:
+    global _CATALOG
+    if _CATALOG is None:
+        _CATALOG = AmazonBinCatalog()
+    return _CATALOG
 
 app = typer.Typer(
     name="drone-nav",
@@ -87,7 +98,7 @@ def layout_generate(
     """Generate 3D warehouse world from a configuration file."""
     try:
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         s = world.get_summary()
 
         if summary:
@@ -165,7 +176,7 @@ def layout_export_csv(
     """Export warehouse bin locations to DRIMS CSV format."""
     try:
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         out = export_drims_csv(world, output_csv)
         console.print(
             f"[bold green][OK] Exported {len(world.bins)} bins to DRIMS CSV:[/bold green] {out}"
@@ -203,7 +214,7 @@ def plan(
         from drone_nav.planner.plotter import export_mission_path_svg
 
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         planner = MissionPlanner(world, config)
 
         if compare:
@@ -317,7 +328,7 @@ def simulate(
         from drone_nav.simulator.sim import FlightSimulator
 
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         planner = MissionPlanner(world, config)
         mission = planner.plan_mission(strategy_name=strategy)
 
@@ -459,7 +470,7 @@ def localise(
         from drone_nav.simulator.sim import FlightSimulator
 
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         planner = MissionPlanner(world, config)
         mission = planner.plan_mission(strategy_name=strategy)
 
@@ -648,7 +659,7 @@ def scan(
             )
             raise typer.Exit(code=1)
 
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         planner = MissionPlanner(world, config)
         mission = planner.plan_mission(strategy_name=strategy)
 
@@ -750,7 +761,7 @@ def safety(
         from drone_nav.safety.injector import FailureInjectionFramework
 
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         framework = FailureInjectionFramework(world, config)
 
         if scenario.lower() == "all":
@@ -847,7 +858,7 @@ def scenario(
         from drone_nav.scenarios.runner import ScenarioRunner
 
         config = load_config(config_path)
-        world = generate_world_from_config(config)
+        world = generate_world_from_config(config, catalog=_get_catalog())
         runner = ScenarioRunner(world, config)
 
         sweep_type = sweep.lower()

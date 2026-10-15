@@ -694,7 +694,54 @@ obstacles:
       type: "pillar"
       position: [80.0, 43.0, 0.0]
       dimensions: [0.8, 0.8, 9.0]
-  dynamic: []
+  dynamic:
+    - id: "FORKLIFT-NORTH"
+      type: "forklift"
+      path:
+        - [4.0, 46.0, 0.0]
+        - [106.0, 46.0, 0.0]
+      speed_mps: 1.8
+      schedule_start_s: 0.0
+      schedule_end_s: 2000.0
+    - id: "FORKLIFT-SOUTH"
+      type: "forklift"
+      path:
+        - [106.0, 2.5, 0.0]
+        - [4.0, 2.5, 0.0]
+      speed_mps: 1.6
+      schedule_start_s: 0.0
+      schedule_end_s: 2000.0
+    - id: "FORKLIFT-ALL-AISLES"
+      type: "forklift"
+      path:
+        - [4.0, 43.5, 0.0]
+        - [4.0, 2.5, 0.0]
+        - [9.2, 2.5, 0.0]
+        - [9.2, 43.5, 0.0]
+        - [14.4, 43.5, 0.0]
+        - [14.4, 2.5, 0.0]
+        - [19.6, 2.5, 0.0]
+        - [19.6, 43.5, 0.0]
+        - [24.8, 43.5, 0.0]
+        - [24.8, 2.5, 0.0]
+        - [30.0, 2.5, 0.0]
+        - [30.0, 43.5, 0.0]
+        - [35.2, 43.5, 0.0]
+        - [35.2, 2.5, 0.0]
+        - [40.4, 2.5, 0.0]
+        - [40.4, 43.5, 0.0]
+        - [4.0, 43.5, 0.0]
+      speed_mps: 1.6
+      schedule_start_s: 0.0
+      schedule_end_s: 2000.0
+    - id: "AMR-TRANSFER-01"
+      type: "walker"
+      path:
+        - [55.0, 3.0, 0.0]
+        - [55.0, 45.0, 0.0]
+      speed_mps: 1.2
+      schedule_start_s: 0.0
+      schedule_end_s: 2000.0
   random_seed: 42
   random_count: 0
 
@@ -768,3 +815,4 @@ export:
   schema_version: "1.0"
   mode: "file"
   output_directory: "exports/large"
+

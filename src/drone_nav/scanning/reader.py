@@ -50,13 +50,17 @@ class LabelReader:
             "h": 100,
         }
 
-        # Resolve image reference
+        # Resolve image reference: prefer real paired image from catalog
         image_ref: str | None = None
-        if self.available_images:
+        if target_bin.amazon_img_id:
+            # Bin has a real paired Amazon image - store just the img_id for URL construction
+            image_ref = target_bin.amazon_img_id
+        elif self.available_images:
             img_name = self.available_images[bin_index % len(self.available_images)]
-            image_ref = f"Amazonbindata/img/{img_name}"
+            # Store just the image filename (without repo path) for URL construction
+            image_ref = img_name
         else:
-            image_ref = f"img/bins/{target_bin.id}.jpg"
+            image_ref = target_bin.id
 
         # Label symbology: QR for higher density, CODE128 standard
         symbology = "CODE128" if (bin_index % 3 != 0) else "QRCODE"

@@ -3,6 +3,8 @@
 import math
 import uuid
 
+import networkx as nx
+
 from drone_nav.config.models import WarehouseConfig
 from drone_nav.planner.astar import astar_path, calculate_path_length
 from drone_nav.planner.graph import NavigationGraph
@@ -65,8 +67,13 @@ class MissionPlanner:
         strat = self.strategies.get(strategy_name, self.strategies["serpentine"])
         target_bins = self._get_target_bins()
         if not target_bins:
-            # Fallback to all bins in world
-            target_bins = list(self.world.bins.values())
+            if not self.config.mission.target_zones and not self.config.mission.target_bins:
+                # No targeting filters configured: fall back to all bins in world
+                target_bins = list(self.world.bins.values())
+            else:
+                raise ValueError(
+                    "No bins match the configured mission target_bins/target_zones"
+                )
 
         home_pad = self.world.pads[0] if self.world.pads else None
         if not home_pad:
@@ -77,15 +84,18 @@ class MissionPlanner:
             raise ValueError(f"Home pad {home_pad.id} could not be connected to navigation graph")
 
         # Connect candidate bins and check reachability
+        # Fast reachability: compute forward and reverse reachable sets from home pad once
+        fwd_reachable = nx.descendants(self.nav_graph.graph, home_pad_node) | {home_pad_node}
+        rev_reachable = nx.ancestors(self.nav_graph.graph, home_pad_node) | {home_pad_node}
+
         reachable_bins: list[Bin] = []
         unreachable_bins: list[str] = []
 
         for b in target_bins:
             scan_node = self.nav_graph.connect_scan_pose(b)
-            # Check if there exists a path from pad to bin and back to pad
-            path_to = astar_path(self.nav_graph.graph, home_pad_node, scan_node)
-            path_back = astar_path(self.nav_graph.graph, scan_node, home_pad_node)
-            if path_to and path_back:
+            can_reach = any(n in fwd_reachable for n in self.nav_graph.graph.predecessors(scan_node))
+            can_return = any(n in rev_reachable for n in self.nav_graph.graph.successors(scan_node))
+            if can_reach and can_return:
                 reachable_bins.append(b)
             else:
                 unreachable_bins.append(b.id)

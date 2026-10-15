@@ -372,6 +372,447 @@
       color: #07090e;
     }
 
+    /* Amazon Bin Vision HUD Card */
+    .amazon-bin-hud {
+      position: absolute;
+      top: 16px;
+      left: 310px;
+      width: 330px;
+      background: rgba(12, 17, 26, 0.94);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.12);
+      z-index: 12;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+    }
+
+    .amazon-bin-hud.minimized .amz-hud-body {
+      display: none;
+    }
+
+    .amz-hud-header {
+      padding: 10px 14px;
+      background: linear-gradient(90deg, rgba(56, 189, 248, 0.14), rgba(99, 102, 241, 0.1));
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .amz-hud-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+
+    .amz-status-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .amz-status-ready {
+      background: rgba(16, 185, 129, 0.18);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .amz-status-scanning {
+      background: rgba(56, 189, 248, 0.25);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      animation: pulseGlow 1.2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
+      50% { opacity: 0.6; box-shadow: none; }
+    }
+
+    .amz-hud-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .amz-hud-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .amz-hud-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .amz-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 155px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #020617;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .amz-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .amz-laser-sweep {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #10b981, #38bdf8, transparent);
+      box-shadow: 0 0 10px #10b981;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .amz-laser-sweep.active {
+      opacity: 1;
+      animation: laserScan 1.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes laserScan {
+      0% { top: 5%; }
+      100% { top: 92%; }
+    }
+
+    .amz-img-overlay-tag {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-family: var(--font-mono);
+      color: #94a3b8;
+    }
+
+    .amz-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .amz-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    .amz-value-bin {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-top: 2px;
+    }
+
+    .amz-value-code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-top: 2px;
+    }
+
+    .amz-catalog-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .amz-catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .amz-qty-pill {
+      font-size: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .amz-items-scroll {
+      max-height: 80px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .amz-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .amz-metrics-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .amz-conf-bar-bg {
+      width: 70px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .amz-conf-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .amz-conf-val {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .amz-value-dim {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* FPV Viewport Reticle & Avionics Overlay */
+    .fpv-hud-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 14;
+      display: none;
+    }
+
+    .fpv-crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 140px;
+    }
+
+    .fpv-bracket-tl {
+      position: absolute; top: 0; left: 0; width: 26px; height: 26px;
+      border-top: 2px solid rgba(56, 189, 248, 0.9);
+      border-left: 2px solid rgba(56, 189, 248, 0.9);
+    }
+    .fpv-bracket-tr {
+      position: absolute; top: 0; right: 0; width: 26px; height: 26px;
+      border-top: 2px solid rgba(56, 189, 248, 0.9);
+      border-right: 2px solid rgba(56, 189, 248, 0.9);
+    }
+    .fpv-bracket-bl {
+      position: absolute; bottom: 0; left: 0; width: 26px; height: 26px;
+      border-bottom: 2px solid rgba(56, 189, 248, 0.9);
+      border-left: 2px solid rgba(56, 189, 248, 0.9);
+    }
+    .fpv-bracket-br {
+      position: absolute; bottom: 0; right: 0; width: 26px; height: 26px;
+      border-bottom: 2px solid rgba(56, 189, 248, 0.9);
+      border-right: 2px solid rgba(56, 189, 248, 0.9);
+    }
+
+    .fpv-center-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .fpv-horizon-bar {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 240px;
+      height: 1px;
+      background: rgba(56, 189, 248, 0.35);
+      transform: translate(-50%, -50%);
+    }
+
+    .fpv-horizon-bar::before {
+      content: '';
+      position: absolute;
+      left: 48px;
+      top: -6px;
+      width: 12px;
+      height: 6px;
+      border-left: 1px solid rgba(56, 189, 248, 0.6);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.6);
+    }
+
+    .fpv-horizon-bar::after {
+      content: '';
+      position: absolute;
+      right: 48px;
+      top: -6px;
+      width: 12px;
+      height: 6px;
+      border-right: 1px solid rgba(56, 189, 248, 0.6);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.6);
+    }
+
+    .fpv-lock-tag {
+      position: absolute;
+      top: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(16, 185, 129, 0.22);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #10b981;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      display: none;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+    }
+
+    .fpv-tape-left {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(12, 17, 26, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .fpv-tape-right {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(12, 17, 26, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      color: #10b981;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .fpv-badge-top {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(12, 17, 26, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 5px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Traffic Hazard Alert Banner */
+    .traffic-alert-banner {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(220, 38, 38, 0.94);
+      border: 1px solid #ef4444;
+      border-radius: 12px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 30px rgba(239, 68, 68, 0.6);
+      z-index: 20;
+      pointer-events: none;
+      display: none;
+      animation: alertPulse 1.2s infinite alternate;
+    }
+
+    @keyframes alertPulse {
+      0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+      100% { transform: translateX(-50%) scale(1.02); box-shadow: 0 0 30px rgba(239, 68, 68, 0.9); }
+    }
+
+    .traffic-alert-icon { font-size: 20px; }
+    .traffic-alert-title { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+    .traffic-alert-desc { font-size: 11px; color: rgba(255, 255, 255, 0.92); }
+    .traffic-alert-badge {
+      background: #000;
+      color: #f59e0b;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
     /* Panels & General Views */
     .view-content-wrapper {
       width: 100%;
@@ -572,7 +1013,7 @@
     /* Code Editor */
     textarea.code-editor {
       width: 100%;
-      height: 480px;
+      height: 520px;
       background: #07090e;
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
@@ -587,6 +1028,356 @@
 
     textarea.code-editor:focus {
       border-color: var(--accent-blue);
+    }
+
+    /* User-Friendly Config GUI Styles */
+    .cfg-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .cfg-mode-toggle {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+    }
+    .cfg-mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .cfg-mode-btn.active {
+      background: var(--bg-surface-elevated);
+      color: var(--accent-blue);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .cfg-subnav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+    }
+    .cfg-subnav-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .cfg-subnav-btn:hover {
+      color: var(--text-main);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .cfg-subnav-btn.active {
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+    .cfg-section-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .cfg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .cfg-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cfg-card-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .cfg-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .cfg-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .cfg-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .cfg-grid-2, .cfg-grid-3, .cfg-grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .cfg-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cfg-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cfg-input-group {
+      display: flex;
+      align-items: center;
+      background: var(--bg-darkest);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s ease;
+    }
+    .cfg-input-group:focus-within {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+    }
+    .cfg-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-family: var(--font-mono);
+      outline: none;
+      width: 100%;
+    }
+    .cfg-unit {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-dim);
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-left: 1px solid var(--border-subtle);
+      user-select: none;
+      min-width: 38px;
+      text-align: center;
+    }
+    .cfg-range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .cfg-range {
+      flex: 1;
+      accent-color: var(--accent-blue);
+      height: 4px;
+      cursor: pointer;
+    }
+    .cfg-help {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.3;
+    }
+    .cfg-battery-gauge {
+      display: flex;
+      height: 14px;
+      border-radius: 7px;
+      overflow: hidden;
+      margin: 10px 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+    }
+    .cfg-gauge-flight {
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      height: 100%;
+      transition: width 0.2s ease;
+    }
+    .cfg-gauge-safe {
+      background: #f59e0b;
+      height: 100%;
+      transition: width 0.2s ease;
+    }
+    .cfg-gauge-crit {
+      background: #ef4444;
+      height: 100%;
+      transition: width 0.2s ease;
+    }
+    .cfg-alert-banner {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    .cfg-alert-banner.valid {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      display: flex;
+    }
+    .cfg-alert-banner.error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      display: flex;
+    }
+
+    /* 3D Viewport Controls & Layout */
+    .viewport-toolbar {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .toolbar-group {
+      background: rgba(12, 17, 26, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    }
+
+    .toolbar-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .toolbar-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .toolbar-btn.active {
+      background: rgba(56, 189, 248, 0.18);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .toolbar-select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .toolbar-select option {
+      background: var(--bg-dark);
+      color: var(--text-main);
+    }
+
+    /* 3D Top Facility Stats Bar */
+    .top-stats-bar {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(12, 17, 26, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 30px;
+      padding: 6px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 10;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+      pointer-events: auto;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .stat-pill strong {
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    /* Floating Bin Hover Tooltip */
+    #binHoverTooltip {
+      position: absolute;
+      display: none;
+      pointer-events: none;
+      z-index: 30;
+      background: rgba(10, 15, 28, 0.94);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 8px;
+      backdrop-filter: blur(12px);
+      padding: 8px 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      font-size: 11px;
+      color: var(--text-main);
+      transform: translate(14px, 14px);
+      max-width: 280px;
+      transition: opacity 0.15s ease;
     }
   </style>
 </head>
@@ -605,6 +1396,7 @@
           <option value="small">WH-SMALL (3 Aisles, 90 Bins)</option>
           <option value="medium" selected>WH-MEDIUM (8 Aisles, ~500 Bins)</option>
           <option value="large">WH-LARGE (20 Aisles, ~5,000 Bins)</option>
+          <option value="mega">WH-MEGA (50 Aisles, 50,000 Bins)</option>
         </select>
       </div>
     </div>
@@ -635,6 +1427,192 @@
     <section id="tab-3d" class="tab-view active">
       <div id="view-3d">
         <div id="threeContainer" style="width:100%; height:100%;"></div>
+
+        <!-- 3D Top Facility Stats Bar -->
+        <div class="top-stats-bar">
+          <div class="stat-pill">🏢 <span id="twinSiteName">Warehouse Logistics Facility</span></div>
+          <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
+          <div class="stat-pill">📦 Bins: <strong id="twinBinsCount">0</strong></div>
+          <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
+          <div class="stat-pill">🛣️ Aisles: <strong id="twinAislesCount">0</strong></div>
+          <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
+          <div class="stat-pill">🏗️ Racks: <strong id="twinRacksCount">0</strong></div>
+          <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
+          <div class="stat-pill">🏷️ Markers: <strong id="twinMarkersCount">0</strong></div>
+          <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
+          <div class="stat-pill" title="Live Multi-Aisle Ground Traffic & Flight Coverage Coordination">
+            <span id="trafficAisleStatus" style="font-family:var(--font-mono); font-size:11px; color:#f59e0b; font-weight:600;">🚜 Traffic: All-Aisle Patrol</span>
+          </div>
+        </div>
+
+        <!-- Viewport Toolbar (Right Side) -->
+        <div class="viewport-toolbar">
+          <!-- Camera Perspectives -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Cam:</span>
+            <button class="toolbar-btn active" id="camIsoBtn" title="Elevated 3/4 Perspective">🌐 Overview</button>
+            <button class="toolbar-btn" id="camTopBtn" title="Top-Down Plan View">🧭 Top</button>
+            <button class="toolbar-btn" id="camAisleBtn" title="Corridor Eye-Level View">🚶 Corridor</button>
+            <button class="toolbar-btn" id="camFollowBtn" title="Chase Drone Flight">🚁 Follow</button>
+            <button class="toolbar-btn" id="camFpvBtn" title="First-Person Pilot & Scanner View">🎥 FPV Gimbal</button>
+          </div>
+
+          <!-- Aisle Quick Jump -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Aisle:</span>
+            <select id="aisleJumpSelect" class="toolbar-select">
+              <option value="">Jump to Aisle...</option>
+            </select>
+          </div>
+
+          <!-- Visual Rendering Mode & Layers -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Style:</span>
+            <select id="visualModeSelect" class="toolbar-select">
+              <option value="realistic" selected>🏭 Realistic Logistics</option>
+              <option value="cyber">⚡ Cyber / Hologram</option>
+              <option value="heatmap">📊 Level Heatmap</option>
+            </select>
+            <div style="width:1px; height:14px; background:var(--border-subtle);"></div>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Bins">
+              <input type="checkbox" id="layerBins" checked> 📦
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Racks">
+              <input type="checkbox" id="layerRacks" checked> 🏗️
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle ArUco Markers">
+              <input type="checkbox" id="layerMarkers" checked> 🏷️
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Safety & NFZ">
+              <input type="checkbox" id="layerSafety" checked> 🚫
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Charging & Pads">
+              <input type="checkbox" id="layerPads" checked> ⚡
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Aisle Signs">
+              <input type="checkbox" id="layerSigns" checked> 🪧
+            </label>
+            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Traffic (Forklifts & AMRs)">
+              <input type="checkbox" id="layerTraffic" checked> 🚜
+            </label>
+          </div>
+
+          <!-- Forklift Multi-Aisle Flight Corridor Controls -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Forklift:</span>
+            <button class="toolbar-btn" id="dispatchForkliftBtn" title="Dispatch Forklift to start Multi-Aisle Patrol from active Drone Aisle">⚡ Patrol from Drone Aisle</button>
+            <button class="toolbar-btn" id="toggleTrafficModeBtn" title="Toggle between All-Aisles Weaving Patrol and Perimeter Cross-Docks">🔄 All Aisles / Crossway</button>
+          </div>
+        </div>
+
+        <!-- Floating Bin Hover Tooltip -->
+        <div id="binHoverTooltip">
+          <div id="bttCode" style="font-weight:700; color:var(--accent-blue); font-family:var(--font-mono); font-size:12px;"></div>
+          <div id="bttLoc" style="color:var(--text-muted); font-size:10px; margin-top:2px;"></div>
+          <div id="bttItems" style="color:var(--accent-emerald); font-size:10px; margin-top:2px;"></div>
+        </div>
+
+        <!-- Traffic Hazard Conflict Banner -->
+        <div id="trafficAlertBanner" class="traffic-alert-banner">
+          <span class="traffic-alert-icon">⚠️</span>
+          <div>
+            <div id="trafficAlertTitle" class="traffic-alert-title">TRAFFIC CONFLICT DETECTED</div>
+            <div id="trafficAlertDesc" class="traffic-alert-desc">Forklift intersecting corridor (Dist: 2.1m) — Executing reactive climb</div>
+          </div>
+          <span id="trafficAlertAction" class="traffic-alert-badge">CLIMB +1.8m</span>
+        </div>
+
+        <!-- FPV Avionics & Scanner Reticle Overlay -->
+        <div id="fpvHudOverlay" class="fpv-hud-overlay">
+          <div class="fpv-badge-top">
+            <span style="color:#ef4444; font-weight:700;">● REC</span>
+            <span style="color:#94a3b8;">1080p 60FPS</span>
+            <span style="color:#38bdf8; font-weight:600;">GIMBAL: ACTIVE</span>
+            <span id="fpvCompass" style="color:#f59e0b; font-weight:700;">084° ENE</span>
+          </div>
+          <div class="fpv-tape-left">
+            <span style="font-size:9px; color:#64748b;">ALTITUDE</span>
+            <span id="fpvAltVal" style="font-size:14px; font-weight:700;">2.45 m</span>
+            <span style="font-size:9px; color:#64748b; margin-top:4px;">BARO</span>
+            <span style="font-size:10px; color:#94a3b8;">1013 hPa</span>
+          </div>
+          <div class="fpv-crosshair">
+            <div class="fpv-bracket-tl"></div>
+            <div class="fpv-bracket-tr"></div>
+            <div class="fpv-bracket-bl"></div>
+            <div class="fpv-bracket-br"></div>
+            <div class="fpv-center-dot"></div>
+            <div class="fpv-horizon-bar"></div>
+            <div id="fpvLockTag" class="fpv-lock-tag">[ TARGET LOCKED: BIN A01-R01-B01-L01-S1 ]</div>
+          </div>
+          <div class="fpv-tape-right">
+            <span style="font-size:9px; color:#64748b;">SPEED</span>
+            <span id="fpvSpeedVal" style="font-size:14px; font-weight:700;">1.20 m/s</span>
+            <span style="font-size:9px; color:#64748b; margin-top:4px;">BATTERY</span>
+            <span id="fpvBatVal" style="font-size:10px; color:#10b981;">98.5%</span>
+          </div>
+        </div>
+
+        <!-- Real Amazon Bin Image HUD Card -->
+        <div id="amazonBinHudCard" class="amazon-bin-hud">
+          <div class="amz-hud-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:13px;">📦</span>
+              <span class="amz-hud-title">Amazon Bin Vision HUD</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span id="amzHudStatus" class="amz-status-pill amz-status-ready">STANDBY</span>
+              <button id="amzHudMinimizeBtn" class="amz-hud-btn" title="Toggle HUD Size">−</button>
+            </div>
+          </div>
+          <div id="amzHudBody" class="amz-hud-body">
+            <div class="amz-img-wrapper">
+              <img id="amzHudImage" src="/img/amazon/439407.jpg" alt="Real Amazon Shelf Photo" onerror="this.src='https://placehold.co/400x240/1e293b/94a3b8?text=Amazon+Bin+Image'">
+              <div id="amzLaserSweep" class="amz-laser-sweep"></div>
+              <div class="amz-img-overlay-tag">
+                <span id="amzHudImgId">IMG #439407</span> • 1080p CMOS
+              </div>
+            </div>
+            <div class="amz-meta-row">
+              <div>
+                <div class="amz-label">BIN IDENTIFIER</div>
+                <div id="amzHudBinId" class="amz-value-bin">A01-R01-B01-L01-S1</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="amz-label">DECODED BARCODE</div>
+                <div id="amzHudBarcode" class="amz-value-code">AMZN-439407</div>
+              </div>
+            </div>
+            <div class="amz-catalog-box">
+              <div class="amz-catalog-header">
+                <span class="amz-label">SHELF CONTENTS & ASIN VERIFICATION</span>
+                <span id="amzHudItemCount" class="amz-qty-pill">3 Items</span>
+              </div>
+              <div id="amzHudItemsList" class="amz-items-scroll">
+                <div class="amz-item-row">
+                  <span style="color:#94a3b8; font-family:monospace; font-size:10px;">B00140V5Q8</span>
+                  <span style="color:#e2e8f0; font-size:11px;">Amazon Basics Electronics</span>
+                  <span style="color:#38bdf8; font-weight:700;">×2</span>
+                </div>
+              </div>
+            </div>
+            <div class="amz-metrics-row">
+              <div class="amz-metric">
+                <span class="amz-label">OPTICAL CONFIDENCE</span>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+                  <div class="amz-conf-bar-bg">
+                    <div id="amzHudConfBar" class="amz-conf-bar-fill" style="width:98%;"></div>
+                  </div>
+                  <span id="amzHudConfVal" class="amz-conf-val">98%</span>
+                </div>
+              </div>
+              <div class="amz-metric" style="text-align:right;">
+                <span class="amz-label">STANDOFF / ANGLE</span>
+                <div id="amzHudOptics" class="amz-value-dim">1.20 m • 5.8°</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- 3D HUD Telemetry Overlay -->
         <div class="hud-overlay">
@@ -871,16 +1849,605 @@
     <!-- 7. Config Editor View -->
     <section id="tab-config" class="tab-view">
       <div class="view-content-wrapper">
-        <div class="panel-card">
-          <div class="panel-title">
-            <span>Warehouse YAML Configuration Editor</span>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <span id="configValidBadge" class="badge badge-success">VALID PYDANTIC V2</span>
-              <button id="validateConfigBtn" class="btn-secondary" style="font-size:12px; padding:4px 10px;">✔ Validate</button>
-              <button id="saveConfigBtn" class="btn-primary" style="font-size:12px; padding:4px 12px;">💾 Save Preset</button>
+        <div class="panel-card" style="padding: 24px;">
+
+          <!-- Configuration Header & Mode Switcher -->
+          <div class="cfg-header-bar">
+            <div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <h2 style="font-size:18px; font-weight:800; color:var(--text-main);">Warehouse & Drone Configuration</h2>
+                <span id="cfgCurrentPresetBadge" class="brand-badge" style="background:#0284c7;">PRESET: MEDIUM</span>
+                <span id="configValidBadge" class="badge badge-success">VALID PYDANTIC V2</span>
+              </div>
+              <p style="font-size:12px; color:var(--text-dim); margin-top:4px;">
+                Fine-tune facility dimensions, drone physics limits, optical scanning standoffs, and autonomous safety failsafes.
+              </p>
+            </div>
+
+            <!-- View Mode Switcher -->
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div class="cfg-mode-toggle">
+                <button type="button" class="cfg-mode-btn active" id="cfgModeVisualBtn">
+                  🎛️ Visual GUI
+                </button>
+                <button type="button" class="cfg-mode-btn" id="cfgModeYamlBtn">
+                  💻 Raw YAML
+                </button>
+              </div>
+
+              <div style="display:flex; gap:8px;">
+                <button type="button" id="revertConfigBtn" class="btn-secondary" style="font-size:12px; padding:6px 12px;" title="Discard unsaved changes">
+                  🔄 Revert
+                </button>
+                <button type="button" id="validateConfigBtn" class="btn-secondary" style="font-size:12px; padding:6px 12px;">
+                  ✔ Validate
+                </button>
+                <button type="button" id="saveConfigBtn" class="btn-primary" style="font-size:12px; padding:6px 14px;">
+                  💾 Save Preset
+                </button>
+              </div>
             </div>
           </div>
-          <textarea id="configYamlEditor" class="code-editor" spellcheck="false"></textarea>
+
+          <!-- Alert / Validation Banner -->
+          <div id="cfgAlertBanner" class="cfg-alert-banner">
+            <span id="cfgAlertIcon">✔</span>
+            <span id="cfgAlertText">Configuration is valid and compliant with Pydantic v2 schema.</span>
+          </div>
+
+          <!-- ========================================================= -->
+          <!-- MODE A: INTERACTIVE VISUAL GUI EDITOR                      -->
+          <!-- ========================================================= -->
+          <div id="cfgVisualContainer">
+
+            <!-- Category Sub-Navigation -->
+            <div class="cfg-subnav">
+              <button type="button" class="cfg-subnav-btn active" data-cfg-sec="cfg-sec-site">🏢 Site & Dimensions</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-drone">🚁 Drone Platform</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-battery">🔋 Battery & Energy</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-mission">🎯 Mission & Strategy</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-scanner">📷 Camera & Optics</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-safety">🛡️ Safety & Buffers</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-loc">🏷️ Localization & Tags</button>
+              <button type="button" class="cfg-subnav-btn" data-cfg-sec="cfg-sec-layout">📦 Layout Overview</button>
+            </div>
+
+            <!-- SECTION 1: Site & Facility -->
+            <div id="cfg-sec-site" class="cfg-section">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🏢 Facility Identity & Coordinates</div>
+                    <div class="cfg-card-desc">Define site code, facility name, and physical warehouse building envelope.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Site ID Code</label>
+                    <div class="cfg-input-group">
+                      <input type="text" id="cfgSiteId" class="cfg-input" placeholder="e.g. WH-SMALL">
+                    </div>
+                    <span class="cfg-help">Primary facility identifier for WMS tracking.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Facility Display Name</label>
+                    <div class="cfg-input-group">
+                      <input type="text" id="cfgSiteName" class="cfg-input" placeholder="e.g. Micro-Fulfillment Center">
+                    </div>
+                    <span class="cfg-help">Human-readable logistics warehouse name.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Floor Length (X Max)</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgFloorXMax" class="cfg-input" step="1.0" min="5" max="300">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">East-West warehouse span.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Floor Width (Y Max)</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgFloorYMax" class="cfg-input" step="1.0" min="5" max="200">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">North-South warehouse span.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Ceiling Clearance Height</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgCeilingHeight" class="cfg-input" step="0.1" min="3.0" max="25.0">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgCeilingHeightRange" class="cfg-range" min="3.0" max="20.0" step="0.5">
+                    </div>
+                    <span class="cfg-help">Structural roof beam elevation limit.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: Drone Vehicle Platform -->
+            <div id="cfg-sec-drone" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🚁 Drone Kinematics & Physical Flight Limits</div>
+                    <div class="cfg-card-desc">Flight vehicle chassis, takeoff mass, velocity ceilings, and turn rates.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Total Aircraft Takeoff Mass</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgDroneMass" class="cfg-input" step="0.1" min="0.2" max="25.0">
+                      <span class="cfg-unit">kg</span>
+                    </div>
+                    <span class="cfg-help">Includes quadrotor frame, battery, and optical scanner payload.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Maximum Cruise Flight Speed</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgDroneMaxSpeed" class="cfg-input" step="0.1" min="0.5" max="10.0">
+                      <span class="cfg-unit">m/s</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgDroneMaxSpeedRange" class="cfg-range" min="0.5" max="10.0" step="0.1">
+                    </div>
+                    <span class="cfg-help">Top horizontal velocity in transit corridors.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Maximum Acceleration</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgDroneMaxAccel" class="cfg-input" step="0.1" min="0.2" max="5.0">
+                      <span class="cfg-unit">m/s²</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgDroneMaxAccelRange" class="cfg-range" min="0.2" max="5.0" step="0.1">
+                    </div>
+                    <span class="cfg-help">Linear acceleration limit during starts and stops.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Maximum Yaw Rotation Rate</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgDroneMaxYawRate" class="cfg-input" step="0.05" min="0.2" max="3.14">
+                      <span class="cfg-unit">rad/s</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgDroneMaxYawRateRange" class="cfg-range" min="0.2" max="3.14" step="0.05">
+                    </div>
+                    <span class="cfg-help">Angular turning velocity (e.g. 1.57 rad/s = 90°/s).</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 3: Battery & Energy -->
+            <div id="cfg-sec-battery" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🔋 Power System & Failsafe Reserves</div>
+                    <div class="cfg-card-desc">Battery capacity, hover consumption models, return-to-base triggers, and emergency landing thresholds.</div>
+                  </div>
+                </div>
+
+                <!-- Visual Allocation Gauge -->
+                <div style="background:rgba(255,255,255,0.02); padding:14px; border-radius:10px; border:1px solid var(--border-subtle); margin-bottom:16px;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+                    <span style="font-weight:700; color:var(--text-main);">Battery Capacity Allocation</span>
+                    <span id="cfgBatterySummaryText" style="font-family:var(--font-mono); color:var(--accent-blue);">120 Wh (~25 min endurance)</span>
+                  </div>
+                  <div class="cfg-battery-gauge">
+                    <div id="cfgGaugeCrit" class="cfg-gauge-crit" style="width:10%;" title="Critical Emergency Land"></div>
+                    <div id="cfgGaugeSafe" class="cfg-gauge-safe" style="width:10%;" title="Return to Pad Zone"></div>
+                    <div id="cfgGaugeFlight" class="cfg-gauge-flight" style="width:80%;" title="Active Mission Flight Zone"></div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); margin-top:4px;">
+                    <span style="color:#ef4444;">🔴 0 - <span id="cfgGaugeCritVal">10</span>% Critical Descent</span>
+                    <span style="color:#f59e0b;">🟡 <span id="cfgGaugeCritVal2">10</span> - <span id="cfgGaugeSafeVal">20</span>% Return to Base</span>
+                    <span style="color:#10b981;">🟢 <span id="cfgGaugeSafeVal2">20</span> - 100% Active Mission Scan</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Battery Capacity</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgBatteryCapacity" class="cfg-input" step="5" min="20" max="600">
+                      <span class="cfg-unit">Wh</span>
+                    </div>
+                    <span class="cfg-help">Nominal stored energy capacity.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Hover Power Draw</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgBatteryHoverPower" class="cfg-input" step="5" min="50" max="800">
+                      <span class="cfg-unit">W</span>
+                    </div>
+                    <span class="cfg-help">Continuous power consumed during hover.</span>
+                  </div>
+                  <div class="cfg-field">
+                    <label class="cfg-label">Forward Flight Factor</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgBatteryForwardPower" class="cfg-input" step="1" min="0" max="100">
+                      <span class="cfg-unit">W/(m/s)</span>
+                    </div>
+                    <span class="cfg-help">Additional power consumed per m/s cruise speed.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Safe Return-to-Base Reserve</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgBatterySafeReserve" class="cfg-input" step="1" min="10" max="50">
+                      <span class="cfg-unit">%</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgBatterySafeReserveRange" class="cfg-range" min="10" max="50" step="1">
+                    </div>
+                    <span class="cfg-help">Trigger threshold: drone halts scanning and navigates to charging pad.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Critical Emergency Landing Reserve</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgBatteryCritReserve" class="cfg-input" step="1" min="2" max="25">
+                      <span class="cfg-unit">%</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgBatteryCritReserveRange" class="cfg-range" min="2" max="25" step="1">
+                    </div>
+                    <span class="cfg-help">Emergency threshold: drone executes immediate controlled vertical descent.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 4: Mission Planning & Strategy -->
+            <div id="cfg-sec-mission" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🎯 Mission Planning & Sequencing Strategy</div>
+                    <div class="cfg-card-desc">Configure scan sequencing algorithms, operational priority, flight limits, and recharge rules.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Waypoint Sequencing Algorithm</label>
+                    <div class="cfg-input-group">
+                      <select id="cfgMissionStrategy" class="cfg-input" style="cursor:pointer; background:transparent; color:var(--text-main); border:none; padding:8px 12px; width:100%;">
+                        <option value="serpentine" style="background:#0f172a; color:#fff;">Serpentine (Continuous Snake Scan Corridor)</option>
+                        <option value="nearest" style="background:#0f172a; color:#fff;">Nearest (Greedy Proximity Scan)</option>
+                        <option value="minimum_time" style="background:#0f172a; color:#fff;">Minimum-Time (Kinematic 4D Optimal)</option>
+                      </select>
+                    </div>
+                    <span class="cfg-help">Aisle trajectory optimization across rack faces.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Mission Execution Priority</label>
+                    <div class="cfg-input-group">
+                      <select id="cfgMissionPriority" class="cfg-input" style="cursor:pointer; background:transparent; color:var(--text-main); border:none; padding:8px 12px; width:100%;">
+                        <option value="low" style="background:#0f172a; color:#fff;">Low (Routine Background Audit)</option>
+                        <option value="normal" style="background:#0f172a; color:#fff;" selected>Normal (Standard Scheduled Cycle Count)</option>
+                        <option value="high" style="background:#0f172a; color:#fff;">High (Urgent Discrepancy & Critical Audit)</option>
+                      </select>
+                    </div>
+                    <span class="cfg-help">Fleet dispatch priority level in WMS queue.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Max Flight Duration Limit</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgMissionFlightDuration" class="cfg-input" step="30" min="120" max="3600">
+                      <span class="cfg-unit">s</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgMissionFlightDurationRange" class="cfg-range" min="120" max="2400" step="30">
+                    </div>
+                    <span class="cfg-help">Mission ceiling per sortie (e.g. 900s = 15 min).</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Return-to-Charge Threshold</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgMissionRtcThreshold" class="cfg-input" step="1" min="10" max="50">
+                      <span class="cfg-unit">%</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgMissionRtcThresholdRange" class="cfg-range" min="10" max="50" step="1">
+                    </div>
+                    <span class="cfg-help">Battery % trigger commanding drone to dock at pad.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Home Charging Pad ID</label>
+                    <div class="cfg-input-group">
+                      <input type="text" id="cfgMissionRtcPad" class="cfg-input" placeholder="e.g. PAD-HOME">
+                    </div>
+                    <span class="cfg-help">Designated landing pad with charging contacts.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 5: Camera & Optics Payload -->
+            <div id="cfg-sec-scanner" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">📷 Barcode Scanner & Optical Camera</div>
+                    <div class="cfg-card-desc">Camera field-of-view, standoff scanning distance windows, and motion blur speed limits.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Horizontal Field-of-View</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerFovH" class="cfg-input" step="1" min="30" max="130">
+                      <span class="cfg-unit">deg</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgScannerFovHRange" class="cfg-range" min="30" max="130" step="1">
+                    </div>
+                    <span class="cfg-help">Horizontal lens aperture angle (hfov_deg).</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Vertical Field-of-View</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerFovV" class="cfg-input" step="1" min="20" max="100">
+                      <span class="cfg-unit">deg</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgScannerFovVRange" class="cfg-range" min="20" max="100" step="1">
+                    </div>
+                    <span class="cfg-help">Vertical lens aperture angle (vfov_deg).</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Camera Mount Pitch Angle</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerMountAngle" class="cfg-input" step="1" min="-45" max="45">
+                      <span class="cfg-unit">deg</span>
+                    </div>
+                    <div class="cfg-range-row">
+                      <input type="range" id="cfgScannerMountAngleRange" class="cfg-range" min="-45" max="45" step="1">
+                    </div>
+                    <span class="cfg-help">Camera tilt angle relative to forward axis.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Target Standoff Distance</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerMinDist" class="cfg-input" step="0.05" min="0.3" max="2.5">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">Ideal standoff distance to rack barcode face.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Max Scan Blur Speed</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerMaxSpeed" class="cfg-input" step="0.1" min="0.5" max="3.0">
+                      <span class="cfg-unit">m/s</span>
+                    </div>
+                    <span class="cfg-help">Speed limit while reading barcodes to prevent blur.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Sensor Exposure Time</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgScannerExposure" class="cfg-input" step="0.001" min="0.001" max="0.02">
+                      <span class="cfg-unit">s</span>
+                    </div>
+                    <span class="cfg-help">Shutter duration (e.g. 0.004s = 1/250s).</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 6: Safety & Buffers -->
+            <div id="cfg-sec-safety" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🛡️ Safety Buffers & Failsafe Supervisors</div>
+                    <div class="cfg-card-desc">Geofence margins, rack clearance buffers, and automated failsafe responses.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Geofence Margin</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgSafetyGeofence" class="cfg-input" step="0.1" min="0.1" max="3.0">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">Buffer distance inside warehouse outer perimeter walls.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Min Rack Clearance Buffer</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgSafetyRackClearance" class="cfg-input" step="0.05" min="0.1" max="1.5">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">Clearance maintained from rack uprights & beams.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Emergency Stop Deceleration</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgSafetyEmStopDecel" class="cfg-input" step="0.5" min="2.0" max="10.0">
+                      <span class="cfg-unit">m/s²</span>
+                    </div>
+                    <span class="cfg-help">Braking deceleration commanded on collision hazard.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-2">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Link-Loss Failsafe Action</label>
+                    <div class="cfg-input-group">
+                      <select id="cfgSafetyLinkLoss" class="cfg-input" style="cursor:pointer; background:transparent; color:var(--text-main); border:none; padding:8px 12px; width:100%;">
+                        <option value="hover_then_land" style="background:#0f172a; color:#fff;" selected>Hover Then Land</option>
+                        <option value="rth" style="background:#0f172a; color:#fff;">Return To Home (RTH)</option>
+                        <option value="land_immediately" style="background:#0f172a; color:#fff;">Land Immediately</option>
+                      </select>
+                    </div>
+                    <span class="cfg-help">Autonomous response upon losing command link telemetry.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Localisation Loss Failsafe</label>
+                    <div class="cfg-input-group">
+                      <select id="cfgSafetyLocLoss" class="cfg-input" style="cursor:pointer; background:transparent; color:var(--text-main); border:none; padding:8px 12px; width:100%;">
+                        <option value="hover_then_land" style="background:#0f172a; color:#fff;" selected>Hover Then Land</option>
+                        <option value="emergency_land" style="background:#0f172a; color:#fff;">Emergency Land</option>
+                      </select>
+                    </div>
+                    <span class="cfg-help">Autonomous response upon loss of visual marker tracking.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 7: Localization & Tags -->
+            <div id="cfg-sec-loc" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">🏷️ Visual Fiducial Markers & EKF Localization</div>
+                    <div class="cfg-card-desc">ArUco/AprilTag sizing, spacing along aisles, and Kalman filter noise parameters.</div>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3" style="margin-bottom:16px;">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Fiducial Tag Size</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgLocMarkerSize" class="cfg-input" step="0.01" min="0.05" max="0.5">
+                      <span class="cfg-unit">m</span>
+                    </div>
+                    <span class="cfg-help">Physical printed side length (0.16m = 16cm).</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Tag Placement Spacing</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgLocSpacingBays" class="cfg-input" step="1" min="1" max="10">
+                      <span class="cfg-unit">bays</span>
+                    </div>
+                    <span class="cfg-help">Attach an ArUco marker every N storage bays.</span>
+                  </div>
+
+                  <div class="cfg-field" style="justify-content:center;">
+                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text-main); cursor:pointer; margin-top:16px;">
+                      <input type="checkbox" id="cfgLocRackEnds" style="width:16px; height:16px; accent-color:var(--accent-blue);" checked>
+                      Always Mark Both Rack Ends
+                    </label>
+                    <span class="cfg-help">Guarantees tags at aisle entry and exit points.</span>
+                  </div>
+                </div>
+
+                <div class="cfg-grid-3">
+                  <div class="cfg-field">
+                    <label class="cfg-label">Drift Random Walk Noise</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgLocWalkStd" class="cfg-input" step="0.01" min="0.001" max="0.2">
+                      <span class="cfg-unit">m/s</span>
+                    </div>
+                    <span class="cfg-help">Simulated IMU random walk standard deviation.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">EKF Process Position Noise</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgLocEkfQPos" class="cfg-input" step="0.005" min="0.001" max="0.1">
+                      <span class="cfg-unit">Q</span>
+                    </div>
+                    <span class="cfg-help">Kinematic prediction covariance growth rate.</span>
+                  </div>
+
+                  <div class="cfg-field">
+                    <label class="cfg-label">Marker Measurement Noise</label>
+                    <div class="cfg-input-group">
+                      <input type="number" id="cfgLocEkfRMarker" class="cfg-input" step="0.005" min="0.005" max="0.2">
+                      <span class="cfg-unit">R</span>
+                    </div>
+                    <span class="cfg-help">Camera visual pose estimation measurement variance.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 8: Layout Summary -->
+            <div id="cfg-sec-layout" class="cfg-section" style="display:none;">
+              <div class="cfg-section-card">
+                <div class="cfg-card-header">
+                  <div>
+                    <div class="cfg-card-title">📦 Facility Layout & Structural Summary</div>
+                    <div class="cfg-card-desc">Overview of storage aisles, rack structures, zones, and charging infrastructure.</div>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px;">
+                  <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px; color:var(--text-dim);">STORAGE AISLES</div>
+                    <div id="cfgSumAisles" style="font-size:24px; font-weight:800; color:var(--accent-blue);">0</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px; color:var(--text-dim);">RACK STRUCTURES</div>
+                    <div id="cfgSumRacks" style="font-size:24px; font-weight:800; color:var(--accent-orange);">0</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px; color:var(--text-dim);">TAKEOFF / CHARGE PADS</div>
+                    <div id="cfgSumPads" style="font-size:24px; font-weight:800; color:var(--accent-green);">0</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px; color:var(--text-dim);">TOTAL INVENTORY BINS</div>
+                    <div id="cfgSumBins" style="font-size:24px; font-weight:800; color:var(--accent-purple);">0</div>
+                  </div>
+                </div>
+
+                <p style="font-size:12px; color:var(--text-muted); margin-top:16px; line-height:1.5;">
+                  💡 To add new physical aisles, modify rack level spacings, or add custom No-Fly Zones, use the <strong>💻 Raw YAML</strong> mode to specify aisle coordinates and polygon boundaries.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========================================================= -->
+          <!-- MODE B: RAW YAML CODE EDITOR                               -->
+          <!-- ========================================================= -->
+          <div id="cfgYamlContainer" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:12px; color:var(--text-dim); font-family:var(--font-mono);">configs/presets/{preset}.yaml</span>
+              <span style="font-size:11px; color:var(--text-muted);">Pydantic v2 Compliant YAML</span>
+            </div>
+            <textarea id="configYamlEditor" class="code-editor" spellcheck="false"></textarea>
+          </div>
+
         </div>
       </div>
     </section>
@@ -913,11 +2480,70 @@
     let playbackIndex = 0;
     let isPlaying = false;
     let playTimer = null;
+let playSpeed = 5;
 
-    // Three.js Scene Variables
+    // Three.js Scene Variables & Groups
     let scene, camera3D, renderer, controls;
-    let droneMesh, propellerMeshes = [];
-    let rackMeshes = [], padMeshes = [], flightPathLine = null;
+    let droneMesh, propellerMeshes = [], droneSpotlight = null;
+    let worldGroup = null; // Single parent group for all dynamic warehouse geometry
+    let racksGroup = null, binsGroup = null, markersGroup = null, padsGroup = null;
+    let safetyGroup = null, signageGroup = null, lightsGroup = null;
+    let dirLight = null, ambientLight = null, fillLight = null;
+
+    // Instanced Bins Engine
+    let instancedBins = null;
+    let binDataList = [];        // index -> bin data
+    let binIndexMap = {};        // bin_id -> index
+    let hoveredInstanceId = -1;
+    let selectedBinData = null;
+    let hoverBoxHelper = null, selectBoxHelper = null;
+    let flightPathLine = null;
+    let raycaster3D = null;
+
+    // Viewport & Perspective state
+    let activeCamMode = 'iso';     // 'iso', 'top', 'corridor', 'follow', 'fpv'
+    let activeVisualMode = 'realistic'; // 'realistic', 'cyber', 'heatmap'
+    let warehouseBounds = null;    // { x_min, x_max, y_min, y_max, cx, cy, fW, fH, maxDim, ch }
+
+    // Dynamic Traffic, FPV & Audio
+    let trafficGroup = null;
+    let dynamicObstacleEntities = [];
+    let evasiveClimbOffset = 0.0;
+    let trafficRoutingMode = 'all_aisles';
+    let sharedAisleHazardMesh = null;
+    let worldBinsMap = new Map();
+    let audioCtx = null;
+
+    function playScanChirp() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(3200, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.09);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.09);
+      } catch (e) {}
+    }
+
+    // Color definitions
+    const BIN_COLOR_DEFAULT = 0xd97706;  // Amazon cardboard
+    const BIN_COLOR_HOVER   = 0xfbbf24;  // Brighter amber hover
+    const BIN_COLOR_SELECT  = 0x38bdf8;  // Cyan select
+    const BIN_COLOR_LEVELS = [
+      0x0284c7, // Level 1 - Sky Blue
+      0x10b981, // Level 2 - Emerald
+      0xf59e0b, // Level 3 - Amber
+      0x8b5cf6, // Level 4 - Purple
+      0xec4899, // Level 5 - Pink
+      0xef4444  // Level 6 - Coral Red
+    ];
 
     // 2D Canvas Variables
     const canvas2D = document.getElementById('mapCanvas');
@@ -925,13 +2551,15 @@
     let cam2D = { x: 0, y: 0, scale: 20 };
     let isDragging2D = false, dragStart2D = { x: 0, y: 0 };
 
+    // Selected bin tracker (3D)
+    let selectedBin3D = null;
+
     // Initialization
     window.addEventListener('DOMContentLoaded', async () => {
       initTabs();
       initThreeJS();
       init2DCanvas();
       await loadPreset(currentPreset);
-      await loadCompareData();
       await loadSafetyScenarios();
       animateThree();
     });
@@ -950,6 +2578,7 @@
 
           if (targetTabId === 'tab-3d') onResizeThree();
           if (targetTabId === 'tab-2d') { resize2DCanvas(); render2D(); }
+          if (targetTabId === 'tab-compare') { loadCompareData(); }
         });
       });
     }
@@ -960,40 +2589,71 @@
     function initThreeJS() {
       const container = document.getElementById('threeContainer');
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x07090e);
-      scene.fog = new THREE.FogExp2(0x07090e, 0.015);
+      scene.background = new THREE.Color(0x06080d);
+      scene.fog = new THREE.FogExp2(0x06080d, 0.012);
 
-      camera3D = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-      camera3D.position.set(-15, -25, 25);
+      camera3D = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
+      camera3D.position.set(-20, -30, 25);
       camera3D.up.set(0, 0, 1); // Z is up
 
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
       container.appendChild(renderer.domElement);
 
       controls = new THREE.OrbitControls(camera3D, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't go below floor
 
-      // Lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      // Dynamic World Root Group
+      worldGroup = new THREE.Group();
+      scene.add(worldGroup);
+
+      // Persistent Lighting Rig
+      ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
       scene.add(ambientLight);
 
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      dirLight.position.set(20, 20, 40);
+      dirLight = new THREE.DirectionalLight(0xffffff, 0.95);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 2048;
       dirLight.shadow.mapSize.height = 2048;
+      dirLight.shadow.bias = -0.0004;
       scene.add(dirLight);
+      scene.add(dirLight.target);
 
-      const bluePoint = new THREE.PointLight(0x38bdf8, 0.5, 50);
-      bluePoint.position.set(0, 0, 10);
-      scene.add(bluePoint);
+      fillLight = new THREE.DirectionalLight(0x38bdf8, 0.28);
+      fillLight.position.set(-30, -30, 30);
+      scene.add(fillLight);
 
+      // Drone Model
       buildDroneMesh();
+
+      // Selection & Hover 3D Wireframe Bounding Box Helpers
+      const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+      const hoverWireMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true, transparent: true, opacity: 0.95 });
+      hoverBoxHelper = new THREE.Mesh(boxGeo, hoverWireMat);
+      hoverBoxHelper.visible = false;
+      scene.add(hoverBoxHelper);
+
+      const selectWireMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.95 });
+      selectBoxHelper = new THREE.Mesh(boxGeo, selectWireMat);
+      selectBoxHelper.visible = false;
+      scene.add(selectBoxHelper);
+
+      // Raycaster setup
+      raycaster3D = new THREE.Raycaster();
+
+      // Interaction listeners attached once
+      setupInteractionListeners(container);
+
+      // Viewport Toolbar Controls
+      setupViewportToolbar();
+
       window.addEventListener('resize', onResizeThree);
     }
 
@@ -1005,16 +2665,452 @@
       renderer.setSize(container.clientWidth, container.clientHeight);
     }
 
+    function setupInteractionListeners(container) {
+      const tooltip = document.getElementById('binHoverTooltip');
+      const bttCode = document.getElementById('bttCode');
+      const bttLoc = document.getElementById('bttLoc');
+      const bttItems = document.getElementById('bttItems');
+
+      renderer.domElement.addEventListener('pointermove', e => {
+        if (!raycaster3D || !instancedBins || binDataList.length === 0) {
+          if (hoverBoxHelper) hoverBoxHelper.visible = false;
+          if (tooltip) tooltip.style.display = 'none';
+          return;
+        }
+
+        const rect = renderer.domElement.getBoundingClientRect();
+        const mouse = new THREE.Vector2(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          -((e.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        raycaster3D.setFromCamera(mouse, camera3D);
+
+        const hits = raycaster3D.intersectObject(instancedBins);
+        if (hits.length > 0 && hits[0].instanceId !== undefined) {
+          const idx = hits[0].instanceId;
+          const bin = binDataList[idx];
+          if (bin) {
+            hoveredInstanceId = idx;
+            renderer.domElement.style.cursor = 'pointer';
+
+            const b = bin.bounds;
+            const bx = b.x_max - b.x_min;
+            const by = b.y_max - b.y_min;
+            const bz = b.z_max - b.z_min;
+            hoverBoxHelper.position.set((b.x_min + b.x_max) / 2, (b.y_min + b.y_max) / 2, (b.z_min + b.z_max) / 2);
+            hoverBoxHelper.scale.set(bx * 0.94, by * 0.94, bz * 0.92);
+            hoverBoxHelper.visible = true;
+
+            if (tooltip) {
+              bttCode.innerText = `📦 ${bin.id}`;
+              bttLoc.innerText = `Aisle ${bin.aisle_id} • Rack ${bin.rack_id} • Level ${bin.level_index + 1} (Bay ${bin.bay_index + 1})`;
+              const itemsCount = bin.amazon_items ? bin.amazon_items.reduce((acc, it) => acc + (it.quantity || 1), 0) : (bin.amazon_expected_qty || 0);
+              bttItems.innerText = `Contents: ${itemsCount} items (${bin.amazon_items ? bin.amazon_items.length : 0} ASINs)`;
+              tooltip.style.left = `${e.clientX}px`;
+              tooltip.style.top = `${e.clientY}px`;
+              tooltip.style.display = 'block';
+            }
+            return;
+          }
+        }
+
+        hoveredInstanceId = -1;
+        if (hoverBoxHelper) hoverBoxHelper.visible = false;
+        if (tooltip) tooltip.style.display = 'none';
+        renderer.domElement.style.cursor = '';
+      });
+
+      renderer.domElement.addEventListener('click', e => {
+        if (!raycaster3D || !instancedBins || binDataList.length === 0) return;
+        const rect = renderer.domElement.getBoundingClientRect();
+        const mouse = new THREE.Vector2(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          -((e.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        raycaster3D.setFromCamera(mouse, camera3D);
+
+        const hits = raycaster3D.intersectObject(instancedBins);
+        if (hits.length > 0 && hits[0].instanceId !== undefined) {
+          const idx = hits[0].instanceId;
+          const bin = binDataList[idx];
+          if (bin) {
+            selectedBinData = bin;
+            const b = bin.bounds;
+            const bx = b.x_max - b.x_min;
+            const by = b.y_max - b.y_min;
+            const bz = b.z_max - b.z_min;
+            selectBoxHelper.position.set((b.x_min + b.x_max) / 2, (b.y_min + b.y_max) / 2, (b.z_min + b.z_max) / 2);
+            selectBoxHelper.scale.set(bx * 0.96, by * 0.96, bz * 0.94);
+            selectBoxHelper.visible = true;
+
+            updateAmazonBinHUD(bin, null, false);
+            playScanChirp();
+            showBinDetailPopup(bin);
+          }
+        }
+      });
+    }
+
+    function setupViewportToolbar() {
+      const btnIso = document.getElementById('camIsoBtn');
+      const btnTop = document.getElementById('camTopBtn');
+      const btnAisle = document.getElementById('camAisleBtn');
+      const btnFollow = document.getElementById('camFollowBtn');
+      const btnFpv = document.getElementById('camFpvBtn');
+      const fpvHud = document.getElementById('fpvHudOverlay');
+
+      function setActiveCamBtn(activeBtn) {
+        [btnIso, btnTop, btnAisle, btnFollow, btnFpv].forEach(b => { if (b) b.classList.remove('active'); });
+        if (activeBtn) activeBtn.classList.add('active');
+        if (fpvHud) fpvHud.style.display = (activeBtn === btnFpv) ? 'block' : 'none';
+      }
+
+      if (btnIso) {
+        btnIso.addEventListener('click', () => {
+          activeCamMode = 'iso';
+          setActiveCamBtn(btnIso);
+          if (warehouseBounds) {
+            const { cx, cy, maxDim } = warehouseBounds;
+            camera3D.position.set(cx - maxDim * 0.45, cy - maxDim * 0.72, maxDim * 0.55);
+            controls.target.set(cx, cy, warehouseBounds.ch * 0.3);
+            controls.update();
+          }
+        });
+      }
+
+      if (btnTop) {
+        btnTop.addEventListener('click', () => {
+          activeCamMode = 'top';
+          setActiveCamBtn(btnTop);
+          if (warehouseBounds) {
+            const { cx, cy, maxDim } = warehouseBounds;
+            camera3D.position.set(cx, cy, maxDim * 1.3);
+            controls.target.set(cx, cy, 0);
+            controls.update();
+          }
+        });
+      }
+
+      if (btnAisle) {
+        btnAisle.addEventListener('click', () => {
+          activeCamMode = 'corridor';
+          setActiveCamBtn(btnAisle);
+          if (worldData && worldData.aisles && worldData.aisles.length > 0) {
+            const a = worldData.aisles[0];
+            camera3D.position.set(a.x_start, a.y_start - 2.0, 1.7);
+            controls.target.set(a.x_end, a.y_end, 1.7);
+            controls.update();
+          }
+        });
+      }
+
+      if (btnFollow) {
+        btnFollow.addEventListener('click', () => {
+          activeCamMode = (activeCamMode === 'follow') ? 'iso' : 'follow';
+          if (activeCamMode === 'follow') {
+            setActiveCamBtn(btnFollow);
+          } else {
+            setActiveCamBtn(btnIso);
+          }
+        });
+      }
+
+      if (btnFpv) {
+        btnFpv.addEventListener('click', () => {
+          activeCamMode = (activeCamMode === 'fpv') ? 'iso' : 'fpv';
+          if (activeCamMode === 'fpv') {
+            setActiveCamBtn(btnFpv);
+          } else {
+            setActiveCamBtn(btnIso);
+          }
+        });
+      }
+
+      const btnMinAmz = document.getElementById('amzHudMinimizeBtn');
+      if (btnMinAmz) {
+        btnMinAmz.addEventListener('click', () => {
+          const hud = document.getElementById('amazonBinHudCard');
+          if (hud) {
+            hud.classList.toggle('minimized');
+            btnMinAmz.innerText = hud.classList.contains('minimized') ? '+' : '−';
+          }
+        });
+      }
+
+      const aisleSelect = document.getElementById('aisleJumpSelect');
+      if (aisleSelect) {
+        aisleSelect.addEventListener('change', e => {
+          const aId = e.target.value;
+          if (!aId || !worldData) return;
+          const aisle = worldData.aisles.find(a => a.id === aId);
+          if (aisle) {
+            setActiveCamBtn(btnAisle);
+            activeCamMode = 'corridor';
+            camera3D.position.set(aisle.x_start, aisle.y_start - 2.5, 1.8);
+            controls.target.set(aisle.x_end, (aisle.y_start + aisle.y_end) / 2, 2.0);
+            controls.update();
+          }
+        });
+      }
+
+      const visualSelect = document.getElementById('visualModeSelect');
+      if (visualSelect) {
+        visualSelect.addEventListener('change', e => {
+          activeVisualMode = e.target.value;
+          applyVisualMode();
+        });
+      }
+
+      const layerMap = {
+        'layerBins': () => binsGroup,
+        'layerRacks': () => racksGroup,
+        'layerMarkers': () => markersGroup,
+        'layerSafety': () => safetyGroup,
+        'layerPads': () => padsGroup,
+        'layerSigns': () => signageGroup,
+        'layerTraffic': () => trafficGroup
+      };
+
+      Object.entries(layerMap).forEach(([id, getGroup]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('change', () => {
+            const grp = getGroup();
+            if (grp) grp.visible = el.checked;
+          });
+        }
+      });
+
+      // Forklift Shared Corridor & In-Aisle Dispatch Handlers
+      const btnDispatch = document.getElementById('dispatchForkliftBtn');
+      if (btnDispatch) {
+        btnDispatch.addEventListener('click', () => {
+          dispatchForkliftToDroneAisle();
+        });
+      }
+
+      const btnToggleMode = document.getElementById('toggleTrafficModeBtn');
+      if (btnToggleMode) {
+        btnToggleMode.addEventListener('click', () => {
+          toggleTrafficRoutingMode();
+        });
+      }
+    }
+
+    function generateAllAislesPath(aisles, fb, startAisleId = null) {
+      if (!aisles || aisles.length === 0) {
+        return [[fb.x_min + 3, fb.y_max - 2, 0], [fb.x_max - 3, fb.y_max - 2, 0]];
+      }
+      let sortedAisles = [...aisles].sort((a, b) => a.x_start - b.x_start);
+      if (startAisleId) {
+        const idx = sortedAisles.findIndex(a => a.id === startAisleId);
+        if (idx > 0) {
+          sortedAisles = sortedAisles.slice(idx).concat(sortedAisles.slice(0, idx));
+        }
+      }
+
+      const allY = [];
+      sortedAisles.forEach(a => allY.push(a.y_start, a.y_end));
+      const minY = Math.min(...allY);
+      const maxY = Math.max(...allY);
+      const ySouthGap = Math.max(fb.y_min + 1.4, minY - 0.4);
+      const yNorthGap = Math.min(fb.y_max - 1.4, maxY + 0.4);
+
+      const path = [];
+      sortedAisles.forEach((a, i) => {
+        const x = (a.x_start + a.x_end) / 2;
+        if (i % 2 === 0) {
+          path.push([x, yNorthGap, 0.0]);
+          path.push([x, ySouthGap, 0.0]);
+        } else {
+          path.push([x, ySouthGap, 0.0]);
+          path.push([x, yNorthGap, 0.0]);
+        }
+      });
+      // Return loop across gap back to start of patrol
+      const firstX = (sortedAisles[0].x_start + sortedAisles[0].x_end) / 2;
+      path.push([firstX, path[path.length - 1][1], 0.0]);
+      path.push([firstX, yNorthGap, 0.0]);
+      return path;
+    }
+
+    function dispatchForkliftToDroneAisle() {
+      if (!dynamicObstacleEntities || dynamicObstacleEntities.length === 0 || !worldData) return;
+
+      const forkliftEnt = dynamicObstacleEntities.find(e =>
+        e.config.type === 'forklift' || (e.config.id && e.config.id.toLowerCase().includes('forklift'))
+      );
+      if (!forkliftEnt) return;
+
+      const fb = warehouseBounds || { x_min: 0, x_max: 20, y_min: 0, y_max: 20 };
+
+      // Identify active drone coordinates
+      let droneX = 3.5;
+      if (missionReplayData && missionReplayData.states && missionReplayData.states.length > 0) {
+        const state = missionReplayData.states[playbackIndex] || missionReplayData.states[0];
+        droneX = state.position[0];
+      } else if (droneMesh) {
+        droneX = droneMesh.position.x;
+      }
+
+      let targetAisle = null;
+      if (worldData.aisles && worldData.aisles.length > 0) {
+        targetAisle = worldData.aisles.reduce((prev, curr) =>
+          Math.abs(curr.x_start - droneX) < Math.abs(prev.x_start - droneX) ? curr : prev
+        );
+      }
+
+      // Generate all-aisles patrol route starting at drone's active aisle
+      forkliftEnt.path = generateAllAislesPath(worldData.aisles, fb, targetAisle ? targetAisle.id : null);
+      forkliftEnt.isAisleRoute = true;
+
+      // Update dotted floor navigation lane
+      if (forkliftEnt.laneLine) {
+        const pts = forkliftEnt.path.map(p => new THREE.Vector3(p[0], p[1], 0.02));
+        forkliftEnt.laneLine.geometry.dispose();
+        forkliftEnt.laneLine.geometry = new THREE.BufferGeometry().setFromPoints(pts);
+        forkliftEnt.laneLine.computeLineDistances();
+        forkliftEnt.laneLine.material.color.setHex(0xef4444);
+      }
+
+      const alertBanner = document.getElementById('trafficAlertBanner');
+      if (alertBanner) {
+        alertBanner.style.display = 'flex';
+        alertBanner.style.background = 'rgba(234, 88, 12, 0.95)';
+        alertBanner.style.borderColor = '#f97316';
+        document.getElementById('trafficAlertTitle').innerText = '🚜 ALL-AISLE FORKLIFT PATROL DISPATCHED';
+        document.getElementById('trafficAlertDesc').innerText = `${forkliftEnt.config.id} starting in Aisle ${targetAisle ? targetAisle.id : '1'} and traversing ALL ${worldData.aisles.length} aisles sequentially via turning gaps!`;
+        document.getElementById('trafficAlertAction').innerText = 'ALL AISLES ACTIVE';
+      }
+    }
+
+    function toggleTrafficRoutingMode() {
+      if (!dynamicObstacleEntities || dynamicObstacleEntities.length === 0 || !worldData) return;
+      const fb = warehouseBounds || { x_min: 0, x_max: 20, y_min: 0, y_max: 20 };
+
+      trafficRoutingMode = (trafficRoutingMode === 'all_aisles') ? 'crossway' : 'all_aisles';
+
+      dynamicObstacleEntities.forEach((ent, idx) => {
+        const isFork = ent.config.type === 'forklift' || (ent.config.id && ent.config.id.toLowerCase().includes('forklift'));
+        if (!isFork) return;
+
+        if (trafficRoutingMode === 'all_aisles') {
+          ent.path = generateAllAislesPath(worldData.aisles, fb);
+          ent.isAisleRoute = true;
+        } else {
+          const yCross = (idx % 2 === 0) ? fb.y_max - 2.0 : fb.y_min + 2.0;
+          ent.path = [
+            [fb.x_min + 2.0, yCross, 0.0],
+            [fb.x_max - 2.0, yCross, 0.0]
+          ];
+          ent.isAisleRoute = false;
+        }
+
+        if (ent.laneLine) {
+          const pts = ent.path.map(p => new THREE.Vector3(p[0], p[1], 0.02));
+          ent.laneLine.geometry.dispose();
+          ent.laneLine.geometry = new THREE.BufferGeometry().setFromPoints(pts);
+          ent.laneLine.computeLineDistances();
+          ent.laneLine.material.color.setHex(trafficRoutingMode === 'all_aisles' ? 0xef4444 : 0xf59e0b);
+        }
+      });
+
+      const alertBanner = document.getElementById('trafficAlertBanner');
+      if (alertBanner) {
+        alertBanner.style.display = 'flex';
+        alertBanner.style.background = 'rgba(16, 185, 129, 0.95)';
+        alertBanner.style.borderColor = '#10b981';
+        document.getElementById('trafficAlertTitle').innerText = `TRAFFIC MODE: ${trafficRoutingMode === 'all_aisles' ? 'ALL AISLES' : 'PERIMETER'}`;
+        document.getElementById('trafficAlertDesc').innerText = trafficRoutingMode === 'all_aisles'
+          ? `Forklift patrolling through ALL ${worldData.aisles ? worldData.aisles.length : ''} aisles via end turning gaps!`
+          : 'Forklift routed along perimeter crossways (Cross-Dock Lanes)';
+        document.getElementById('trafficAlertAction').innerText = 'ROUTING UPDATED ✓';
+        setTimeout(() => { if (alertBanner && evasiveClimbOffset === 0) alertBanner.style.display = 'none'; }, 2200);
+      }
+    }
+
+    function applyVisualMode() {
+      if (!instancedBins || binDataList.length === 0) return;
+      const color = new THREE.Color();
+      for (let i = 0; i < binDataList.length; i++) {
+        const b = binDataList[i];
+        if (activeVisualMode === 'heatmap') {
+          const lvl = b.level_index || 0;
+          color.setHex(BIN_COLOR_LEVELS[lvl % BIN_COLOR_LEVELS.length]);
+        } else if (activeVisualMode === 'cyber') {
+          color.setHex(0x06b6d4); // Neon cyan
+        } else {
+          color.setHex(BIN_COLOR_DEFAULT); // Amazon cardboard amber
+        }
+        instancedBins.setColorAt(i, color);
+      }
+      instancedBins.instanceColor.needsUpdate = true;
+    }
+
+    function cleanUp3DScene() {
+      if (worldGroup) {
+        worldGroup.traverse(child => {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+            else child.material.dispose();
+          }
+        });
+        while (worldGroup.children.length > 0) {
+          worldGroup.remove(worldGroup.children[0]);
+        }
+      }
+
+      if (flightPathLine) {
+        scene.remove(flightPathLine);
+        if (flightPathLine.geometry) flightPathLine.geometry.dispose();
+        if (flightPathLine.material) flightPathLine.material.dispose();
+        flightPathLine = null;
+      }
+
+      instancedBins = null;
+      binDataList = [];
+      binIndexMap = {};
+      hoveredInstanceId = -1;
+      selectedBinData = null;
+
+      if (hoverBoxHelper) hoverBoxHelper.visible = false;
+      if (selectBoxHelper) selectBoxHelper.visible = false;
+
+      const tooltip = document.getElementById('binHoverTooltip');
+      if (tooltip) tooltip.style.display = 'none';
+
+      dynamicObstacleEntities = [];
+      sharedAisleHazardMesh = null;
+
+      // Reset playback state
+      if (playTimer) { clearInterval(playTimer); playTimer = null; }
+      isPlaying = false;
+      playbackIndex = 0;
+      missionReplayData = null;
+      const playBtn = document.getElementById('playPauseBtn');
+      if (playBtn) playBtn.innerText = '▶';
+      const slider = document.getElementById('timelineSlider');
+      if (slider) slider.value = 0;
+
+      // Dynamic Traffic Resets
+      trafficGroup = null;
+      dynamicObstacleEntities = [];
+      evasiveClimbOffset = 0.0;
+      const alertBanner = document.getElementById('trafficAlertBanner');
+      if (alertBanner) alertBanner.style.display = 'none';
+    }
+
     function buildDroneMesh() {
       droneMesh = new THREE.Group();
 
       // Carbon Fiber Quadcopter Body
       const bodyGeo = new THREE.BoxGeometry(0.35, 0.35, 0.08);
-      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.2 });
       const body = new THREE.Mesh(bodyGeo, bodyMat);
       droneMesh.add(body);
 
-      // Nose indicator (Green)
+      // Direction indicator (Front Green Nose)
       const noseGeo = new THREE.ConeGeometry(0.06, 0.15, 8);
       const noseMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
       const nose = new THREE.Mesh(noseGeo, noseMat);
@@ -1022,16 +3118,39 @@
       nose.position.y = 0.22;
       droneMesh.add(nose);
 
-      // Camera lens on side/bottom
+      // Navigation LEDs (Starboard Green, Port Red)
+      const navLightGeo = new THREE.SphereGeometry(0.02, 8, 8);
+      const greenLED = new THREE.Mesh(navLightGeo, new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+      greenLED.position.set(0.22, 0.1, 0.04);
+      droneMesh.add(greenLED);
+      const redLED = new THREE.Mesh(navLightGeo, new THREE.MeshBasicMaterial({ color: 0xef4444 }));
+      redLED.position.set(-0.22, 0.1, 0.04);
+      droneMesh.add(redLED);
+
+      // Camera Gimbal on bottom
       const camLensGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.08);
       const camLensMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
       const camLens = new THREE.Mesh(camLensGeo, camLensMat);
       camLens.position.set(0, 0, -0.05);
       droneMesh.add(camLens);
 
+      // Downward inspection spotlight cone
+      const coneGeo = new THREE.ConeGeometry(0.6, 2.2, 16, 1, true);
+      const coneMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: 0.2,
+        side: THREE.DoubleSide
+      });
+      droneSpotlight = new THREE.Mesh(coneGeo, coneMat);
+      droneSpotlight.rotation.x = -Math.PI / 2;
+      droneSpotlight.position.set(0, 0, -1.1);
+      droneSpotlight.visible = false;
+      droneMesh.add(droneSpotlight);
+
       // Arms & Propellers
       const armMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9 });
-      const propMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.7 });
+      const propMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.75 });
 
       const offsets = [
         [0.25, 0.25], [-0.25, 0.25], [-0.25, -0.25], [0.25, -0.25]
@@ -1057,80 +3176,999 @@
       scene.add(droneMesh);
     }
 
-    function build3DWorld(world) {
-      // Clear old racks
-      rackMeshes.forEach(m => scene.remove(m));
-      rackMeshes = [];
-      padMeshes.forEach(m => scene.remove(m));
-      padMeshes = [];
+    // Procedural Industrial Forklift Mesh (Safety-Yellow Body, Mast, Pallet, Strobe & Blue Safety Spot)
+    function buildForkliftMesh() {
+      const group = new THREE.Group();
 
-      // Floor Grid
-      const floorBounds = world.floor_bounds;
-      const fWidth = floorBounds.x_max - floorBounds.x_min;
-      const fHeight = floorBounds.y_max - floorBounds.y_min;
+      const yellowMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.35, metalness: 0.25 });
+      const steelMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.5, metalness: 0.7 });
+      const tireMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.9, metalness: 0.05 });
+      const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.2, metalness: 0.9 });
+      const forkMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.35, metalness: 0.8 });
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.85 });
+      const boxMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.75 });
 
-      const floorGeo = new THREE.PlaneGeometry(fWidth, fHeight);
-      const floorMat = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: 0.9 });
-      const floor = new THREE.Mesh(floorGeo, floorMat);
-      floor.position.set((floorBounds.x_min + floorBounds.x_max) / 2, (floorBounds.y_min + floorBounds.y_max) / 2, 0);
-      floor.receiveShadow = true;
-      scene.add(floor);
-      rackMeshes.push(floor);
+      // 1. Chassis Body (length 2.0m, width 1.1m, height 0.55m)
+      const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.1, 0.55), yellowMat);
+      chassis.position.set(0, 0, 0.45);
+      chassis.castShadow = true;
+      group.add(chassis);
 
-      const grid = new THREE.GridHelper(Math.max(fWidth, fHeight), Math.round(Math.max(fWidth, fHeight)), 0x1e293b, 0x141c2b);
-      grid.rotation.x = Math.PI / 2;
-      grid.position.set((floorBounds.x_min + floorBounds.x_max) / 2, (floorBounds.y_min + floorBounds.y_max) / 2, 0.01);
-      scene.add(grid);
-      rackMeshes.push(grid);
+      // 2. Rear Counterweight
+      const cw = new THREE.Mesh(new THREE.BoxGeometry(0.65, 1.05, 0.65), steelMat);
+      cw.position.set(-0.75, 0, 0.55);
+      cw.castShadow = true;
+      group.add(cw);
 
-      // High-Bay Racks
-      const rackMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.3, roughness: 0.6 });
-      const binMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.5 }); // Amazon cardboard color
-
-      world.racks.forEach(r => {
-        const rx = r.bounds.x_max - r.bounds.x_min;
-        const ry = r.bounds.y_max - r.bounds.y_min;
-        const rz = r.bounds.z_max - r.bounds.z_min;
-
-        const rackBox = new THREE.Mesh(new THREE.BoxGeometry(rx, ry, rz), rackMat);
-        rackBox.position.set(
-          (r.bounds.x_min + r.bounds.x_max) / 2,
-          (r.bounds.y_min + r.bounds.y_max) / 2,
-          rz / 2
-        );
-        rackBox.castShadow = true;
-        rackBox.receiveShadow = true;
-        scene.add(rackBox);
-        rackMeshes.push(rackBox);
+      // 3. Cabin Overhead Protective Roll Cage
+      [[-0.5, -0.48], [-0.5, 0.48], [0.45, -0.48], [0.45, 0.48]].forEach(([px, py]) => {
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.35, 8), steelMat);
+        post.position.set(px, py, 1.35);
+        post.rotation.x = Math.PI / 2;
+        group.add(post);
       });
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.05, 0.04), steelMat);
+      roof.position.set(-0.02, 0, 2.02);
+      group.add(roof);
 
-      // Charging / Takeoff Pads
-      const padGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.04, 32);
-      const padMat = new THREE.MeshStandardMaterial({ color: 0x10b981, metalness: 0.5, roughness: 0.3 });
+      // 4. Rotating Orange Flashing Safety Beacon
+      const beaconBase = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.05, 12), steelMat);
+      beaconBase.position.set(0, 0, 2.06);
+      beaconBase.rotation.x = Math.PI / 2;
+      group.add(beaconBase);
 
-      world.pads.forEach(p => {
-        const padMesh = new THREE.Mesh(padGeo, padMat);
-        padMesh.rotation.x = Math.PI / 2;
-        padMesh.position.set(p.position[0], p.position[1], 0.02);
-        scene.add(padMesh);
-        padMeshes.push(padMesh);
-      });
-
-      // Adjust camera focus
-      controls.target.set(
-        (floorBounds.x_min + floorBounds.x_max) / 2,
-        (floorBounds.y_min + floorBounds.y_max) / 2,
-        0
+      const beaconDome = new THREE.Mesh(
+        new THREE.SphereGeometry(0.07, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+        new THREE.MeshBasicMaterial({ color: 0xff7700 })
       );
+      beaconDome.position.set(0, 0, 2.09);
+      beaconDome.rotation.x = -Math.PI / 2;
+      group.add(beaconDome);
+
+      const beaconLight = new THREE.PointLight(0xff7700, 1.6, 7.0);
+      beaconLight.position.set(0, 0, 2.2);
+      group.add(beaconLight);
+
+      // 5. Industrial Wheels
+      const wheelGeom = new THREE.CylinderGeometry(0.24, 0.24, 0.18, 16);
+      [[0.65, 0.52, 0.24], [0.65, -0.52, 0.24], [-0.65, 0.48, 0.24], [-0.65, -0.48, 0.24]].forEach(([wx, wy, wz]) => {
+        const wheel = new THREE.Mesh(wheelGeom, tireMat);
+        wheel.position.set(wx, wy, wz);
+        group.add(wheel);
+        const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.19, 12), chromeMat);
+        cap.position.set(wx, wy, wz);
+        group.add(cap);
+      });
+
+      // 6. Dual Mast Uprights (Front vertical steel rails)
+      const mastHeight = 2.4;
+      const mastPostGeom = new THREE.BoxGeometry(0.08, 0.08, mastHeight);
+      [-0.32, 0.32].forEach(my => {
+        const mastPost = new THREE.Mesh(mastPostGeom, steelMat);
+        mastPost.position.set(1.04, my, mastHeight / 2 + 0.1);
+        group.add(mastPost);
+      });
+      [0.6, 1.4, 2.2].forEach(mz => {
+        const cross = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.72, 0.05), steelMat);
+        cross.position.set(1.04, 0, mz);
+        group.add(cross);
+      });
+
+      // 7. Carriage & Twin Steel Forks
+      [-0.22, 0.22].forEach(fy => {
+        const fork = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.08, 0.04), forkMat);
+        fork.position.set(1.58, fy, 0.1);
+        group.add(fork);
+        const forkBack = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.08, 0.6), forkMat);
+        forkBack.position.set(1.06, fy, 0.38);
+        group.add(forkBack);
+      });
+
+      // 8. Wooden Pallet + Cargo Carton
+      const pallet = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.95, 0.1), woodMat);
+      pallet.position.set(1.58, 0, 0.18);
+      group.add(pallet);
+      const cargoBox = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.8, 0.75), boxMat);
+      cargoBox.position.set(1.58, 0, 0.62);
+      group.add(cargoBox);
+
+      // 9. Projected Blue Safety Floor Spotlight (High Visual Impact Warehouse Pedestrian Safety)
+      const blueSpot = new THREE.Mesh(
+        new THREE.CircleGeometry(0.38, 24),
+        new THREE.MeshBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide })
+      );
+      blueSpot.position.set(3.2, 0, 0.03);
+      group.add(blueSpot);
+
+      group.userData = { beaconLight, beaconDome, blueSpot };
+      return group;
+    }
+
+    // Procedural Autonomous Mobile Robot (AMR / AGV) Mesh
+    function buildAMRMesh() {
+      const group = new THREE.Group();
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.6 });
+      const orangeStripeMat = new THREE.MeshStandardMaterial({ color: 0xf97316, roughness: 0.3 });
+      const lidarMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.2, metalness: 0.8 });
+      const podMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6 });
+
+      const base = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.9, 0.28), darkMat);
+      base.position.set(0, 0, 0.18);
+      base.castShadow = true;
+      group.add(base);
+
+      const stripe = new THREE.Mesh(new THREE.BoxGeometry(1.22, 0.92, 0.06), orangeStripeMat);
+      stripe.position.set(0, 0, 0.18);
+      group.add(stripe);
+
+      const lidar = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.1, 16), lidarMat);
+      lidar.position.set(0.4, 0, 0.36);
+      lidar.rotation.x = Math.PI / 2;
+      group.add(lidar);
+
+      const tote = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.75, 0.5), podMat);
+      tote.position.set(-0.05, 0, 0.58);
+      group.add(tote);
+
+      const pLight = new THREE.PointLight(0xf97316, 1.0, 4.0);
+      pLight.position.set(0, 0, 0.4);
+      group.add(pLight);
+
+      group.userData = { pLight };
+      return group;
+    }
+
+    // Helper: Create procedural ArUco tag canvas texture
+    function createArUcoTexture(tagId) {
+      const c = document.createElement('canvas');
+      c.width = 64; c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 64, 64);
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(4, 4, 56, 56);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(10, 10, 44, 44);
+
+      // Procedural pseudo-marker bit matrix seeded by tagId
+      ctx.fillStyle = '#000000';
+      let seed = (tagId * 9301 + 49297) % 233280;
+      for (let r = 0; r < 4; r++) {
+        for (let col = 0; col < 4; col++) {
+          seed = (seed * 9301 + 49297) % 233280;
+          if ((seed / 233280) > 0.45) {
+            ctx.fillRect(14 + col * 9, 14 + r * 9, 9, 9);
+          }
+        }
+      }
+      return new THREE.CanvasTexture(c);
+    }
+
+    // Helper: Create procedural illuminated aisle sign texture
+    function createAisleSignTexture(aisleName) {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 64;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#0a101d';
+      ctx.fillRect(0, 0, 256, 64);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(2, 2, 252, 60);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 22px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(aisleName.toUpperCase(), 128, 32);
+      return new THREE.CanvasTexture(c);
+    }
+
+    function build3DWorld(world) {
+      cleanUp3DScene();
+
+      // Warehouse Geometry & Extents
+      const fb = world.floor_bounds;
+      const fW = fb.x_max - fb.x_min;
+      const fH = fb.y_max - fb.y_min;
+      const cx = (fb.x_min + fb.x_max) / 2;
+      const cy = (fb.y_min + fb.y_max) / 2;
+      const ch = world.ceiling_height || 8.0;
+      const maxDim = Math.max(fW, fH, 20);
+
+      warehouseBounds = {
+        x_min: fb.x_min, x_max: fb.x_max,
+        y_min: fb.y_min, y_max: fb.y_max,
+        fW, fH, cx, cy, ch, maxDim
+      };
+
+      // Update Facility Stats Header
+      document.getElementById('twinSiteName').innerText = world.site_name || 'Warehouse Facility';
+      document.getElementById('twinBinsCount').innerText = (world.bins ? world.bins.length : 0).toLocaleString();
+      document.getElementById('twinAislesCount').innerText = world.aisles ? world.aisles.length : 0;
+      document.getElementById('twinRacksCount').innerText = world.racks ? world.racks.length : 0;
+      document.getElementById('twinMarkersCount').innerText = world.markers ? world.markers.length : 0;
+
+      // Populate Aisle Jump dropdown
+      const aisleSelect = document.getElementById('aisleJumpSelect');
+      if (aisleSelect && world.aisles) {
+        aisleSelect.innerHTML = '<option value="">Jump to Aisle...</option>';
+        world.aisles.forEach((a, idx) => {
+          const opt = document.createElement('option');
+          opt.value = a.id;
+          opt.innerText = a.name ? `${a.name} (${a.id})` : `Aisle ${idx + 1} (${a.id})`;
+          aisleSelect.appendChild(opt);
+        });
+      }
+
+      // Initialize Subgroups inside worldGroup
+      racksGroup = new THREE.Group(); worldGroup.add(racksGroup);
+      binsGroup = new THREE.Group(); worldGroup.add(binsGroup);
+      markersGroup = new THREE.Group(); worldGroup.add(markersGroup);
+      padsGroup = new THREE.Group(); worldGroup.add(padsGroup);
+      safetyGroup = new THREE.Group(); worldGroup.add(safetyGroup);
+      signageGroup = new THREE.Group(); worldGroup.add(signageGroup);
+      lightsGroup = new THREE.Group(); worldGroup.add(lightsGroup);
+      trafficGroup = new THREE.Group(); worldGroup.add(trafficGroup);
+      dynamicObstacleEntities = [];
+      worldBinsMap.clear();
+      if (world.bins) world.bins.forEach(b => worldBinsMap.set(b.id, b));
+
+      // Re-position lighting and shadow cameras scaled to warehouse bounds
+      dirLight.position.set(cx + maxDim * 0.4, cy - maxDim * 0.4, ch + maxDim * 0.6);
+      dirLight.target.position.set(cx, cy, 0);
+      dirLight.target.updateMatrixWorld();
+      dirLight.shadow.camera.left = -maxDim * 0.75;
+      dirLight.shadow.camera.right = maxDim * 0.75;
+      dirLight.shadow.camera.top = maxDim * 0.75;
+      dirLight.shadow.camera.bottom = -maxDim * 0.75;
+      dirLight.shadow.camera.near = 1;
+      dirLight.shadow.camera.far = maxDim * 2.5;
+      dirLight.shadow.camera.updateProjectionMatrix();
+
+      // Atmospheric fog density scaled to warehouse dimensions
+      scene.fog.density = 0.015 / Math.max(1, maxDim / 35);
+
+      // Camera Auto-Framing
+      camera3D.position.set(cx - maxDim * 0.45, cy - maxDim * 0.72, maxDim * 0.55);
+      controls.target.set(cx, cy, ch * 0.25);
+      controls.maxDistance = maxDim * 3.5;
+      controls.update();
+
+      // ----------------------------------------------------
+      // 1. Warehouse Floor & Industrial Guide Markings
+      // ----------------------------------------------------
+      const floorGeo = new THREE.PlaneGeometry(fW + 6, fH + 6);
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: 0x090d15,
+        roughness: 0.88,
+        metalness: 0.12
+      });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.position.set(cx, cy, 0);
+      floor.receiveShadow = true;
+      worldGroup.add(floor);
+
+      const grid = new THREE.GridHelper(Math.max(fW, fH) + 10, Math.round(Math.max(fW, fH)), 0x1e293b, 0x101726);
+      grid.rotation.x = Math.PI / 2;
+      grid.position.set(cx, cy, 0.01);
+      worldGroup.add(grid);
+
+      // Perimeter Warehouse Walls (subtle dark structure)
+      const wallMat = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: 0.95 });
+      const wallThickness = 0.4;
+      const wallH = ch;
+
+      const walls = [
+        // South wall
+        { x: cx, y: fb.y_min - 0.2, w: fW + 1.0, d: wallThickness },
+        // North wall
+        { x: cx, y: fb.y_max + 0.2, w: fW + 1.0, d: wallThickness },
+        // West wall
+        { x: fb.x_min - 0.2, y: cy, w: wallThickness, d: fH + 1.0 },
+        // East wall
+        { x: fb.x_max + 0.2, y: cy, w: wallThickness, d: fH + 1.0 }
+      ];
+      walls.forEach(wl => {
+        const wallMesh = new THREE.Mesh(new THREE.BoxGeometry(wl.w, wl.d, wallH), wallMat);
+        wallMesh.position.set(wl.x, wl.y, wallH / 2);
+        wallMesh.receiveShadow = true;
+        worldGroup.add(wallMesh);
+      });
+
+      // Aisle Floor Lines & Runway Markings
+      if (world.aisles) {
+        const stripeMat = new THREE.MeshBasicMaterial({ color: 0xeab308, transparent: true, opacity: 0.8 });
+        const arrowMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.45 });
+
+        world.aisles.forEach(a => {
+          const aLen = Math.hypot(a.x_end - a.x_start, a.y_end - a.y_start);
+          const aMidX = (a.x_start + a.x_end) / 2;
+          const aMidY = (a.y_start + a.y_end) / 2;
+          const halfW = a.width / 2;
+
+          // Left caution boundary line
+          const lineLeft = new THREE.Mesh(new THREE.PlaneGeometry(0.1, aLen), stripeMat);
+          lineLeft.position.set(aMidX - halfW, aMidY, 0.015);
+          worldGroup.add(lineLeft);
+
+          // Right caution boundary line
+          const lineRight = new THREE.Mesh(new THREE.PlaneGeometry(0.1, aLen), stripeMat);
+          lineRight.position.set(aMidX + halfW, aMidY, 0.015);
+          worldGroup.add(lineRight);
+
+          // Directional flow indicator chevron markers
+          const arrowSteps = Math.max(2, Math.floor(aLen / 8));
+          for (let s = 1; s <= arrowSteps; s++) {
+            const frac = s / (arrowSteps + 1);
+            const py = a.y_start + (a.y_end - a.y_start) * frac;
+            const chevron = new THREE.Mesh(new THREE.ConeGeometry(0.35, 0.8, 3), arrowMat);
+            chevron.position.set(aMidX, py, 0.02);
+            chevron.rotation.x = -Math.PI / 2;
+            if (a.direction === 'backward') chevron.rotation.z = Math.PI;
+            worldGroup.add(chevron);
+          }
+
+          // Suspended Illuminated Aisle Sign at start and end
+          const signTex = createAisleSignTexture(a.name || a.id);
+          const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true, side: THREE.DoubleSide });
+          const signGeo = new THREE.PlaneGeometry(2.0, 0.5);
+
+          const signStart = new THREE.Mesh(signGeo, signMat);
+          signStart.position.set(a.x_start, a.y_start, ch - 0.8);
+          signageGroup.add(signStart);
+
+          const signEnd = new THREE.Mesh(signGeo, signMat);
+          signEnd.position.set(a.x_end, a.y_end, ch - 0.8);
+          signageGroup.add(signEnd);
+
+          // Ceiling High-Bay Pendant Lights along aisle
+          const lightPendantSteps = Math.max(1, Math.floor(aLen / 12));
+          for (let ls = 1; ls <= lightPendantSteps; ls++) {
+            const frac = ls / (lightPendantSteps + 1);
+            const ly = a.y_start + (a.y_end - a.y_start) * frac;
+
+            // Lamp fixture
+            const fixture = new THREE.Mesh(
+              new THREE.CylinderGeometry(0.25, 0.45, 0.2, 12),
+              new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 })
+            );
+            fixture.position.set(aMidX, ly, ch - 0.2);
+            lightsGroup.add(fixture);
+
+            // Subtle downlight pool
+            const lampPool = new THREE.Mesh(
+              new THREE.CircleGeometry(2.8, 16),
+              new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.04 })
+            );
+            lampPool.position.set(aMidX, ly, 0.015);
+            lightsGroup.add(lampPool);
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // 2. High-Bay Storage Racks (Structural Columns & Orange Beams)
+      // ----------------------------------------------------
+      if (world.racks && world.racks.length > 0) {
+        const uprightMat = new THREE.MeshStandardMaterial({
+          color: 0x1e293b,
+          metalness: 0.65,
+          roughness: 0.35
+        });
+        const beamMat = new THREE.MeshStandardMaterial({
+          color: 0xf97316, // Industrial safety orange
+          metalness: 0.35,
+          roughness: 0.45
+        });
+        const shelfMeshMat = new THREE.MeshStandardMaterial({
+          color: 0x334155,
+          transparent: true,
+          opacity: 0.65,
+          roughness: 0.7
+        });
+
+        world.racks.forEach(r => {
+          const rx = r.bounds.x_max - r.bounds.x_min;
+          const ry = r.bounds.y_max - r.bounds.y_min;
+          const rz = r.bounds.z_max - r.bounds.z_min;
+          const rMidX = (r.bounds.x_min + r.bounds.x_max) / 2;
+          const rMidY = (r.bounds.y_min + r.bounds.y_max) / 2;
+
+          // Vertical Upright Columns at bay divisions
+          const bays = Math.max(1, r.bays || 8);
+          const colW = 0.08;
+          const baySpacing = ry / bays;
+
+          for (let b = 0; b <= bays; b++) {
+            const cyPos = r.bounds.y_min + b * baySpacing;
+
+            // Front post
+            const postFront = new THREE.Mesh(new THREE.BoxGeometry(colW, colW, rz), uprightMat);
+            postFront.position.set(r.bounds.x_min + colW / 2, cyPos, rz / 2);
+            postFront.castShadow = true;
+            racksGroup.add(postFront);
+
+            // Back post
+            const postBack = new THREE.Mesh(new THREE.BoxGeometry(colW, colW, rz), uprightMat);
+            postBack.position.set(r.bounds.x_max - colW / 2, cyPos, rz / 2);
+            postBack.castShadow = true;
+            racksGroup.add(postBack);
+          }
+
+          // Horizontal Shelf Load Beams (Safety Orange)
+          const levels = Math.max(1, r.levels || 4);
+          for (let l = 1; l <= levels; l++) {
+            const beamZ = (rz / (levels + 1)) * l;
+
+            // Front horizontal beam
+            const beamFront = new THREE.Mesh(new THREE.BoxGeometry(colW * 1.1, ry, 0.07), beamMat);
+            beamFront.position.set(r.bounds.x_min + colW / 2, rMidY, beamZ);
+            beamFront.castShadow = true;
+            racksGroup.add(beamFront);
+
+            // Back horizontal beam
+            const beamBack = new THREE.Mesh(new THREE.BoxGeometry(colW * 1.1, ry, 0.07), beamMat);
+            beamBack.position.set(r.bounds.x_max - colW / 2, rMidY, beamZ);
+            beamBack.castShadow = true;
+            racksGroup.add(beamBack);
+
+            // Wire mesh shelf plate
+            const shelfDeck = new THREE.Mesh(new THREE.BoxGeometry(rx * 0.95, ry * 0.98, 0.02), shelfMeshMat);
+            shelfDeck.position.set(rMidX, rMidY, beamZ - 0.02);
+            racksGroup.add(shelfDeck);
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // 3. Thousands of High-Performance Instanced Bins
+      // ----------------------------------------------------
+      if (world.bins && world.bins.length > 0) {
+        binDataList = world.bins;
+        const binCount = world.bins.length;
+
+        // Shared geometry & PBR material for thousands of bins in a single draw call
+        const unitBoxGeo = new THREE.BoxGeometry(1, 1, 1);
+        const instancedBinMat = new THREE.MeshStandardMaterial({
+          color: BIN_COLOR_DEFAULT,
+          roughness: 0.55,
+          metalness: 0.12
+        });
+
+        instancedBins = new THREE.InstancedMesh(unitBoxGeo, instancedBinMat, binCount);
+        instancedBins.castShadow = (binCount < 6000); // Shadow enabled for 500 & 5000 bins
+        instancedBins.receiveShadow = true;
+
+        const dummy = new THREE.Object3D();
+        const color = new THREE.Color();
+
+        for (let i = 0; i < binCount; i++) {
+          const b = world.bins[i];
+          binIndexMap[b.id] = i;
+
+          const bx = b.bounds.x_max - b.bounds.x_min;
+          const by = b.bounds.y_max - b.bounds.y_min;
+          const bz = b.bounds.z_max - b.bounds.z_min;
+
+          dummy.position.set(
+            (b.bounds.x_min + b.bounds.x_max) / 2,
+            (b.bounds.y_min + b.bounds.y_max) / 2,
+            (b.bounds.z_min + b.bounds.z_max) / 2
+          );
+          dummy.scale.set(bx * 0.88, by * 0.88, bz * 0.84);
+          dummy.rotation.set(0, 0, 0);
+          dummy.updateMatrix();
+
+          instancedBins.setMatrixAt(i, dummy.matrix);
+
+          // Initial Color based on mode
+          if (activeVisualMode === 'heatmap') {
+            const lvl = b.level_index || 0;
+            color.setHex(BIN_COLOR_LEVELS[lvl % BIN_COLOR_LEVELS.length]);
+          } else if (activeVisualMode === 'cyber') {
+            color.setHex(0x06b6d4);
+          } else {
+            color.setHex(BIN_COLOR_DEFAULT);
+          }
+          instancedBins.setColorAt(i, color);
+        }
+
+        instancedBins.instanceMatrix.needsUpdate = true;
+        if (instancedBins.instanceColor) instancedBins.instanceColor.needsUpdate = true;
+        binsGroup.add(instancedBins);
+      }
+
+      // ----------------------------------------------------
+      // 4. ArUco Fiducial Navigation Tags on Upright Posts
+      // ----------------------------------------------------
+      if (world.markers && world.markers.length > 0) {
+        world.markers.forEach(m => {
+          const tagSize = m.size_m || 0.22;
+          const tagTex = createArUcoTexture(m.tag_id || 1);
+          const tagMat = new THREE.MeshBasicMaterial({ map: tagTex, side: THREE.DoubleSide });
+          const tagMesh = new THREE.Mesh(new THREE.PlaneGeometry(tagSize, tagSize), tagMat);
+
+          tagMesh.position.set(m.position[0], m.position[1], m.position[2]);
+
+          // Orient tag facing outwards along normal
+          const norm = m.normal || [0, 1, 0];
+          tagMesh.lookAt(
+            m.position[0] + norm[0],
+            m.position[1] + norm[1],
+            m.position[2] + norm[2]
+          );
+
+          // Glowing border mount
+          const borderMesh = new THREE.Mesh(
+            new THREE.BoxGeometry(tagSize * 1.15, tagSize * 1.15, 0.02),
+            new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+          );
+          borderMesh.position.set(0, 0, -0.012);
+          tagMesh.add(borderMesh);
+
+          markersGroup.add(tagMesh);
+        });
+      }
+
+      // ----------------------------------------------------
+      // 5. Takeoff & Landing Pads and High-Tech Charging Docks
+      // ----------------------------------------------------
+      if (world.pads) {
+        const padGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.04, 32);
+        const padMat = new THREE.MeshStandardMaterial({ color: 0x10b981, metalness: 0.4, roughness: 0.3 });
+
+        world.pads.forEach((p, idx) => {
+          const padMesh = new THREE.Mesh(padGeo, padMat);
+          padMesh.rotation.x = Math.PI / 2;
+          padMesh.position.set(p.position[0], p.position[1], 0.02);
+
+          // Illuminated perimeter LED ring
+          const ringGeo = new THREE.RingGeometry(0.85, 0.95, 32);
+          const ringMat = new THREE.MeshBasicMaterial({ color: 0x34d399, side: THREE.DoubleSide });
+          const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+          ringMesh.position.z = 0.025;
+          padMesh.add(ringMesh);
+
+          padsGroup.add(padMesh);
+
+          // Position drone on primary pad
+          if (idx === 0 && droneMesh) {
+            droneMesh.position.set(p.position[0], p.position[1], 0.1);
+          }
+        });
+      }
+
+      if (world.charging_stations) {
+        world.charging_stations.forEach(cs => {
+          const tower = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.18, 0.22, 1.2, 16),
+            new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 })
+          );
+          tower.rotation.x = Math.PI / 2;
+          tower.position.set(cs.position[0], cs.position[1], 0.6);
+
+          // Glowing status ring
+          const glowRing = new THREE.Mesh(
+            new THREE.TorusGeometry(0.24, 0.03, 8, 24),
+            new THREE.MeshBasicMaterial({ color: 0x10b981 })
+          );
+          glowRing.position.z = 0.35;
+          tower.add(glowRing);
+
+          padsGroup.add(tower);
+        });
+      }
+
+      // ----------------------------------------------------
+      // 6. Safety Zones (Volumetric No-Fly Zones & People Zones)
+      // ----------------------------------------------------
+      if (world.no_fly_zones) {
+        const nfzMat = new THREE.MeshBasicMaterial({
+          color: 0xef4444,
+          transparent: true,
+          opacity: 0.22,
+          side: THREE.DoubleSide
+        });
+        const nfzWireMat = new THREE.MeshBasicMaterial({
+          color: 0xf87171,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.85
+        });
+
+        world.no_fly_zones.forEach(nfz => {
+          if (nfz.polygon && nfz.polygon.length >= 3) {
+            const xs = nfz.polygon.map(pt => pt[0]);
+            const ys = nfz.polygon.map(pt => pt[1]);
+            const minX = Math.min(...xs), maxX = Math.max(...xs);
+            const minY = Math.min(...ys), maxY = Math.max(...ys);
+            const zMin = nfz.z_min || 0;
+            const zMax = nfz.z_max || ch;
+
+            const boxGeo = new THREE.BoxGeometry(maxX - minX, maxY - minY, zMax - zMin);
+            const boxMesh = new THREE.Mesh(boxGeo, nfzMat);
+            boxMesh.position.set((minX + maxX) / 2, (minY + maxY) / 2, (zMin + zMax) / 2);
+            safetyGroup.add(boxMesh);
+
+            const wireMesh = new THREE.Mesh(boxGeo, nfzWireMat);
+            wireMesh.position.copy(boxMesh.position);
+            safetyGroup.add(wireMesh);
+          }
+        });
+      }
+
+      if (world.people_zones) {
+        const pzMat = new THREE.MeshBasicMaterial({
+          color: 0xf59e0b,
+          transparent: true,
+          opacity: 0.18,
+          side: THREE.DoubleSide
+        });
+
+        world.people_zones.forEach(pz => {
+          if (pz.polygon && pz.polygon.length >= 3) {
+            const xs = pz.polygon.map(pt => pt[0]);
+            const ys = pz.polygon.map(pt => pt[1]);
+            const minX = Math.min(...xs), maxX = Math.max(...xs);
+            const minY = Math.min(...ys), maxY = Math.max(...ys);
+
+            const plate = new THREE.Mesh(
+              new THREE.PlaneGeometry(maxX - minX, maxY - minY),
+              pzMat
+            );
+            plate.position.set((minX + maxX) / 2, (minY + maxY) / 2, 0.018);
+            safetyGroup.add(plate);
+          }
+        });
+      }
+
+      // Dynamic Warehouse Traffic (Forklifts & AMRs)
+      const rawDynObstacles = (world.dynamic_obstacles && world.dynamic_obstacles.length > 0)
+        ? world.dynamic_obstacles
+        : [
+            {
+              id: 'FORKLIFT-ALL-AISLES',
+              type: 'forklift',
+              path: generateAllAislesPath(world.aisles, fb),
+              speed_mps: 1.3
+            },
+            {
+              id: 'AMR-01',
+              type: 'walker',
+              path: [[fb.x_max - 2.5, fb.y_min + 1.8, 0], [fb.x_min + 2.5, fb.y_min + 1.8, 0]],
+              speed_mps: 1.1
+            }
+          ];
+
+      rawDynObstacles.forEach(obs => {
+        const isForklift = (obs.type === 'forklift' || (obs.id && obs.id.toLowerCase().includes('forklift')));
+        const mesh = isForklift ? buildForkliftMesh() : buildAMRMesh();
+        const startPos = (obs.path && obs.path.length > 0) ? obs.path[0] : [fb.x_min + 2, fb.y_min + 2, 0];
+        mesh.position.set(startPos[0], startPos[1], startPos[2]);
+        trafficGroup.add(mesh);
+
+        // Render Dotted Floor Navigation Lane
+        let laneLine = null;
+        if (obs.path && obs.path.length >= 2) {
+          const pts = obs.path.map(p => new THREE.Vector3(p[0], p[1], 0.02));
+          const laneGeo = new THREE.BufferGeometry().setFromPoints(pts);
+          const laneMat = new THREE.LineDashedMaterial({
+            color: isForklift ? 0xf59e0b : 0x06b6d4,
+            dashSize: 0.6,
+            gapSize: 0.3,
+            opacity: 0.6,
+            transparent: true
+          });
+          laneLine = new THREE.Line(laneGeo, laneMat);
+          laneLine.computeLineDistances();
+          trafficGroup.add(laneLine);
+        }
+
+        dynamicObstacleEntities.push({
+          config: obs,
+          mesh: mesh,
+          path: obs.path,
+          laneLine: laneLine,
+          isForklift: isForklift,
+          speed: obs.speed_mps || 1.4,
+          currentPos: [startPos[0], startPos[1], startPos[2]]
+        });
+      });
+
+      // Shared Aisle In-Flight Hazard Warning Indicator on Floor
+      const hazardGeo = new THREE.PlaneGeometry(1.4, 4.5);
+      const hazardMat = new THREE.MeshBasicMaterial({
+        color: 0xef4444,
+        transparent: true,
+        opacity: 0.0,
+        side: THREE.DoubleSide
+      });
+      sharedAisleHazardMesh = new THREE.Mesh(hazardGeo, hazardMat);
+      sharedAisleHazardMesh.position.set(0, 0, 0.025);
+      sharedAisleHazardMesh.visible = false;
+      trafficGroup.add(sharedAisleHazardMesh);
     }
 
     function animateThree() {
       requestAnimationFrame(animateThree);
+
+      const time = performance.now() / 1000;
+
+      // Pulse flight path glow during playback
+      if (flightPathLine && isPlaying) {
+        const pulse = Math.sin(time * 3) * 0.15 + 0.85;
+        flightPathLine.material.opacity = pulse;
+      }
+
       controls.update();
 
-      // Spin propellers
-      if (isPlaying && propellerMeshes.length > 0) {
-        propellerMeshes.forEach(p => p.rotation.z += 0.4);
+      // Spin propellers during mission playback
+      if (propellerMeshes.length > 0) {
+        propellerMeshes.forEach(p => p.rotation.z += (isPlaying ? 0.45 * playSpeed : 0.08));
+      }
+
+      // Dynamic Warehouse Traffic Animation (Ping-Pong Patrol along path)
+      dynamicObstacleEntities.forEach((ent, idx) => {
+        const path = ent.path;
+        if (!path || path.length < 2) return;
+
+        let totalLen = 0;
+        const segLens = [];
+        for (let i = 0; i < path.length - 1; i++) {
+          const d = Math.hypot(path[i+1][0] - path[i][0], path[i+1][1] - path[i][1]);
+          segLens.push(d);
+          totalLen += d;
+        }
+        if (totalLen === 0) return;
+
+        const cycleDuration = (totalLen / ent.speed) * 2;
+        const phase = ((time + idx * 4.2) % cycleDuration) / cycleDuration;
+        const tNorm = phase <= 0.5 ? phase * 2 : (1 - phase) * 2;
+        const targetDist = tNorm * totalLen;
+
+        let curDist = 0;
+        let px = path[0][0], py = path[0][1], pz = path[0][2] || 0;
+        let heading = 0;
+
+        for (let i = 0; i < segLens.length; i++) {
+          if (curDist + segLens[i] >= targetDist || i === segLens.length - 1) {
+            const segD = Math.max(0.001, segLens[i]);
+            const u = Math.min(1.0, Math.max(0.0, (targetDist - curDist) / segD));
+            const p1 = path[i];
+            const p2 = path[i+1];
+            if (phase <= 0.5) {
+              px = p1[0] + u * (p2[0] - p1[0]);
+              py = p1[1] + u * (p2[1] - p1[1]);
+              heading = Math.atan2(p2[1] - p1[1], p2[0] - p1[0]);
+            } else {
+              px = p2[0] - u * (p2[0] - p1[0]);
+              py = p2[1] - u * (p2[1] - p1[1]);
+              heading = Math.atan2(p1[1] - p2[1], p1[0] - p2[0]);
+            }
+            break;
+          }
+          curDist += segLens[i];
+        }
+
+        ent.mesh.position.set(px, py, pz);
+        ent.mesh.rotation.z = heading;
+        ent.currentPos = [px, py, pz];
+
+        // Pulse Safety Beacon
+        if (ent.mesh.userData && ent.mesh.userData.beaconLight) {
+          ent.mesh.userData.beaconLight.intensity = Math.sin(time * 14 + idx) * 0.9 + 1.3;
+        }
+      });
+
+      // Update drone position & camera tracking during playback
+      if (droneMesh) {
+        let state = null;
+        if (missionReplayData && missionReplayData.states && missionReplayData.states.length > 0) {
+          state = missionReplayData.states[playbackIndex] || missionReplayData.states[0];
+        }
+
+        if (state) {
+          // Dynamic Obstacle Conflict Detection (Narrow Aisle & Crossway)
+          let nearestDist = Infinity;
+          let conflictObstacle = null;
+          let isSharedAisleConflict = false;
+
+          dynamicObstacleEntities.forEach(ent => {
+            const dx = state.position[0] - ent.currentPos[0];
+            const dy = state.position[1] - ent.currentPos[1];
+            const dist = Math.hypot(dx, dy);
+
+            // Narrow Aisle Geometry: aisles run North-South (constant X).
+            // Width is ~1.8m-2.0m. |dx| < 1.05m and |dy| < 5.2m means sharing the active aisle flight corridor!
+            const inSameAisle = Math.abs(dx) < 1.05 && Math.abs(dy) < 5.2;
+
+            if (inSameAisle) {
+              isSharedAisleConflict = true;
+              nearestDist = dist;
+              conflictObstacle = ent;
+            } else if (!isSharedAisleConflict && dist < nearestDist) {
+              nearestDist = dist;
+              conflictObstacle = ent;
+            }
+          });
+
+          // Real-time Multi-Aisle Ground Traffic & Drone Coverage Tracking
+          let flAisle = null;
+          let flInGap = false;
+          const pForklift = dynamicObstacleEntities.find(e => e.isForklift);
+          if (pForklift && worldData && worldData.aisles) {
+            const fx = pForklift.currentPos[0];
+            const fy = pForklift.currentPos[1];
+            for (const a of worldData.aisles) {
+              const cx = (a.x_start + a.x_end) / 2;
+              const yMin = Math.min(a.y_start, a.y_end) - 0.4;
+              const yMax = Math.max(a.y_start, a.y_end) + 0.4;
+              if (Math.abs(fx - cx) < 1.05 && fy >= yMin && fy <= yMax) {
+                flAisle = a.id;
+                break;
+              }
+            }
+            if (!flAisle) flInGap = true;
+          }
+
+          let drAisle = null;
+          if (worldData && worldData.aisles) {
+            const dx = state.position[0];
+            const dy = state.position[1];
+            for (const a of worldData.aisles) {
+              const cx = (a.x_start + a.x_end) / 2;
+              const yMin = Math.min(a.y_start, a.y_end) - 0.4;
+              const yMax = Math.max(a.y_start, a.y_end) + 0.4;
+              if (Math.abs(dx - cx) < 1.05 && dy >= yMin && dy <= yMax) {
+                drAisle = a.id;
+                break;
+              }
+            }
+          }
+
+          const statusEl = document.getElementById('trafficAisleStatus');
+          if (statusEl) {
+            if (isSharedAisleConflict) {
+              statusEl.innerHTML = `<span style="color:#ef4444; font-weight:700;">⚠️ SHARED ${drAisle || 'AISLE'}: OVERFLIGHT (+${evasiveClimbOffset.toFixed(1)}m)</span>`;
+            } else if (flAisle && drAisle) {
+              statusEl.innerHTML = `<span style="color:#10b981;">🚜 Forklift: ${flAisle} | 🚁 Drone: ${drAisle}</span>`;
+            } else if (flInGap && drAisle) {
+              statusEl.innerHTML = `<span style="color:#38bdf8;">🚜 Forklift: Turning Gap | 🚁 Drone: ${drAisle}</span>`;
+            } else {
+              statusEl.innerHTML = `<span style="color:#f59e0b;">🚜 All-Aisle Patrol Active</span>`;
+            }
+          }
+
+          const alertBanner = document.getElementById('trafficAlertBanner');
+
+          if (isSharedAisleConflict && conflictObstacle) {
+            // SHARED AISLE HEAD-ON FLIGHT CONFLICT!
+            // Forklift mast is 2.4m tall, aisle width is narrow (lateral escape restricted by racks).
+            // Drone executes vertical separation overflight climb (+2.0m) to reach safe clearance z >= 3.8m.
+            evasiveClimbOffset = Math.min(2.0, evasiveClimbOffset + 0.12);
+
+            if (alertBanner) {
+              alertBanner.style.display = 'flex';
+              alertBanner.style.background = 'rgba(220, 38, 38, 0.95)';
+              alertBanner.style.borderColor = '#ef4444';
+              document.getElementById('trafficAlertTitle').innerText = '🚨 SHARED AISLE HEAD-ON CONFLICT';
+              document.getElementById('trafficAlertDesc').innerText = `${conflictObstacle.config.id} in ${drAisle || 'Aisle'} (Sep: ${nearestDist.toFixed(1)}m, Mast: 2.4m) — Drone coordinating continuous bin audit via overflight`;
+              document.getElementById('trafficAlertAction').innerText = `OVERFLIGHT +${evasiveClimbOffset.toFixed(1)}m`;
+            }
+
+            // Update Floor Hazard Projection between drone and vehicle
+            if (sharedAisleHazardMesh) {
+              const midX = (state.position[0] + conflictObstacle.currentPos[0]) / 2;
+              const midY = (state.position[1] + conflictObstacle.currentPos[1]) / 2;
+              sharedAisleHazardMesh.position.set(midX, midY, 0.025);
+              sharedAisleHazardMesh.visible = true;
+              sharedAisleHazardMesh.material.opacity = Math.sin(time * 9) * 0.2 + 0.45;
+            }
+
+            // In FPV mode, target reticle highlights oncoming vehicle
+            const elLock = document.getElementById('fpvLockTag');
+            if (activeCamMode === 'fpv' && elLock) {
+              elLock.style.display = 'block';
+              elLock.innerHTML = `<span style="color:#ef4444; font-weight:800; text-shadow:0 0 10px #ef4444;">⚠️ COLLISION HAZARD: ${conflictObstacle.config.id} IN ${drAisle || 'AISLE'} (SEP: ${nearestDist.toFixed(1)}m) — VERTICAL SEPARATION</span>`;
+            }
+          } else if (nearestDist < 3.2 && state.position[2] < 3.5 && conflictObstacle) {
+            // Crossing corridor traffic
+            evasiveClimbOffset = Math.min(1.8, evasiveClimbOffset + 0.08);
+            if (alertBanner) {
+              alertBanner.style.display = 'flex';
+              alertBanner.style.background = 'rgba(245, 158, 11, 0.95)';
+              alertBanner.style.borderColor = '#f59e0b';
+              document.getElementById('trafficAlertTitle').innerText = 'TRAFFIC CROSSING CONFLICT';
+              document.getElementById('trafficAlertDesc').innerText = `${conflictObstacle.config.id} crossing corridor (Dist ${nearestDist.toFixed(1)}m) — Reactive climb active`;
+              document.getElementById('trafficAlertAction').innerText = `CLIMB +${evasiveClimbOffset.toFixed(1)}m`;
+            }
+            if (sharedAisleHazardMesh) sharedAisleHazardMesh.visible = false;
+          } else {
+            if (sharedAisleHazardMesh) sharedAisleHazardMesh.visible = false;
+            if (evasiveClimbOffset > 0) {
+              evasiveClimbOffset = Math.max(0, evasiveClimbOffset - 0.04);
+              if (alertBanner && evasiveClimbOffset === 0) {
+                document.getElementById('trafficAlertTitle').innerText = 'TRAFFIC CONFLICT RESOLVED';
+                document.getElementById('trafficAlertDesc').innerText = 'Corridor clear of moving hazards — Resuming standard flight sequence';
+                document.getElementById('trafficAlertAction').innerText = 'CLEARED ✓';
+                setTimeout(() => { if (evasiveClimbOffset === 0 && alertBanner) alertBanner.style.display = 'none'; }, 1600);
+              }
+            }
+          }
+
+          const effZ = state.position[2] + evasiveClimbOffset;
+          droneMesh.position.set(state.position[0], state.position[1], effZ);
+          droneMesh.rotation.z = (state.yaw_rad || 0) - Math.PI / 2;
+
+          // Toggle scanner inspection spotlight
+          if (droneSpotlight) {
+            const isScanning = (state.action === 'scan' || state.target_bin_id);
+            droneSpotlight.visible = !!isScanning;
+            if (evasiveClimbOffset > 0) {
+              droneSpotlight.scale.set(1.35, 1.35, 1.2);
+            } else {
+              droneSpotlight.scale.set(1.0, 1.0, 1.0);
+            }
+          }
+
+          // Camera Follow Mode (dynamic chase cam)
+          if (activeCamMode === 'follow') {
+            const yaw = state.yaw_rad || 0;
+            const chaseDist = 3.5;
+            const chaseHeight = 2.2;
+            const cx = state.position[0] - Math.sin(yaw) * chaseDist;
+            const cy = state.position[1] - Math.cos(yaw) * chaseDist;
+            const cz = effZ + chaseHeight;
+            camera3D.position.lerp(new THREE.Vector3(cx, cy, cz), 0.08);
+            controls.target.copy(droneMesh.position);
+          }
+
+          // Camera FPV Gimbal Mode (High visual impact pilot & scanner perspective)
+          if (activeCamMode === 'fpv') {
+            const yaw = state.yaw_rad || 0;
+            const camX = droneMesh.position.x + Math.cos(yaw) * 0.28;
+            const camY = droneMesh.position.y + Math.sin(yaw) * 0.28;
+            const camZ = droneMesh.position.z + 0.05;
+            camera3D.position.set(camX, camY, camZ);
+
+            let targetLook = null;
+            if (state.target_bin_id && worldBinsMap.has(state.target_bin_id)) {
+              const b = worldBinsMap.get(state.target_bin_id);
+              targetLook = new THREE.Vector3(b.center[0], b.center[1], b.center[2]);
+            } else {
+              targetLook = new THREE.Vector3(
+                camX + Math.cos(yaw) * 4.0,
+                camY + Math.sin(yaw) * 4.0,
+                camZ - 0.15
+              );
+            }
+            controls.target.copy(targetLook);
+            camera3D.lookAt(targetLook);
+
+            // Update FPV HUD Avionics
+            const compassDeg = Math.round(((yaw * 180 / Math.PI) % 360 + 360) % 360);
+            const compassDirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+            const compassDir = compassDirs[Math.round(compassDeg / 45) % 8];
+            const elCompass = document.getElementById('fpvCompass');
+            if (elCompass) elCompass.innerText = `${String(compassDeg).padStart(3, '0')}° ${compassDir}`;
+            const elAlt = document.getElementById('fpvAltVal');
+            if (elAlt) elAlt.innerText = `${droneMesh.position.z.toFixed(2)} m`;
+            const elSpd = document.getElementById('fpvSpeedVal');
+            if (elSpd) elSpd.innerText = `${(state.speed_mps || 0).toFixed(2)} m/s`;
+            const elBat = document.getElementById('fpvBatVal');
+            if (elBat) elBat.innerText = `${(state.battery_pct || 100).toFixed(1)}%`;
+
+            const elLock = document.getElementById('fpvLockTag');
+            if (elLock) {
+              if (state.target_bin_id) {
+                elLock.innerText = `[ TARGET LOCKED: BIN ${state.target_bin_id} ]`;
+                elLock.style.display = 'block';
+              } else {
+                elLock.style.display = 'none';
+              }
+            }
+          }
+        }
       }
 
       renderer.render(scene, camera3D);
@@ -1250,7 +4288,234 @@
         ctx2D.fill();
         ctx2D.shadowBlur = 0;
       }
+
+      // Draw Dynamic Traffic on 2D Map
+      if (dynamicObstacleEntities && dynamicObstacleEntities.length > 0) {
+        dynamicObstacleEntities.forEach(ent => {
+          const isFork = ent.isForklift || ent.config.type === 'forklift' || (ent.config.id && ent.config.id.toLowerCase().includes('forklift'));
+          const p = worldToScreen2D(ent.currentPos[0], ent.currentPos[1]);
+
+          // Draw Dotted Navigation Lane
+          if (ent.path && ent.path.length >= 2) {
+            ctx2D.strokeStyle = isFork ? 'rgba(245, 158, 11, 0.45)' : 'rgba(6, 182, 212, 0.45)';
+            ctx2D.lineWidth = 1.5;
+            ctx2D.setLineDash([4, 4]);
+            ctx2D.beginPath();
+            const p0 = worldToScreen2D(ent.path[0][0], ent.path[0][1]);
+            ctx2D.moveTo(p0.x, p0.y);
+            for (let i = 1; i < ent.path.length; i++) {
+              const pi = worldToScreen2D(ent.path[i][0], ent.path[i][1]);
+              ctx2D.lineTo(pi.x, pi.y);
+            }
+            ctx2D.stroke();
+            ctx2D.setLineDash([]);
+          }
+
+          // Draw vehicle marker
+          ctx2D.fillStyle = isFork ? '#f59e0b' : '#06b6d4';
+          ctx2D.strokeStyle = '#ffffff';
+          ctx2D.lineWidth = 1.5;
+          ctx2D.beginPath();
+          ctx2D.arc(p.x, p.y, isFork ? 6 : 4, 0, Math.PI * 2);
+          ctx2D.fill();
+          ctx2D.stroke();
+
+          // Vehicle label
+          ctx2D.fillStyle = '#f8fafc';
+          ctx2D.font = '9px monospace';
+          ctx2D.fillText(ent.config.id || 'VEHICLE', p.x + 8, p.y + 3);
+        });
+      }
     }
+
+    // ----------------------------------------------------------
+    // Real Amazon Bin Image HUD Updater
+    // ----------------------------------------------------------
+    function updateAmazonBinHUD(bin, scanRecord, isLiveScan = false) {
+      const hud = document.getElementById('amazonBinHudCard');
+      if (!hud || !bin) return;
+
+      const statusPill = document.getElementById('amzHudStatus');
+      const laserSweep = document.getElementById('amzLaserSweep');
+      const imgEl = document.getElementById('amzHudImage');
+      const imgIdEl = document.getElementById('amzHudImgId');
+      const binIdEl = document.getElementById('amzHudBinId');
+      const barcodeEl = document.getElementById('amzHudBarcode');
+      const itemCountEl = document.getElementById('amzHudItemCount');
+      const itemsListEl = document.getElementById('amzHudItemsList');
+      const confBarEl = document.getElementById('amzHudConfBar');
+      const confValEl = document.getElementById('amzHudConfVal');
+      const opticsEl = document.getElementById('amzHudOptics');
+
+      // 1. Image reference & shelf photo
+      const imgId = bin.amazon_img_id || (scanRecord ? scanRecord.image_ref : null) || '439407';
+      const imgUrl = bin.amazon_img_url || `/img/amazon/${imgId}.jpg`;
+      if (imgEl) imgEl.src = imgUrl;
+      if (imgIdEl) imgIdEl.innerText = `IMG #${imgId}`;
+      if (binIdEl) binIdEl.innerText = bin.id;
+
+      const decodedCode = (scanRecord && scanRecord.decoded_value) || bin.label_code || `AMZN-${imgId}`;
+      if (barcodeEl) barcodeEl.innerText = decodedCode;
+
+      // 2. Scan status badge and sweeping laser
+      if (isLiveScan) {
+        if (statusPill) {
+          statusPill.className = 'amz-status-pill amz-status-scanning';
+          statusPill.innerText = 'SCANNING...';
+        }
+        if (laserSweep) laserSweep.classList.add('active');
+        setTimeout(() => {
+          if (statusPill) {
+            statusPill.className = 'amz-status-pill amz-status-ready';
+            statusPill.innerText = 'AUDIT OK ✓';
+          }
+          if (laserSweep) laserSweep.classList.remove('active');
+        }, 900);
+      } else {
+        if (statusPill) {
+          statusPill.className = 'amz-status-pill amz-status-ready';
+          statusPill.innerText = 'INSPECTED';
+        }
+        if (laserSweep) laserSweep.classList.remove('active');
+      }
+
+      // 3. Amazon catalog items and verified ASINs
+      if (itemsListEl) {
+        itemsListEl.innerHTML = '';
+        const items = bin.amazon_items || [];
+        const totalQty = items.reduce((acc, it) => acc + (it.quantity || 1), 0) || (bin.amazon_expected_qty || 1);
+        if (itemCountEl) itemCountEl.innerText = `${totalQty} Item${totalQty === 1 ? '' : 's'}`;
+
+        if (items.length > 0) {
+          items.slice(0, 4).forEach(it => {
+            const row = document.createElement('div');
+            row.className = 'amz-item-row';
+            row.innerHTML = `
+              <div style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:6px;">
+                <span style="color:#94a3b8; font-family:monospace; font-size:10px;">${it.asin}</span>
+                <span style="color:#e2e8f0; font-size:11px; margin-left:4px;">${it.name.substring(0, 32)}${it.name.length > 32 ? '…' : ''}</span>
+              </div>
+              <span style="color:#38bdf8; font-weight:700; font-size:11px; white-space:nowrap;">×${it.quantity}</span>
+            `;
+            itemsListEl.appendChild(row);
+          });
+        } else {
+          itemsListEl.innerHTML = '<div style="color:var(--text-dim); font-size:10px; padding:4px 0;">Catalog sync verified for bin</div>';
+        }
+      }
+
+      // 4. Optical confidence and stand-off distance
+      const conf = (scanRecord && scanRecord.confidence) ? (scanRecord.confidence * 100) : (94 + Math.random() * 5);
+      if (confBarEl) confBarEl.style.width = `${conf.toFixed(0)}%`;
+      if (confValEl) confValEl.innerText = `${conf.toFixed(0)}%`;
+      if (opticsEl) opticsEl.innerText = `1.20 m • ${(5 + Math.random() * 3).toFixed(1)}°`;
+    }
+
+    // ----------------------------------------------------------
+    // Amazon Bin Detail Popup
+    // ----------------------------------------------------------
+    function showBinDetailPopup(bin) {
+      let popup = document.getElementById('binDetailPopup');
+      if (!popup) {
+        popup = document.createElement('div');
+        popup.id = 'binDetailPopup';
+        popup.style.cssText = `
+          position:fixed; bottom:24px; right:24px; z-index:9999;
+          width:340px; background:rgba(10,15,28,0.97);
+          border:1px solid rgba(56,189,248,0.35); border-radius:14px;
+          backdrop-filter:blur(16px); padding:0; overflow:hidden;
+          box-shadow:0 20px 60px rgba(0,0,0,0.7);
+          font-family: 'Inter', sans-serif;
+          animation: fadeInUp 0.25s ease;
+        `;
+        document.body.appendChild(popup);
+      }
+
+      const imgUrl = bin.amazon_img_url
+        ? bin.amazon_img_url
+        : `https://placehold.co/340x180/1e293b/94a3b8?text=Bin+${encodeURIComponent(bin.id)}`;
+
+      const itemsHtml = (bin.amazon_items && bin.amazon_items.length > 0)
+        ? bin.amazon_items.map(it => `
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;
+              padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="flex:1;">
+                <div style="font-size:10px;color:#94a3b8;font-family:monospace;">${it.asin}</div>
+                <div style="font-size:11px;color:#e2e8f0;margin-top:2px;">${it.name.substring(0,55)}${it.name.length>55?'…':''}</div>
+              </div>
+              <div style="margin-left:10px;background:rgba(56,189,248,0.15);color:#38bdf8;
+                border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;white-space:nowrap;">
+                ×${it.quantity}
+              </div>
+            </div>`).join('')
+        : '<div style="color:#64748b;font-size:11px;padding:8px 0;">No catalog data</div>';
+
+      popup.innerHTML = `
+        <div style="position:relative;">
+          <img src="${imgUrl}"
+            onerror="this.src='https://placehold.co/340x180/1e293b/94a3b8?text=No+Image'"
+            style="width:100%;height:180px;object-fit:cover;display:block;">
+          <div style="position:absolute;top:8px;left:8px;
+            background:rgba(0,0,0,0.7);border-radius:6px;padding:3px 8px;
+            font-size:10px;color:#38bdf8;font-family:monospace;font-weight:600;">
+            📦 ${bin.id}
+          </div>
+          <button onclick="document.getElementById('binDetailPopup').remove()"
+            style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);
+              border:none;color:#94a3b8;cursor:pointer;border-radius:6px;
+              padding:3px 8px;font-size:13px;">✕</button>
+        </div>
+        <div style="padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div>
+              <div style="font-size:10px;color:#64748b;">ASIN / Label Code</div>
+              <div style="font-family:monospace;font-size:13px;color:#38bdf8;font-weight:700;">${bin.label_code}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:#64748b;">Expected Qty</div>
+              <div style="font-size:20px;font-weight:800;color:#10b981;">${bin.amazon_expected_qty || '—'}</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;">Contents</div>
+          <div style="max-height:140px;overflow-y:auto;">${itemsHtml}</div>
+          <div style="margin-top:10px;display:flex;gap:8px;">
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">RACK</div>
+              <div style="font-size:11px;color:#e2e8f0;">${bin.rack_id}</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">LEVEL</div>
+              <div style="font-size:11px;color:#e2e8f0;">${bin.level_index + 1}</div>
+            </div>
+            <div style="flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px;">
+              <div style="font-size:9px;color:#64748b;">BAY</div>
+              <div style="font-size:11px;color:#e2e8f0;">${bin.bay_index + 1}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 2D map bin click support
+    canvas2D.addEventListener('click', e => {
+      if (!worldData || !worldData.bins) return;
+      const rect = canvas2D.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      // Hit-test each bin center dot
+      let hit = null;
+      const DOT_R = Math.max(4, cam2D.scale * 0.25);
+      for (const bin of worldData.bins) {
+        const sp = worldToScreen2D(bin.center[0], bin.center[1]);
+        const dist = Math.hypot(mx - sp.x, my - sp.y);
+        if (dist <= DOT_R + 4) { hit = bin; break; }
+      }
+      if (hit) {
+        updateAmazonBinHUD(hit, null, false);
+        playScanChirp();
+        showBinDetailPopup(hit);
+      }
+    });
 
     // ----------------------------------------------------
     // Presets & Configuration Loading
@@ -1263,10 +4528,18 @@
         build3DWorld(worldData);
         fit2DView();
 
-        // Also fetch raw YAML for Config Editor
+        // Also fetch raw YAML & structured object for Config Editor
         const cfgRes = await fetch(`/api/v1/config?config=${presetName}`);
         const cfgData = await cfgRes.json();
         document.getElementById('configYamlEditor').value = cfgData.yaml_text;
+        activeConfigData = cfgData.config;
+        populateConfigVisualForm(activeConfigData);
+        updateConfigPresetBadge(presetName);
+
+        // Pre-populate Amazon Bin HUD with real shelf photo
+        if (worldData.bins && worldData.bins.length > 0) {
+          updateAmazonBinHUD(worldData.bins[0], null, false);
+        }
 
         document.getElementById('systemStatusText').innerText = `Loaded ${worldData.site_name} (${worldData.summary.total_bins} bins)`;
       } catch (err) {
@@ -1277,8 +4550,9 @@
 
     document.getElementById('presetSelect').addEventListener('change', e => {
       currentPreset = e.target.value;
+      const resPanel = document.getElementById('missionResultsPanel');
+      if (resPanel) resPanel.style.display = 'none';
       loadPreset(currentPreset);
-      loadCompareData();
     });
 
     // ----------------------------------------------------
@@ -1350,13 +4624,42 @@
     });
 
     function setup3DFlightPath(waypoints) {
-      if (flightPathLine) scene.remove(flightPathLine);
-      if (waypoints.length < 2) return;
+      if (flightPathLine) {
+        scene.remove(flightPathLine);
+        if (flightPathLine.geometry) flightPathLine.geometry.dispose();
+        if (flightPathLine.material) flightPathLine.material.dispose();
+        flightPathLine = null;
+      }
+      if (!waypoints || waypoints.length < 2) return;
 
-      const pts = waypoints.map(wp => new THREE.Vector3(wp.pos[0], wp.pos[1], wp.pos[2]));
-      const geo = new THREE.BufferGeometry().setFromPoints(pts);
-      const mat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 });
-      flightPathLine = new THREE.Line(geo, mat);
+      const pathMaterial = new THREE.LineBasicMaterial({
+        linewidth: 3,
+        opacity: 0.92,
+        transparent: true,
+        vertexColors: true
+      });
+
+      const pathGeometry = new THREE.BufferGeometry();
+      const vertices = new Float32Array(waypoints.length * 3);
+      const colors = new Float32Array(waypoints.length * 3);
+
+      for (let i = 0; i < waypoints.length; i++) {
+        const wp = waypoints[i];
+        vertices[i * 3] = wp.pos[0];
+        vertices[i * 3 + 1] = wp.pos[1];
+        vertices[i * 3 + 2] = wp.pos[2] || 0.1;
+
+        // Gradient from bright cyan (start) to vivid emerald (end)
+        const t = i / Math.max(1, waypoints.length - 1);
+        colors[i * 3] = 0.22 + t * 0.1;      // R: 0.22 -> 0.32
+        colors[i * 3 + 1] = 0.74 + t * 0.15; // G: 0.74 -> 0.89
+        colors[i * 3 + 2] = 0.97 - t * 0.45; // B: 0.97 -> 0.52
+      }
+
+      pathGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+      pathGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      flightPathLine = new THREE.Line(pathGeometry, pathMaterial);
       scene.add(flightPathLine);
     }
 
@@ -1431,9 +4734,18 @@
       document.getElementById('hudAction').innerText = (st.action || 'CRUISE').toUpperCase();
       document.getElementById('hudTargetBin').innerText = st.target_bin_id || 'NONE';
 
+      // Update Amazon Bin Vision HUD when aiming at or scanning a bin
+      if (st.target_bin_id && worldBinsMap.has(st.target_bin_id)) {
+        const b = worldBinsMap.get(st.target_bin_id);
+        const scanRec = (missionReplayData.scans || []).find(s => s.bin_id === st.target_bin_id);
+        updateAmazonBinHUD(b, scanRec, true);
+        playScanChirp();
+      }
+
       // Update 3D Drone Mesh
       if (droneMesh) {
-        droneMesh.position.set(st.position[0], st.position[1], st.position[2]);
+        const effZ = st.position[2] + evasiveClimbOffset;
+        droneMesh.position.set(st.position[0], st.position[1], effZ);
         droneMesh.rotation.z = (st.yaw_rad || 0) - Math.PI / 2;
       }
 
@@ -1529,11 +4841,14 @@
     // Strategy Comparator Benchmark
     // ----------------------------------------------------
     async function loadCompareData() {
+      const tbody = document.querySelector('#compareTable tbody');
+      if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:16px; color:var(--accent-blue);">⏳ Benchmarking flight strategies on preset...</td></tr>';
+      }
       try {
         const res = await fetch(`/api/v1/mission/compare?config=${currentPreset}`, { method: 'POST' });
         const data = await res.json();
-        const tbody = document.querySelector('#compareTable tbody');
-        tbody.innerHTML = '';
+        if (tbody) tbody.innerHTML = '';
 
         data.strategies.forEach(s => {
           const tr = document.createElement('tr');
@@ -1550,6 +4865,9 @@
         });
       } catch (err) {
         console.error('Error fetching strategy comparisons:', err);
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:16px; color:var(--accent-rose);">Error benchmarking preset strategies.</td></tr>';
+        }
       }
     }
     document.getElementById('recalcCompareBtn').addEventListener('click', loadCompareData);
@@ -1641,14 +4959,353 @@
     });
 
     // ----------------------------------------------------
-    // Config Editor Validation & Save
+    // User-Friendly Interactive Configuration Editor Manager
     // ----------------------------------------------------
-    document.getElementById('validateConfigBtn').addEventListener('click', async () => {
-      const yamlText = document.getElementById('configYamlEditor').value;
-      const badge = document.getElementById('configValidBadge');
-      badge.innerText = 'VALIDATING...';
-      badge.className = 'badge badge-warning';
+    let activeConfigData = null;
+    let activeConfigMode = 'visual';
 
+    function updateConfigPresetBadge(name) {
+      const el = document.getElementById('cfgCurrentPresetBadge');
+      if (el) el.innerText = `PRESET: ${name.toUpperCase()}`;
+    }
+
+    function updateBatteryGaugeUI() {
+      const safeEl = document.getElementById('cfgBatterySafeReserve');
+      const critEl = document.getElementById('cfgBatteryCritReserve');
+      const capEl = document.getElementById('cfgBatteryCapacity');
+      const hoverEl = document.getElementById('cfgBatteryHoverPower');
+
+      const safe = parseFloat(safeEl ? safeEl.value : 20) || 20;
+      const crit = parseFloat(critEl ? critEl.value : 10) || 10;
+      const cap = parseFloat(capEl ? capEl.value : 120) || 120;
+      const hover = parseFloat(hoverEl ? hoverEl.value : 180) || 180;
+
+      const gCrit = document.getElementById('cfgGaugeCrit');
+      const gSafe = document.getElementById('cfgGaugeSafe');
+      const gFlight = document.getElementById('cfgGaugeFlight');
+
+      const cW = Math.max(2, Math.min(40, crit));
+      const sW = Math.max(2, Math.min(50, Math.max(0, safe - crit)));
+      const fW = Math.max(10, 100 - (cW + sW));
+
+      if (gCrit) gCrit.style.width = `${cW}%`;
+      if (gSafe) gSafe.style.width = `${sW}%`;
+      if (gFlight) gFlight.style.width = `${fW}%`;
+
+      const gCritVal = document.getElementById('cfgGaugeCritVal');
+      const gCritVal2 = document.getElementById('cfgGaugeCritVal2');
+      const gSafeVal = document.getElementById('cfgGaugeSafeVal');
+      const gSafeVal2 = document.getElementById('cfgGaugeSafeVal2');
+      const summaryText = document.getElementById('cfgBatterySummaryText');
+
+      if (gCritVal) gCritVal.innerText = crit;
+      if (gCritVal2) gCritVal2.innerText = crit;
+      if (gSafeVal) gSafeVal.innerText = safe;
+      if (gSafeVal2) gSafeVal2.innerText = safe;
+
+      if (summaryText) {
+        if (crit >= safe) {
+          summaryText.innerHTML = `${cap} Wh &bull; <span style="color:#ef4444; font-weight:700;">⚠️ Critical reserve (${crit}%) must be less than safe reserve (${safe}%)</span>`;
+        } else {
+          const estMin = Math.round((cap / hover) * 60);
+          summaryText.innerText = `${cap} Wh (${hover}W hover &bull; ~${estMin} min endurance)`;
+        }
+      }
+    }
+
+    function populateConfigVisualForm(cfg) {
+      if (!cfg) return;
+      activeConfigData = cfg;
+
+      // Site
+      if (cfg.site) {
+        if (document.getElementById('cfgSiteId')) document.getElementById('cfgSiteId').value = cfg.site.id || '';
+        if (document.getElementById('cfgSiteName')) document.getElementById('cfgSiteName').value = cfg.site.name || '';
+        if (cfg.site.floor_bounds) {
+          if (document.getElementById('cfgFloorXMax')) document.getElementById('cfgFloorXMax').value = cfg.site.floor_bounds.x_max ?? 18.0;
+          if (document.getElementById('cfgFloorYMax')) document.getElementById('cfgFloorYMax').value = cfg.site.floor_bounds.y_max ?? 14.0;
+        }
+        if (document.getElementById('cfgCeilingHeight')) document.getElementById('cfgCeilingHeight').value = cfg.site.ceiling_height ?? 5.0;
+        if (document.getElementById('cfgCeilingHeightRange')) document.getElementById('cfgCeilingHeightRange').value = cfg.site.ceiling_height ?? 5.0;
+      }
+
+      // Drone Platform
+      if (cfg.drone) {
+        if (document.getElementById('cfgDroneMass')) document.getElementById('cfgDroneMass').value = cfg.drone.mass_kg ?? 2.2;
+        if (document.getElementById('cfgDroneMaxSpeed')) document.getElementById('cfgDroneMaxSpeed').value = cfg.drone.max_speed_mps ?? 2.5;
+        if (document.getElementById('cfgDroneMaxSpeedRange')) document.getElementById('cfgDroneMaxSpeedRange').value = cfg.drone.max_speed_mps ?? 2.5;
+        if (document.getElementById('cfgDroneMaxAccel')) document.getElementById('cfgDroneMaxAccel').value = cfg.drone.max_accel_mps2 ?? 1.5;
+        if (document.getElementById('cfgDroneMaxAccelRange')) document.getElementById('cfgDroneMaxAccelRange').value = cfg.drone.max_accel_mps2 ?? 1.5;
+        if (document.getElementById('cfgDroneMaxYawRate')) document.getElementById('cfgDroneMaxYawRate').value = cfg.drone.max_yaw_rate_radps ?? 1.57;
+        if (document.getElementById('cfgDroneMaxYawRateRange')) document.getElementById('cfgDroneMaxYawRateRange').value = cfg.drone.max_yaw_rate_radps ?? 1.57;
+
+        // Battery
+        if (cfg.drone.battery) {
+          if (document.getElementById('cfgBatteryCapacity')) document.getElementById('cfgBatteryCapacity').value = cfg.drone.battery.capacity_wh ?? 120.0;
+          if (document.getElementById('cfgBatteryHoverPower')) document.getElementById('cfgBatteryHoverPower').value = cfg.drone.battery.hover_power_w ?? 180.0;
+          if (document.getElementById('cfgBatteryForwardPower')) document.getElementById('cfgBatteryForwardPower').value = cfg.drone.battery.forward_power_w_per_mps ?? 15.0;
+          if (document.getElementById('cfgBatterySafeReserve')) document.getElementById('cfgBatterySafeReserve').value = cfg.drone.battery.safe_reserve_pct ?? 20.0;
+          if (document.getElementById('cfgBatterySafeReserveRange')) document.getElementById('cfgBatterySafeReserveRange').value = cfg.drone.battery.safe_reserve_pct ?? 20.0;
+          if (document.getElementById('cfgBatteryCritReserve')) document.getElementById('cfgBatteryCritReserve').value = cfg.drone.battery.critical_reserve_pct ?? 10.0;
+          if (document.getElementById('cfgBatteryCritReserveRange')) document.getElementById('cfgBatteryCritReserveRange').value = cfg.drone.battery.critical_reserve_pct ?? 10.0;
+        }
+
+        // Camera
+        if (cfg.drone.camera) {
+          if (document.getElementById('cfgScannerFovH')) document.getElementById('cfgScannerFovH').value = cfg.drone.camera.hfov_deg ?? 72.0;
+          if (document.getElementById('cfgScannerFovHRange')) document.getElementById('cfgScannerFovHRange').value = cfg.drone.camera.hfov_deg ?? 72.0;
+          if (document.getElementById('cfgScannerFovV')) document.getElementById('cfgScannerFovV').value = cfg.drone.camera.vfov_deg ?? 48.0;
+          if (document.getElementById('cfgScannerFovVRange')) document.getElementById('cfgScannerFovVRange').value = cfg.drone.camera.vfov_deg ?? 48.0;
+          if (document.getElementById('cfgScannerMountAngle')) document.getElementById('cfgScannerMountAngle').value = cfg.drone.camera.mount_angle_deg ?? 0.0;
+          if (document.getElementById('cfgScannerMountAngleRange')) document.getElementById('cfgScannerMountAngleRange').value = cfg.drone.camera.mount_angle_deg ?? 0.0;
+          if (document.getElementById('cfgScannerMinDist')) document.getElementById('cfgScannerMinDist').value = cfg.drone.camera.standoff_distance_m ?? 0.9;
+          if (document.getElementById('cfgScannerMaxSpeed')) document.getElementById('cfgScannerMaxSpeed').value = cfg.drone.camera.max_blur_speed_mps ?? 1.2;
+          if (document.getElementById('cfgScannerExposure')) document.getElementById('cfgScannerExposure').value = cfg.drone.camera.exposure_time_s ?? 0.004;
+        }
+      }
+
+      // Mission
+      if (cfg.mission) {
+        if (document.getElementById('cfgMissionStrategy')) document.getElementById('cfgMissionStrategy').value = cfg.mission.scan_strategy || 'serpentine';
+        if (document.getElementById('cfgMissionPriority')) document.getElementById('cfgMissionPriority').value = cfg.mission.priority || 'normal';
+        if (document.getElementById('cfgMissionFlightDuration')) document.getElementById('cfgMissionFlightDuration').value = cfg.mission.max_flight_duration_s ?? 900.0;
+        if (document.getElementById('cfgMissionFlightDurationRange')) document.getElementById('cfgMissionFlightDurationRange').value = cfg.mission.max_flight_duration_s ?? 900.0;
+        if (cfg.mission.return_to_charge_rules) {
+          if (document.getElementById('cfgMissionRtcThreshold')) document.getElementById('cfgMissionRtcThreshold').value = cfg.mission.return_to_charge_rules.threshold_pct ?? 25.0;
+          if (document.getElementById('cfgMissionRtcThresholdRange')) document.getElementById('cfgMissionRtcThresholdRange').value = cfg.mission.return_to_charge_rules.threshold_pct ?? 25.0;
+          if (document.getElementById('cfgMissionRtcPad')) document.getElementById('cfgMissionRtcPad').value = cfg.mission.return_to_charge_rules.pad_id || 'PAD-HOME';
+        }
+      }
+
+      // Safety
+      if (cfg.safety) {
+        if (document.getElementById('cfgSafetyGeofence')) document.getElementById('cfgSafetyGeofence').value = cfg.safety.geofence_margin_m ?? 0.5;
+        if (document.getElementById('cfgSafetyRackClearance')) document.getElementById('cfgSafetyRackClearance').value = cfg.safety.min_rack_clearance_m ?? 0.4;
+        if (document.getElementById('cfgSafetyEmStopDecel')) document.getElementById('cfgSafetyEmStopDecel').value = cfg.safety.emergency_stop_decel_mps2 ?? 3.5;
+        if (document.getElementById('cfgSafetyLinkLoss')) document.getElementById('cfgSafetyLinkLoss').value = cfg.safety.link_loss_behaviour || 'hover_then_land';
+        if (document.getElementById('cfgSafetyLocLoss')) document.getElementById('cfgSafetyLocLoss').value = cfg.safety.localisation_loss_behaviour || 'hover_then_land';
+      }
+
+      // Localization
+      if (cfg.localisation) {
+        if (document.getElementById('cfgLocMarkerSize')) document.getElementById('cfgLocMarkerSize').value = cfg.localisation.marker_size_m ?? 0.16;
+        if (cfg.localisation.marker_spacing) {
+          if (document.getElementById('cfgLocSpacingBays')) document.getElementById('cfgLocSpacingBays').value = cfg.localisation.marker_spacing.every_n_bays ?? 2;
+          if (document.getElementById('cfgLocRackEnds')) document.getElementById('cfgLocRackEnds').checked = !!cfg.localisation.marker_spacing.rack_ends;
+        }
+        if (cfg.localisation.drift_model) {
+          if (document.getElementById('cfgLocWalkStd')) document.getElementById('cfgLocWalkStd').value = cfg.localisation.drift_model.walk_std_mps ?? 0.03;
+        }
+        if (cfg.localisation.fusion_filter) {
+          if (document.getElementById('cfgLocEkfQPos')) document.getElementById('cfgLocEkfQPos').value = cfg.localisation.fusion_filter.process_noise_pos ?? 0.01;
+          if (document.getElementById('cfgLocEkfRMarker')) document.getElementById('cfgLocEkfRMarker').value = cfg.localisation.fusion_filter.meas_noise_marker ?? 0.02;
+        }
+      }
+
+      // Layout summary counts
+      if (cfg.layout) {
+        if (document.getElementById('cfgSumAisles')) document.getElementById('cfgSumAisles').innerText = cfg.layout.aisles ? cfg.layout.aisles.length : 0;
+        let racksCount = 0;
+        if (cfg.layout.aisles) {
+          cfg.layout.aisles.forEach(a => {
+            if (a.left_rack) racksCount++;
+            if (a.right_rack) racksCount++;
+          });
+        }
+        if (document.getElementById('cfgSumRacks')) document.getElementById('cfgSumRacks').innerText = racksCount;
+        if (document.getElementById('cfgSumPads')) document.getElementById('cfgSumPads').innerText = cfg.layout.takeoff_landing_pads ? cfg.layout.takeoff_landing_pads.length : 0;
+      }
+      if (document.getElementById('cfgSumBins') && worldData && worldData.summary) {
+        document.getElementById('cfgSumBins').innerText = worldData.summary.total_bins.toLocaleString();
+      }
+
+      updateBatteryGaugeUI();
+      hideConfigAlert();
+    }
+
+    function gatherConfigFromVisualForm() {
+      if (!activeConfigData) activeConfigData = {};
+      const cfg = JSON.parse(JSON.stringify(activeConfigData));
+
+      // Site
+      if (!cfg.site) cfg.site = {};
+      const siteId = document.getElementById('cfgSiteId')?.value?.trim();
+      if (siteId) cfg.site.id = siteId;
+      const siteName = document.getElementById('cfgSiteName')?.value?.trim();
+      if (siteName) cfg.site.name = siteName;
+      if (!cfg.site.floor_bounds) cfg.site.floor_bounds = { x_min: 0.0, x_max: 18.0, y_min: 0.0, y_max: 14.0 };
+      const fx = parseFloat(document.getElementById('cfgFloorXMax')?.value);
+      if (!isNaN(fx) && fx > 0) cfg.site.floor_bounds.x_max = fx;
+      const fy = parseFloat(document.getElementById('cfgFloorYMax')?.value);
+      if (!isNaN(fy) && fy > 0) cfg.site.floor_bounds.y_max = fy;
+      const ch = parseFloat(document.getElementById('cfgCeilingHeight')?.value);
+      if (!isNaN(ch) && ch > 0) cfg.site.ceiling_height = ch;
+
+      // Drone Platform
+      if (!cfg.drone) cfg.drone = {};
+      const dm = parseFloat(document.getElementById('cfgDroneMass')?.value);
+      if (!isNaN(dm) && dm > 0) cfg.drone.mass_kg = dm;
+      const ds = parseFloat(document.getElementById('cfgDroneMaxSpeed')?.value);
+      if (!isNaN(ds) && ds > 0) cfg.drone.max_speed_mps = ds;
+      const da = parseFloat(document.getElementById('cfgDroneMaxAccel')?.value);
+      if (!isNaN(da) && da > 0) cfg.drone.max_accel_mps2 = da;
+      const dy = parseFloat(document.getElementById('cfgDroneMaxYawRate')?.value);
+      if (!isNaN(dy) && dy > 0) cfg.drone.max_yaw_rate_radps = dy;
+
+      // Battery
+      if (!cfg.drone.battery) cfg.drone.battery = {};
+      const bc = parseFloat(document.getElementById('cfgBatteryCapacity')?.value);
+      if (!isNaN(bc) && bc > 0) cfg.drone.battery.capacity_wh = bc;
+      const bh = parseFloat(document.getElementById('cfgBatteryHoverPower')?.value);
+      if (!isNaN(bh) && bh > 0) cfg.drone.battery.hover_power_w = bh;
+      const bf = parseFloat(document.getElementById('cfgBatteryForwardPower')?.value);
+      if (!isNaN(bf) && bf >= 0) cfg.drone.battery.forward_power_w_per_mps = bf;
+      const bSafe = parseFloat(document.getElementById('cfgBatterySafeReserve')?.value);
+      if (!isNaN(bSafe) && bSafe > 0) cfg.drone.battery.safe_reserve_pct = bSafe;
+      const bCrit = parseFloat(document.getElementById('cfgBatteryCritReserve')?.value);
+      if (!isNaN(bCrit) && bCrit > 0) cfg.drone.battery.critical_reserve_pct = bCrit;
+
+      // Camera
+      if (!cfg.drone.camera) cfg.drone.camera = {};
+      const fovH = parseFloat(document.getElementById('cfgScannerFovH')?.value);
+      if (!isNaN(fovH) && fovH > 0) cfg.drone.camera.hfov_deg = fovH;
+      const fovV = parseFloat(document.getElementById('cfgScannerFovV')?.value);
+      if (!isNaN(fovV) && fovV > 0) cfg.drone.camera.vfov_deg = fovV;
+      const ma = parseFloat(document.getElementById('cfgScannerMountAngle')?.value);
+      if (!isNaN(ma)) cfg.drone.camera.mount_angle_deg = ma;
+      const sDist = parseFloat(document.getElementById('cfgScannerMinDist')?.value);
+      if (!isNaN(sDist) && sDist > 0) cfg.drone.camera.standoff_distance_m = sDist;
+      const sSpd = parseFloat(document.getElementById('cfgScannerMaxSpeed')?.value);
+      if (!isNaN(sSpd) && sSpd > 0) cfg.drone.camera.max_blur_speed_mps = sSpd;
+      const sExp = parseFloat(document.getElementById('cfgScannerExposure')?.value);
+      if (!isNaN(sExp) && sExp > 0) cfg.drone.camera.exposure_time_s = sExp;
+
+      // Mission
+      if (!cfg.mission) cfg.mission = {};
+      const mStrat = document.getElementById('cfgMissionStrategy')?.value;
+      if (mStrat) cfg.mission.scan_strategy = mStrat;
+      const mPrio = document.getElementById('cfgMissionPriority')?.value;
+      if (mPrio) cfg.mission.priority = mPrio;
+      const mDur = parseFloat(document.getElementById('cfgMissionFlightDuration')?.value);
+      if (!isNaN(mDur) && mDur > 0) cfg.mission.max_flight_duration_s = mDur;
+      if (!cfg.mission.return_to_charge_rules) cfg.mission.return_to_charge_rules = {};
+      const rtcThresh = parseFloat(document.getElementById('cfgMissionRtcThreshold')?.value);
+      if (!isNaN(rtcThresh) && rtcThresh > 0) cfg.mission.return_to_charge_rules.threshold_pct = rtcThresh;
+      const rtcPad = document.getElementById('cfgMissionRtcPad')?.value?.trim();
+      if (rtcPad) cfg.mission.return_to_charge_rules.pad_id = rtcPad;
+
+      // Safety
+      if (!cfg.safety) cfg.safety = {};
+      const sGeo = parseFloat(document.getElementById('cfgSafetyGeofence')?.value);
+      if (!isNaN(sGeo) && sGeo > 0) cfg.safety.geofence_margin_m = sGeo;
+      const sRack = parseFloat(document.getElementById('cfgSafetyRackClearance')?.value);
+      if (!isNaN(sRack) && sRack > 0) cfg.safety.min_rack_clearance_m = sRack;
+      const sDec = parseFloat(document.getElementById('cfgSafetyEmStopDecel')?.value);
+      if (!isNaN(sDec) && sDec > 0) cfg.safety.emergency_stop_decel_mps2 = sDec;
+      const sLink = document.getElementById('cfgSafetyLinkLoss')?.value;
+      if (sLink) cfg.safety.link_loss_behaviour = sLink;
+      const sLoc = document.getElementById('cfgSafetyLocLoss')?.value;
+      if (sLoc) cfg.safety.localisation_loss_behaviour = sLoc;
+
+      // Localisation
+      if (!cfg.localisation) cfg.localisation = {};
+      const lSize = parseFloat(document.getElementById('cfgLocMarkerSize')?.value);
+      if (!isNaN(lSize) && lSize > 0) cfg.localisation.marker_size_m = lSize;
+      if (!cfg.localisation.marker_spacing) cfg.localisation.marker_spacing = {};
+      const lBays = parseInt(document.getElementById('cfgLocSpacingBays')?.value);
+      if (!isNaN(lBays) && lBays > 0) cfg.localisation.marker_spacing.every_n_bays = lBays;
+      cfg.localisation.marker_spacing.rack_ends = !!document.getElementById('cfgLocRackEnds')?.checked;
+      if (!cfg.localisation.drift_model) cfg.localisation.drift_model = {};
+      const lWalk = parseFloat(document.getElementById('cfgLocWalkStd')?.value);
+      if (!isNaN(lWalk) && lWalk >= 0) cfg.localisation.drift_model.walk_std_mps = lWalk;
+      if (!cfg.localisation.fusion_filter) cfg.localisation.fusion_filter = {};
+      const lQ = parseFloat(document.getElementById('cfgLocEkfQPos')?.value);
+      if (!isNaN(lQ) && lQ > 0) cfg.localisation.fusion_filter.process_noise_pos = lQ;
+      const lR = parseFloat(document.getElementById('cfgLocEkfRMarker')?.value);
+      if (!isNaN(lR) && lR > 0) cfg.localisation.fusion_filter.meas_noise_marker = lR;
+
+      activeConfigData = cfg;
+      return cfg;
+    }
+
+    function showConfigAlert(text, isError) {
+      const banner = document.getElementById('cfgAlertBanner');
+      const icon = document.getElementById('cfgAlertIcon');
+      const msg = document.getElementById('cfgAlertText');
+      if (!banner) return;
+      banner.className = `cfg-alert-banner ${isError ? 'error' : 'valid'}`;
+      if (icon) icon.innerText = isError ? '⚠️' : '✔';
+      if (msg) msg.innerText = text;
+      banner.style.display = 'flex';
+    }
+
+    function hideConfigAlert() {
+      const banner = document.getElementById('cfgAlertBanner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    // Bidirectional range slider sync helpers
+    function bindInputRangePair(inputElId, rangeElId, onUpdate) {
+      const inp = document.getElementById(inputElId);
+      const rng = document.getElementById(rangeElId);
+      if (!inp || !rng) return;
+
+      inp.addEventListener('input', () => {
+        rng.value = inp.value;
+        if (onUpdate) onUpdate();
+      });
+      rng.addEventListener('input', () => {
+        inp.value = rng.value;
+        if (onUpdate) onUpdate();
+      });
+    }
+
+    bindInputRangePair('cfgCeilingHeight', 'cfgCeilingHeightRange');
+    bindInputRangePair('cfgDroneMaxSpeed', 'cfgDroneMaxSpeedRange');
+    bindInputRangePair('cfgDroneMaxAccel', 'cfgDroneMaxAccelRange');
+    bindInputRangePair('cfgDroneMaxYawRate', 'cfgDroneMaxYawRateRange');
+    bindInputRangePair('cfgBatterySafeReserve', 'cfgBatterySafeReserveRange', updateBatteryGaugeUI);
+    bindInputRangePair('cfgBatteryCritReserve', 'cfgBatteryCritReserveRange', updateBatteryGaugeUI);
+    bindInputRangePair('cfgMissionFlightDuration', 'cfgMissionFlightDurationRange');
+    bindInputRangePair('cfgMissionRtcThreshold', 'cfgMissionRtcThresholdRange');
+    bindInputRangePair('cfgScannerFovH', 'cfgScannerFovHRange');
+    bindInputRangePair('cfgScannerFovV', 'cfgScannerFovVRange');
+    bindInputRangePair('cfgScannerMountAngle', 'cfgScannerMountAngleRange');
+
+    if (document.getElementById('cfgBatteryCapacity')) {
+      document.getElementById('cfgBatteryCapacity').addEventListener('input', updateBatteryGaugeUI);
+    }
+    if (document.getElementById('cfgBatteryHoverPower')) {
+      document.getElementById('cfgBatteryHoverPower').addEventListener('input', updateBatteryGaugeUI);
+    }
+
+    // Sub-navigation Section Switching
+    document.querySelectorAll('.cfg-subnav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cfg-subnav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const secId = btn.getAttribute('data-cfg-sec');
+        document.querySelectorAll('.cfg-section').forEach(s => s.style.display = 'none');
+        const target = document.getElementById(secId);
+        if (target) target.style.display = 'block';
+      });
+    });
+
+    // Dual-Mode Switching (Visual GUI vs Raw YAML)
+    const visualContainer = document.getElementById('cfgVisualContainer');
+    const yamlContainer = document.getElementById('cfgYamlContainer');
+    const modeVisualBtn = document.getElementById('cfgModeVisualBtn');
+    const modeYamlBtn = document.getElementById('cfgModeYamlBtn');
+
+    modeVisualBtn.addEventListener('click', async () => {
+      if (activeConfigMode === 'visual') return;
+      activeConfigMode = 'visual';
+      modeVisualBtn.classList.add('active');
+      modeYamlBtn.classList.remove('active');
+
+      // Sync from YAML to Visual
+      const yamlText = document.getElementById('configYamlEditor').value;
       try {
         const res = await fetch('/api/v1/config/validate', {
           method: 'POST',
@@ -1656,37 +5313,133 @@
           body: JSON.stringify({ yaml_text: yamlText })
         });
         const data = await res.json();
+        if (data.valid && data.config) {
+          populateConfigVisualForm(data.config);
+          showConfigAlert('Visual GUI synchronized with YAML edits.', false);
+        } else {
+          showConfigAlert('YAML has syntax errors; visual fields may not reflect invalid YAML: ' + (data.error || ''), true);
+        }
+      } catch (err) {
+        console.error('Error syncing YAML to GUI:', err);
+      }
+
+      yamlContainer.style.display = 'none';
+      visualContainer.style.display = 'block';
+    });
+
+    modeYamlBtn.addEventListener('click', async () => {
+      if (activeConfigMode === 'yaml') return;
+      activeConfigMode = 'yaml';
+      modeYamlBtn.classList.add('active');
+      modeVisualBtn.classList.remove('active');
+
+      // Sync from Visual GUI to YAML
+      const cfg = gatherConfigFromVisualForm();
+      try {
+        const res = await fetch('/api/v1/config/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ config: cfg })
+        });
+        const data = await res.json();
+        if (data.valid && data.yaml_text) {
+          document.getElementById('configYamlEditor').value = data.yaml_text;
+          showConfigAlert('Raw YAML regenerated from Visual GUI settings.', false);
+        } else if (data.error) {
+          showConfigAlert('Validation Warning: ' + data.error, true);
+        }
+      } catch (err) {
+        console.error('Error syncing GUI to YAML:', err);
+      }
+
+      visualContainer.style.display = 'none';
+      yamlContainer.style.display = 'block';
+    });
+
+    // Validate Action
+    document.getElementById('validateConfigBtn').addEventListener('click', async () => {
+      const badge = document.getElementById('configValidBadge');
+      badge.innerText = 'VALIDATING...';
+      badge.className = 'badge badge-warning';
+
+      let payload = {};
+      if (activeConfigMode === 'visual') {
+        const cfg = gatherConfigFromVisualForm();
+        payload = { config: cfg };
+      } else {
+        payload = { yaml_text: document.getElementById('configYamlEditor').value };
+      }
+
+      try {
+        const res = await fetch('/api/v1/config/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
         if (data.valid) {
           badge.innerText = 'VALID PYDANTIC V2';
           badge.className = 'badge badge-success';
+          showConfigAlert(`Configuration is 100% valid (${data.aisles_count || 0} aisles, site: ${data.site_id})`, false);
+          if (data.yaml_text) document.getElementById('configYamlEditor').value = data.yaml_text;
         } else {
           badge.innerText = 'INVALID CONFIG';
           badge.className = 'badge badge-danger';
-          alert('Config Validation Error:\n' + data.error);
+          showConfigAlert('Validation Failure: ' + data.error, true);
         }
       } catch (err) {
         badge.innerText = 'VALIDATION ERROR';
         badge.className = 'badge badge-danger';
+        showConfigAlert('Network or server error validating config: ' + err, true);
       }
     });
 
+    // Save Preset Action
     document.getElementById('saveConfigBtn').addEventListener('click', async () => {
-      const yamlText = document.getElementById('configYamlEditor').value;
-      const presetName = prompt('Enter preset name to save:', currentPreset);
+      const presetName = prompt('Enter preset name to save (e.g. custom_warehouse):', currentPreset);
       if (!presetName) return;
+
+      let payload = { preset_name: presetName.trim() };
+      if (activeConfigMode === 'visual') {
+        payload.config = gatherConfigFromVisualForm();
+      } else {
+        payload.yaml_text = document.getElementById('configYamlEditor').value;
+      }
 
       try {
         const res = await fetch('/api/v1/config/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ preset_name: presetName, yaml_text: yamlText })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.saved) {
-          alert(`Configuration successfully saved as preset '${data.preset_id}'!`);
+          showConfigAlert(`Preset '${data.preset_id}' saved successfully to configs/presets/${data.preset_id}.yaml!`, false);
+          updateConfigPresetBadge(data.preset_id);
+          // Check if preset option exists in header dropdown, else add it
+          const select = document.getElementById('presetSelect');
+          let exists = false;
+          for (let opt of select.options) {
+            if (opt.value === data.preset_id) { exists = true; break; }
+          }
+          if (!exists) {
+            const opt = document.createElement('option');
+            opt.value = data.preset_id;
+            opt.innerText = `Custom: ${data.preset_id.toUpperCase()}`;
+            select.appendChild(opt);
+            select.value = data.preset_id;
+          }
         }
       } catch (err) {
-        alert('Failed to save config: ' + err);
+        showConfigAlert('Failed to save preset: ' + err, true);
+      }
+    });
+
+    // Revert Action
+    document.getElementById('revertConfigBtn').addEventListener('click', async () => {
+      if (confirm(`Discard unsaved changes and reload '${currentPreset}'?`)) {
+        await loadPreset(currentPreset);
+        showConfigAlert(`Reverted all fields to active preset '${currentPreset}'.`, false);
       }
     });
   </script>

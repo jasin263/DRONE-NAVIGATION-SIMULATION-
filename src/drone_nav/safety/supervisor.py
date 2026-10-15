@@ -81,11 +81,12 @@ class SafetySupervisor:
         self.link_loss_active = is_lost
         if is_lost:
             beh = self.safety_cfg.link_loss_behaviour
-            action = (
-                FailsafeAction.RETURN_HOME
-                if beh == LinkLossBehaviour.RETURN_HOME
-                else FailsafeAction.HOLD_HOVER
-            )
+            if beh == LinkLossBehaviour.RETURN_HOME:
+                action = FailsafeAction.RETURN_HOME
+            elif beh == LinkLossBehaviour.EMERGENCY_STOP:
+                action = FailsafeAction.EMERGENCY_STOP
+            else:
+                action = FailsafeAction.HOLD_HOVER
             self.active_failsafe = action
             self.record_event(
                 timestamp_s=timestamp_s,
@@ -95,6 +96,8 @@ class SafetySupervisor:
                 action=action,
                 drone_pos=drone_pos,
             )
+        elif self.active_failsafe in (FailsafeAction.HOLD_HOVER, FailsafeAction.RETURN_HOME):
+            self.active_failsafe = FailsafeAction.NONE
 
     def trigger_localisation_loss(
         self, timestamp_s: float, drone_pos: tuple[float, float, float], is_lost: bool = True
@@ -154,13 +157,13 @@ class SafetySupervisor:
             cur_speed = math.hypot(vx, vy, vz)
             if cur_speed > 0.05:
                 factor = max(0.0, 1.0 - (decel * 0.05) / cur_speed)
-                return FailsafeAction.EMERGENCY_STOP, (vx * factor, vy * factor, max(-0.5, vz * factor)), 0.0
-            return FailsafeAction.EMERGENCY_STOP, (0.0, 0.0, -0.3), 0.0
+                return FailsafeAction.EMERGENCY_STOP, (vx * factor, vy * factor, max(-0.5, vz * factor)), None
+            return FailsafeAction.EMERGENCY_STOP, (0.0, 0.0, -0.3), None
 
         # 2. Watchdog Failsafe Check
         if self.watchdog_active:
             # Rotor cut / gentle descent
-            return FailsafeAction.WATCHDOG_FAILSAFE, (0.0, 0.0, -0.6), 0.0
+            return FailsafeAction.WATCHDOG_FAILSAFE, (0.0, 0.0, -0.6), None
 
         # 3. Critical Battery Emergency Land
         if battery_pct <= self.bat_cfg.critical_reserve_pct:
@@ -177,14 +180,14 @@ class SafetySupervisor:
             return FailsafeAction.EMERGENCY_LAND, (0.0, 0.0, -0.5), 0.5
 
         # 4. Safe Battery Reserve Return to Launch
-        if battery_pct <= self.bat_cfg.safe_reserve_pct:
+        if battery_pct <= self.safety_cfg.battery_reserve_pct:
             if self.active_failsafe != FailsafeAction.RETURN_HOME and self.active_failsafe != FailsafeAction.EMERGENCY_LAND:
                 self.active_failsafe = FailsafeAction.RETURN_HOME
                 self.record_event(
                     timestamp_s=timestamp_s,
                     alert_level=SafetyAlertLevel.WARNING,
                     violation_type=SafetyViolationType.BATTERY_LOW_RTL,
-                    message=f"Safe battery reserve reached ({battery_pct:.1f}% <= {self.bat_cfg.safe_reserve_pct:.1f}%). Triggering Return-To-Home",
+                    message=f"Safe battery reserve reached ({battery_pct:.1f}% <= {self.safety_cfg.battery_reserve_pct:.1f}%). Triggering Return-To-Home",
                     action=FailsafeAction.RETURN_HOME,
                     drone_pos=position,
                 )

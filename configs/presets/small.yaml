@@ -163,7 +163,29 @@ obstacles:
       type: "pallet"
       position: [5.8, 6.0, 0.0]
       dimensions: [1.2, 0.8, 1.0]
-  dynamic: []
+  dynamic:
+    - id: "FORKLIFT-ALL-AISLES"
+      type: "forklift"
+      path:
+        - [3.5, 12.0, 0.0]
+        - [3.5, 1.6, 0.0]
+        - [8.5, 1.6, 0.0]
+        - [8.5, 12.0, 0.0]
+        - [13.5, 12.0, 0.0]
+        - [13.5, 1.6, 0.0]
+        - [3.5, 1.6, 0.0]
+        - [3.5, 12.0, 0.0]
+      speed_mps: 1.2
+      schedule_start_s: 0.0
+      schedule_end_s: 900.0
+    - id: "AMR-01"
+      type: "walker"
+      path:
+        - [16.0, 1.2, 0.0]
+        - [2.0, 1.2, 0.0]
+      speed_mps: 0.9
+      schedule_start_s: 0.0
+      schedule_end_s: 900.0
   random_seed: 42
   random_count: 0
 
@@ -237,3 +259,4 @@ export:
   schema_version: "1.0"
   mode: "file"
   output_directory: "exports/small"
+

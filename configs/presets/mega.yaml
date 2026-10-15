@@ -1,0 +1,2689 @@
+version: '1.0'
+site:
+  id: WH-MEGA
+  name: Amazon Mega-Scale Robotic Fulfillment Center (50,000-Bin)
+  units: metres
+  coordinate_frame:
+    origin:
+    - 0.0
+    - 0.0
+    - 0.0
+    x_axis: east
+    y_axis: north
+    z_axis: up
+    z_up: true
+  floor_bounds:
+    x_min: 0.0
+    x_max: 185.0
+    y_min: 0.0
+    y_max: 58.0
+  ceiling_height: 12.0
+  timezone: UTC
+layout:
+  zones:
+  - id: Z-MEGA-01
+    name: Primary Automated High-Density Storage Zone
+    bounds:
+      x_min: 1.0
+      x_max: 183.0
+      y_min: 1.0
+      y_max: 56.0
+  aisles:
+  - id: A01
+    name: Aisle 01
+    x_start: 4.0
+    y_start: 3.0
+    x_end: 4.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R001
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R002
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A02
+    name: Aisle 02
+    x_start: 7.5
+    y_start: 3.0
+    x_end: 7.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R003
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R004
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A03
+    name: Aisle 03
+    x_start: 11.0
+    y_start: 3.0
+    x_end: 11.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R005
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R006
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A04
+    name: Aisle 04
+    x_start: 14.5
+    y_start: 3.0
+    x_end: 14.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R007
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R008
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A05
+    name: Aisle 05
+    x_start: 18.0
+    y_start: 3.0
+    x_end: 18.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R009
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R010
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A06
+    name: Aisle 06
+    x_start: 21.5
+    y_start: 3.0
+    x_end: 21.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R011
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R012
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A07
+    name: Aisle 07
+    x_start: 25.0
+    y_start: 3.0
+    x_end: 25.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R013
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R014
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A08
+    name: Aisle 08
+    x_start: 28.5
+    y_start: 3.0
+    x_end: 28.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R015
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R016
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A09
+    name: Aisle 09
+    x_start: 32.0
+    y_start: 3.0
+    x_end: 32.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R017
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R018
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A10
+    name: Aisle 10
+    x_start: 35.5
+    y_start: 3.0
+    x_end: 35.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R019
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R020
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A11
+    name: Aisle 11
+    x_start: 39.0
+    y_start: 3.0
+    x_end: 39.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R021
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R022
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A12
+    name: Aisle 12
+    x_start: 42.5
+    y_start: 3.0
+    x_end: 42.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R023
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R024
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A13
+    name: Aisle 13
+    x_start: 46.0
+    y_start: 3.0
+    x_end: 46.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R025
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R026
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A14
+    name: Aisle 14
+    x_start: 49.5
+    y_start: 3.0
+    x_end: 49.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R027
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R028
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A15
+    name: Aisle 15
+    x_start: 53.0
+    y_start: 3.0
+    x_end: 53.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R029
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R030
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A16
+    name: Aisle 16
+    x_start: 56.5
+    y_start: 3.0
+    x_end: 56.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R031
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R032
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A17
+    name: Aisle 17
+    x_start: 60.0
+    y_start: 3.0
+    x_end: 60.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R033
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R034
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A18
+    name: Aisle 18
+    x_start: 63.5
+    y_start: 3.0
+    x_end: 63.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R035
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R036
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A19
+    name: Aisle 19
+    x_start: 67.0
+    y_start: 3.0
+    x_end: 67.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R037
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R038
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A20
+    name: Aisle 20
+    x_start: 70.5
+    y_start: 3.0
+    x_end: 70.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R039
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R040
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A21
+    name: Aisle 21
+    x_start: 74.0
+    y_start: 3.0
+    x_end: 74.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R041
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R042
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A22
+    name: Aisle 22
+    x_start: 77.5
+    y_start: 3.0
+    x_end: 77.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R043
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R044
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A23
+    name: Aisle 23
+    x_start: 81.0
+    y_start: 3.0
+    x_end: 81.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R045
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R046
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A24
+    name: Aisle 24
+    x_start: 84.5
+    y_start: 3.0
+    x_end: 84.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R047
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R048
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A25
+    name: Aisle 25
+    x_start: 88.0
+    y_start: 3.0
+    x_end: 88.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R049
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R050
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A26
+    name: Aisle 26
+    x_start: 91.5
+    y_start: 3.0
+    x_end: 91.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R051
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R052
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A27
+    name: Aisle 27
+    x_start: 95.0
+    y_start: 3.0
+    x_end: 95.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R053
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R054
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A28
+    name: Aisle 28
+    x_start: 98.5
+    y_start: 3.0
+    x_end: 98.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R055
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R056
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A29
+    name: Aisle 29
+    x_start: 102.0
+    y_start: 3.0
+    x_end: 102.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R057
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R058
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A30
+    name: Aisle 30
+    x_start: 105.5
+    y_start: 3.0
+    x_end: 105.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R059
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R060
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A31
+    name: Aisle 31
+    x_start: 109.0
+    y_start: 3.0
+    x_end: 109.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R061
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R062
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A32
+    name: Aisle 32
+    x_start: 112.5
+    y_start: 3.0
+    x_end: 112.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R063
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R064
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A33
+    name: Aisle 33
+    x_start: 116.0
+    y_start: 3.0
+    x_end: 116.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R065
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R066
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A34
+    name: Aisle 34
+    x_start: 119.5
+    y_start: 3.0
+    x_end: 119.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R067
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R068
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A35
+    name: Aisle 35
+    x_start: 123.0
+    y_start: 3.0
+    x_end: 123.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R069
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R070
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A36
+    name: Aisle 36
+    x_start: 126.5
+    y_start: 3.0
+    x_end: 126.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R071
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R072
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A37
+    name: Aisle 37
+    x_start: 130.0
+    y_start: 3.0
+    x_end: 130.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R073
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R074
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A38
+    name: Aisle 38
+    x_start: 133.5
+    y_start: 3.0
+    x_end: 133.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R075
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R076
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A39
+    name: Aisle 39
+    x_start: 137.0
+    y_start: 3.0
+    x_end: 137.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R077
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R078
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A40
+    name: Aisle 40
+    x_start: 140.5
+    y_start: 3.0
+    x_end: 140.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R079
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R080
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A41
+    name: Aisle 41
+    x_start: 144.0
+    y_start: 3.0
+    x_end: 144.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R081
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R082
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A42
+    name: Aisle 42
+    x_start: 147.5
+    y_start: 3.0
+    x_end: 147.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R083
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R084
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A43
+    name: Aisle 43
+    x_start: 151.0
+    y_start: 3.0
+    x_end: 151.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R085
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R086
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A44
+    name: Aisle 44
+    x_start: 154.5
+    y_start: 3.0
+    x_end: 154.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R087
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R088
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A45
+    name: Aisle 45
+    x_start: 158.0
+    y_start: 3.0
+    x_end: 158.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R089
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R090
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A46
+    name: Aisle 46
+    x_start: 161.5
+    y_start: 3.0
+    x_end: 161.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R091
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R092
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A47
+    name: Aisle 47
+    x_start: 165.0
+    y_start: 3.0
+    x_end: 165.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R093
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R094
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A48
+    name: Aisle 48
+    x_start: 168.5
+    y_start: 3.0
+    x_end: 168.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R095
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R096
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A49
+    name: Aisle 49
+    x_start: 172.0
+    y_start: 3.0
+    x_end: 172.0
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: forward
+    left_rack:
+      id: R097
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R098
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  - id: A50
+    name: Aisle 50
+    x_start: 175.5
+    y_start: 3.0
+    x_end: 175.5
+    y_end: 53.0
+    width: 1.8
+    one_way: true
+    direction: backward
+    left_rack:
+      id: R099
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+    right_rack:
+      id: R100
+      bays: 25
+      levels: 10
+      bay_width: 2.0
+      level_heights:
+      - 0.8
+      - 1.7
+      - 2.6
+      - 3.5
+      - 4.4
+      - 5.3
+      - 6.2
+      - 7.1
+      - 8.0
+      - 8.9
+      depth: 0.8
+      bin_width: 0.95
+      bin_height: 0.8
+      bins_per_bay_level: 2
+  bin_numbering_template: WH-MEGA-{aisle_id}-{rack_id}-L{level}-B{bay:02d}-S{slot}
+  doors:
+  - id: DOOR-WEST-01
+    position:
+    - 0.2
+    - 28.0
+    - 0.0
+    width: 3.0
+    height: 4.5
+  - id: DOOR-EAST-01
+    position:
+    - 184.8
+    - 28.0
+    - 0.0
+    width: 3.0
+    height: 4.5
+  charging_stations:
+  - id: CHARGE-WEST
+    position:
+    - 1.8
+    - 1.8
+    - 0.0
+    charge_rate_kw: 1.5
+  - id: CHARGE-EAST
+    position:
+    - 182.0
+    - 1.8
+    - 0.0
+    charge_rate_kw: 1.5
+  - id: CHARGE-NORTH-W
+    position:
+    - 1.8
+    - 55.0
+    - 0.0
+    charge_rate_kw: 1.5
+  - id: CHARGE-NORTH-E
+    position:
+    - 182.0
+    - 55.0
+    - 0.0
+    charge_rate_kw: 1.5
+  takeoff_landing_pads:
+  - id: PAD-HOME-WEST
+    position:
+    - 1.8
+    - 1.8
+    - 0.0
+    radius: 0.8
+  - id: PAD-HOME-EAST
+    position:
+    - 182.0
+    - 1.8
+    - 0.0
+    radius: 0.8
+  - id: PAD-NORTH-WEST
+    position:
+    - 1.8
+    - 55.0
+    - 0.0
+    radius: 0.8
+  - id: PAD-NORTH-EAST
+    position:
+    - 182.0
+    - 55.0
+    - 0.0
+    radius: 0.8
+  no_fly_zones:
+  - id: NFZ-MEZZANINE-OFFICE
+    name: Operations Command Center
+    polygon:
+    - - 85.0
+      - 0.0
+    - - 95.0
+      - 0.0
+    - - 95.0
+      - 2.8
+    - - 85.0
+      - 2.8
+    z_min: 0.0
+    z_max: 6.0
+  people_zones:
+  - id: PZ-STAGING-CORRIDOR
+    name: Cross-Dock Transit Corridor
+    polygon:
+    - - 0.0
+      - 54.0
+    - - 185.0
+      - 54.0
+    - - 185.0
+      - 57.5
+    - - 0.0
+      - 57.5
+    max_speed_mps: 1.0
+obstacles:
+  static: []
+  dynamic:
+    - id: FORKLIFT-MEGA-NORTH
+      type: forklift
+      path:
+        - [4.0, 55.0, 0.0]
+        - [180.0, 55.0, 0.0]
+      speed_mps: 2.2
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+    - id: FORKLIFT-MEGA-SOUTH
+      type: forklift
+      path:
+        - [180.0, 2.0, 0.0]
+        - [4.0, 2.0, 0.0]
+      speed_mps: 2.0
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+    - id: FORKLIFT-ALL-AISLES
+      type: forklift
+      path:
+        - [3.6, 54.0, 0.0]
+        - [3.6, 2.5, 0.0]
+        - [7.2, 2.5, 0.0]
+        - [7.2, 54.0, 0.0]
+        - [10.8, 54.0, 0.0]
+        - [10.8, 2.5, 0.0]
+        - [14.4, 2.5, 0.0]
+        - [14.4, 54.0, 0.0]
+        - [18.0, 54.0, 0.0]
+        - [18.0, 2.5, 0.0]
+        - [3.6, 2.5, 0.0]
+        - [3.6, 54.0, 0.0]
+      speed_mps: 1.8
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+    - id: AMR-MEGA-CENTRAL
+      type: walker
+      path:
+        - [92.0, 2.5, 0.0]
+        - [92.0, 54.0, 0.0]
+      speed_mps: 1.5
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+  random_seed: 42
+  random_count: 0
+drone:
+  mass_kg: 3.5
+  max_speed_mps: 3.5
+  max_accel_mps2: 2.0
+  max_yaw_rate_radps: 1.57
+  battery:
+    capacity_wh: 450.0
+    hover_power_w: 280.0
+    forward_power_w_per_mps: 25.0
+    climb_power_w_per_mps: 40.0
+    safe_reserve_pct: 22.0
+    critical_reserve_pct: 10.0
+  camera:
+    resolution_w: 3840
+    resolution_h: 2160
+    hfov_deg: 75.0
+    vfov_deg: 48.0
+    mount_angle_deg: 0.0
+    standoff_distance_m: 1.0
+    exposure_time_s: 0.002
+    max_blur_speed_mps: 1.8
+  sensors:
+    imu_accel_bias: 0.015
+    imu_accel_noise: 0.03
+    imu_gyro_bias: 0.003
+    imu_gyro_noise: 0.008
+    marker_pos_noise: 0.02
+    marker_miss_prob: 0.03
+    lidar_range_max_m: 20.0
+    lidar_noise_m: 0.02
+localisation:
+  marker_size_m: 0.2
+  marker_spacing:
+    rack_ends: true
+    every_n_bays: 5
+  pose_noise: 0.02
+  drift_model:
+    walk_std_mps: 0.025
+  fusion_filter:
+    process_noise_pos: 0.01
+    process_noise_vel: 0.05
+    meas_noise_marker: 0.02
+    meas_noise_imu: 0.07
+mission:
+  target_zones:
+  - Z-MEGA-01
+  target_bins: []
+  priority: normal
+  scan_strategy: serpentine
+  max_flight_duration_s: 2400.0
+  return_to_charge_rules:
+    threshold_pct: 25.0
+    pad_id: PAD-HOME-WEST
+safety:
+  min_rack_clearance_m: 0.5
+  geofence_margin_m: 0.8
+  battery_reserve_pct: 22.0
+  link_loss_behaviour: hover_then_land
+  localisation_loss_behaviour: hover_then_land
+  emergency_stop_decel_mps2: 4.5
+export:
+  drims_endpoint_url: null
+  auth_token: null
+  site_id_mapping: WH-MEGA
+  schema_version: '1.0'
+  mode: file
+  output_directory: exports/mega
+

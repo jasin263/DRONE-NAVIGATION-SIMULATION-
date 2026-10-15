@@ -15,9 +15,10 @@ def test_presets_exist():
     assert (PRESETS_DIR / "small.yaml").exists()
     assert (PRESETS_DIR / "medium.yaml").exists()
     assert (PRESETS_DIR / "large.yaml").exists()
+    assert (PRESETS_DIR / "mega.yaml").exists()
 
 
-@pytest.mark.parametrize("preset_name", ["small", "medium", "large"])
+@pytest.mark.parametrize("preset_name", ["small", "medium", "large", "mega"])
 def test_validate_all_presets(preset_name: str):
     cfg_path = PRESETS_DIR / f"{preset_name}.yaml"
     config = load_config(cfg_path)
