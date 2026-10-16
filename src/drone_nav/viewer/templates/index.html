@@ -5488,33 +5488,130 @@ let playSpeed = 5;
       sharedAisleHazardMesh.visible = false;
       trafficGroup.add(sharedAisleHazardMesh);
 
-      // 8. Warehouse Human Pickers & Pedestrian Walkway Patrol
+      // 8. Warehouse Human Pickers & Realistic Walkway Patrol Paths
       humanWorkerEntities = [];
-      const worker1Path = [
-        [fb.x_min + 3.0, cy, 0],
-        [fb.x_max - 3.0, cy, 0]
-      ];
+
+      let ySouthCrossway = fb.y_min + 1.8;
+      let yNorthCrossway = fb.y_max - 1.8;
+      const aisles = world.aisles || [];
+
+      if (aisles.length > 0) {
+        const minY = Math.min(...aisles.map(a => Math.min(a.y_start, a.y_end)));
+        const maxY = Math.max(...aisles.map(a => Math.max(a.y_start, a.y_end)));
+        ySouthCrossway = Math.max(fb.y_min + 1.4, minY - 1.6);
+        yNorthCrossway = Math.min(fb.y_max - 1.4, maxY + 1.6);
+      }
+
+      // Visual High-Vis Green Pedestrian Safety Floor Walkway (OSHA 1910 Standard)
+      const walkW = Math.max(10, (fb.x_max - fb.x_min) - 4.0);
+      const walkMat = new THREE.MeshBasicMaterial({
+        color: 0x10b981,
+        transparent: true,
+        opacity: 0.28,
+        side: THREE.DoubleSide
+      });
+      const walkwayFloor = new THREE.Mesh(new THREE.PlaneGeometry(walkW, 1.3), walkMat);
+      walkwayFloor.position.set(cx, ySouthCrossway, 0.016);
+      worldGroup.add(walkwayFloor);
+
+      // Yellow boundary lines for the pedestrian lane
+      const borderMat = new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0.65 });
+      const borderL = new THREE.Mesh(new THREE.PlaneGeometry(walkW, 0.08), borderMat);
+      borderL.position.set(cx, ySouthCrossway - 0.65, 0.018);
+      worldGroup.add(borderL);
+
+      const borderR = new THREE.Mesh(new THREE.PlaneGeometry(walkW, 0.08), borderMat);
+      borderR.position.set(cx, ySouthCrossway + 0.65, 0.018);
+      worldGroup.add(borderR);
+
+      // White zebra stripes at crossway intersection
+      const zebraMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 });
+      for (let zx = cx - 3.2; zx <= cx + 3.2; zx += 0.7) {
+        const stripe = new THREE.Mesh(new THREE.PlaneGeometry(0.35, 1.2), zebraMat);
+        stripe.position.set(zx, ySouthCrossway, 0.019);
+        worldGroup.add(stripe);
+      }
+
+      // Configure Worker 1: Order Picker with Inventory Roll Cart
+      // Strictly follows open aisle corridors and crossways - NEVER clipping coils or racks
+      let worker1Path = [];
+      let isWorker1Loop = true;
+      if (aisles.length >= 2) {
+        const a1X = (aisles[0].x_start + aisles[0].x_end) / 2;
+        const a2X = (aisles[1].x_start + aisles[1].x_end) / 2;
+        const a1YStart = Math.min(aisles[0].y_start, aisles[0].y_end);
+        const a1YEnd = Math.max(aisles[0].y_start, aisles[0].y_end);
+        worker1Path = [
+          [a1X, ySouthCrossway, 0],
+          [a1X, a1YEnd - 0.6, 0],       // Walk north along Aisle 1
+          [a1X, yNorthCrossway, 0],     // Enter North Crossway
+          [a2X, yNorthCrossway, 0],     // Traverse to Aisle 2
+          [a2X, a1YEnd - 0.6, 0],       // Enter Aisle 2
+          [a2X, a1YStart + 0.6, 0],     // Walk south along Aisle 2
+          [a2X, ySouthCrossway, 0],     // Exit onto South Crossway
+          [a1X, ySouthCrossway, 0]      // Return to Aisle 1
+        ];
+        isWorker1Loop = true;
+      } else if (aisles.length === 1) {
+        const a1X = (aisles[0].x_start + aisles[0].x_end) / 2;
+        const a1YStart = Math.min(aisles[0].y_start, aisles[0].y_end);
+        const a1YEnd = Math.max(aisles[0].y_start, aisles[0].y_end);
+        worker1Path = [
+          [a1X, ySouthCrossway, 0],
+          [a1X, a1YEnd - 0.6, 0]
+        ];
+        isWorker1Loop = false;
+      } else {
+        worker1Path = [
+          [fb.x_min + 3.0, ySouthCrossway, 0],
+          [fb.x_max - 3.0, ySouthCrossway, 0]
+        ];
+        isWorker1Loop = false;
+      }
+
       const worker1 = buildHumanPickerMesh(0x2563eb);
       worker1.group.position.set(worker1Path[0][0], worker1Path[0][1], 0);
       trafficGroup.add(worker1.group);
       humanWorkerEntities.push({
         ...worker1,
         path: worker1Path,
-        speed: 1.1,
+        isLoop: isWorker1Loop,
+        speed: 1.05,
         currentPos: [worker1Path[0][0], worker1Path[0][1], 0]
       });
 
-      const worker2Path = [
-        [fb.x_min + 2.5, fb.y_min + 3.2, 0],
-        [fb.x_max - 2.5, fb.y_min + 3.2, 0]
-      ];
+      // Configure Worker 2: Floor Safety Lead / QA Inspector
+      // Patrols the designated South Pedestrian Walkway and inspects end-bay corridor
+      let worker2Path = [];
+      let isWorker2Loop = false;
+      if (aisles.length >= 3) {
+        const a3X = (aisles[2].x_start + aisles[2].x_end) / 2;
+        const a3YStart = Math.min(aisles[2].y_start, aisles[2].y_end);
+        const a3YEnd = Math.max(aisles[2].y_start, aisles[2].y_end);
+        worker2Path = [
+          [fb.x_min + 3.0, ySouthCrossway, 0],
+          [a3X, ySouthCrossway, 0],
+          [a3X, a3YStart + (a3YEnd - a3YStart) * 0.45, 0], // Walk midway up Aisle 3
+          [a3X, ySouthCrossway, 0],                        // Return to crossway
+          [fb.x_max - 3.0, ySouthCrossway, 0]              // Walk to east bay
+        ];
+        isWorker2Loop = false;
+      } else {
+        worker2Path = [
+          [fb.x_min + 3.0, ySouthCrossway, 0],
+          [fb.x_max - 3.0, ySouthCrossway, 0]
+        ];
+        isWorker2Loop = false;
+      }
+
       const worker2 = buildHumanPickerMesh(0xd97706);
       worker2.group.position.set(worker2Path[0][0], worker2Path[0][1], 0);
       trafficGroup.add(worker2.group);
       humanWorkerEntities.push({
         ...worker2,
         path: worker2Path,
-        speed: 0.95,
+        isLoop: isWorker2Loop,
+        speed: 0.92,
         currentPos: [worker2Path[0][0], worker2Path[0][1], 0]
       });
 
@@ -5974,23 +6071,69 @@ let playSpeed = 5;
         humanWorkerEntities.forEach((worker, wIdx) => {
           const path = worker.path;
           if (!path || path.length < 2) return;
-          const len = Math.hypot(path[1][0] - path[0][0], path[1][1] - path[0][1]);
-          const cycle = (len / worker.speed) * 2;
-          const phase = ((time + wIdx * 5.5) % cycle) / cycle;
-          const u = phase <= 0.5 ? phase * 2 : (1 - phase) * 2;
-          const wx = path[0][0] + u * (path[1][0] - path[0][0]);
-          const wy = path[0][1] + u * (path[1][0] - path[0][1]);
-          const heading = phase <= 0.5 ? Math.atan2(path[1][1] - path[0][1], path[1][0] - path[0][0])
-                                       : Math.atan2(path[0][1] - path[1][0], path[0][0] - path[1][0]);
 
-          worker.group.position.set(wx, wy, 0);
-          worker.group.rotation.z = heading - Math.PI / 2;
-          worker.currentPos = [wx, wy, 0];
+          let totalLen = 0;
+          const segLens = [];
+          for (let i = 0; i < path.length - 1; i++) {
+            const d = Math.hypot(path[i+1][0] - path[i][0], path[i+1][1] - path[i][1]);
+            segLens.push(d);
+            totalLen += d;
+          }
+          if (totalLen === 0) return;
 
-          // Leg swinging walking motion
-          const legSwing = Math.sin(time * 7 + wIdx) * 0.35;
+          const isLoop = !!worker.isLoop;
+          const cycleDuration = (totalLen / worker.speed) * (isLoop ? 1 : 2);
+          const phase = ((time + wIdx * 6.5) % cycleDuration) / cycleDuration;
+
+          let targetDist = 0;
+          let isForward = true;
+
+          if (isLoop) {
+            targetDist = phase * totalLen;
+            isForward = true;
+          } else {
+            const tNorm = phase <= 0.5 ? phase * 2 : (1 - phase) * 2;
+            targetDist = tNorm * totalLen;
+            isForward = (phase <= 0.5);
+          }
+
+          let curDist = 0;
+          let wx = path[0][0], wy = path[0][1];
+          let heading = 0;
+
+          for (let i = 0; i < segLens.length; i++) {
+            if (curDist + segLens[i] >= targetDist || i === segLens.length - 1) {
+              const segD = Math.max(0.001, segLens[i]);
+              const u = Math.min(1.0, Math.max(0.0, (targetDist - curDist) / segD));
+              const p1 = path[i];
+              const p2 = path[i+1];
+
+              if (isForward) {
+                wx = p1[0] + u * (p2[0] - p1[0]);
+                wy = p1[1] + u * (p2[1] - p1[1]);
+                heading = Math.atan2(p2[1] - p1[1], p2[0] - p1[0]);
+              } else {
+                wx = p2[0] - u * (p2[0] - p1[0]);
+                wy = p2[1] - u * (p2[1] - p1[1]);
+                heading = Math.atan2(p1[1] - p2[1], p1[0] - p2[0]);
+              }
+              break;
+            }
+            curDist += segLens[i];
+          }
+
+          // Natural human gait: stride swing frequency scaled with walking speed
+          const strideFreq = 6.8 * (worker.speed / 1.0);
+          const legSwing = Math.sin(time * strideFreq + wIdx * 2.5) * 0.42;
           worker.legL.rotation.x = legSwing;
           worker.legR.rotation.x = -legSwing;
+
+          // Natural human gait vertical bounce (hip elevation cycle)
+          const stepBounce = Math.abs(Math.sin(time * strideFreq + wIdx * 2.5)) * 0.024;
+
+          worker.group.position.set(wx, wy, stepBounce);
+          worker.group.rotation.z = heading - Math.PI / 2;
+          worker.currentPos = [wx, wy, stepBounce];
 
           // Buffer ring pulse
           if (worker.bufRing) {
