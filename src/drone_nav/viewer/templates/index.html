@@ -372,17 +372,15 @@
       color: #07090e;
     }
 
-    /* Amazon Bin Vision HUD Card */
+    /* Amazon Bin Vision HUD Card (Docked in Left Column) */
     .amazon-bin-hud {
-      position: absolute;
-      top: 16px;
-      left: 310px;
-      width: 330px;
-      background: rgba(12, 17, 26, 0.94);
+      position: relative;
+      width: 100%;
+      background: rgba(10, 15, 26, 0.94);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 14px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.12);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.1);
       z-index: 12;
       overflow: hidden;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1255,38 +1253,85 @@
       display: flex;
     }
 
-    /* 3D Viewport Controls & Layout */
-    .viewport-toolbar {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      z-index: 15;
-      pointer-events: none;
+    /* ----------------------------------------------------
+       Clean & Organized 3D Viewport Design System
+       ---------------------------------------------------- */
+
+    /* Clean View Toggle (Hides all HUD overlays for unobstructed viewing) */
+    #view-3d.clean-view .top-stats-bar,
+    #view-3d.clean-view .left-avionics-dock,
+    #view-3d.clean-view .playback-hud {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(-8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
-    .toolbar-group {
-      background: rgba(12, 17, 26, 0.88);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 6px 12px;
+    /* 3D Top Facility Stats Bar (Slim, Centered Ribbon) */
+    .top-stats-bar {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 15, 26, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 5px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+      pointer-events: auto;
+      font-size: 11px;
+      white-space: nowrap;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-muted);
+    }
+
+    .stat-pill strong {
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+    }
+
+    /* Viewport Top Command Deck (Right Side Ribbon with Popovers) */
+    .viewport-command-deck {
+      position: absolute;
+      top: 14px;
+      right: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      z-index: 20;
       pointer-events: auto;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
     }
 
-    .toolbar-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
+    .deck-group {
+      background: rgba(10, 15, 26, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .deck-btn {
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--text-muted);
-      padding: 5px 11px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 7px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
@@ -1297,24 +1342,75 @@
       white-space: nowrap;
     }
 
-    .toolbar-btn:hover {
+    .deck-btn:hover {
       color: var(--text-main);
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
-    .toolbar-btn.active {
+    .deck-btn.active {
       background: rgba(56, 189, 248, 0.18);
       color: var(--accent-blue);
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
     }
 
-    .toolbar-select {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
+    .deck-btn-alert {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 8px;
+      padding: 5px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .deck-btn-alert:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .deck-audit-badge {
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 9.5px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-weight: 800;
+    }
+
+    .deck-btn-clean {
+      background: rgba(10, 15, 26, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .deck-btn-clean:hover {
+      color: var(--accent-cyan);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .deck-select {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--text-main);
-      padding: 5px 9px;
+      padding: 4px 8px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 500;
@@ -1322,43 +1418,185 @@
       cursor: pointer;
     }
 
-    .toolbar-select option {
-      background: var(--bg-dark);
-      color: var(--text-main);
+    /* Popover Dropdown Menus */
+    .deck-dropdown-wrap {
+      position: relative;
     }
 
-    /* 3D Top Facility Stats Bar */
-    .top-stats-bar {
+    .deck-dropdown-btn {
+      background: rgba(10, 15, 26, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 5px 11px;
+    }
+
+    .deck-dropdown-menu {
       position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(12, 17, 26, 0.88);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 30px;
-      padding: 6px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      z-index: 10;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
-      pointer-events: auto;
-      font-size: 11px;
-      white-space: nowrap;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(10, 15, 26, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+      min-width: 240px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(56, 189, 248, 0.15);
+      display: none;
+      z-index: 30;
+      animation: deckDropFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .stat-pill {
+    .deck-dropdown-menu.open {
+      display: block;
+    }
+
+    .deck-menu-ops {
+      min-width: 260px;
+    }
+
+    @keyframes deckDropFade {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .deck-menu-header {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .deck-checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+    }
+
+    .deck-checkbox-label {
+      font-size: 11px;
       display: flex;
       align-items: center;
       gap: 6px;
+      cursor: pointer;
       color: var(--text-muted);
+      user-select: none;
     }
 
-    .stat-pill strong {
-      color: var(--accent-cyan);
-      font-family: var(--font-mono);
-      font-size: 12px;
+    .deck-checkbox-label:hover {
+      color: var(--text-main);
+    }
+
+    .deck-menu-actions {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .deck-menu-actions-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .deck-action-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      width: 100%;
+      text-align: left;
+    }
+
+    .deck-action-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .deck-action-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--accent-blue);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    /* Left Avionics & Vision Column Dock */
+    .left-avionics-dock {
+      position: absolute;
+      top: 56px;
+      left: 16px;
+      width: 295px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 15;
+      pointer-events: auto;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .hud-dock-card {
+      background: rgba(10, 15, 26, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65);
+    }
+
+    .hud-dock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .hud-dock-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hud-dock-min-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 4px;
+      border-radius: 4px;
+    }
+
+    .hud-dock-min-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hud-sub-section {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hud-sub-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
     }
 
     /* Floating Bin Hover Tooltip */
@@ -1377,33 +1615,32 @@
       color: var(--text-main);
       transform: translate(14px, 14px);
       max-width: 280px;
-    /* VIO & EKF GPS-Denied Telemetry Widget */
-    .vio-hud-widget {
-      position: absolute;
-      top: 68px;
-      left: 18px;
-      background: rgba(12, 17, 26, 0.90);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 10px;
-      padding: 10px 14px;
-      z-index: 12;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 250px;
-      pointer-events: auto;
-      font-size: 11px;
     }
 
-    .vio-hud-header {
+    /* VIO & EKF GPS-Denied Metrics Grid */
+    .vio-hud-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .vio-metric {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .vio-metric .lbl {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-family: var(--font-sans);
+    }
+
+    .vio-metric strong {
+      color: var(--text-main);
       font-size: 11px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 5px;
     }
 
     .vio-badge-optimal {
@@ -1428,43 +1665,36 @@
       border-radius: 4px;
     }
 
-    .vio-hud-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 12px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-    }
-
-    .vio-metric {
+    /* Center Toast Alert Stack */
+    .center-alerts-container {
+      position: absolute;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
-      gap: 1px;
+      align-items: center;
+      gap: 8px;
+      z-index: 25;
+      pointer-events: none;
     }
 
-    .vio-metric .lbl {
-      font-size: 9px;
-      color: var(--text-dim);
-      font-family: var(--font-sans);
-    }
-
-    .vio-metric strong {
-      color: var(--text-main);
-      font-size: 11px;
+    .pedestrian-alert-banner,
+    .traffic-alert-banner {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+      pointer-events: auto;
     }
 
     /* Pedestrian Safety Standoff Alert Banner */
     .pedestrian-alert-banner {
-      position: absolute;
-      top: 68px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(239, 68, 68, 0.22);
+      background: rgba(239, 68, 68, 0.25);
       border: 1px solid rgba(239, 68, 68, 0.7);
       backdrop-filter: blur(14px);
       border-radius: 10px;
-      padding: 8px 18px;
-      z-index: 13;
+      padding: 8px 16px;
       box-shadow: 0 0 25px rgba(239, 68, 68, 0.45);
       display: flex;
       align-items: center;
@@ -1641,7 +1871,7 @@
       <div id="view-3d">
         <div id="threeContainer" style="width:100%; height:100%;"></div>
 
-        <!-- 3D Top Facility Stats Bar -->
+        <!-- 3D Top Facility Stats Bar (Slim Centered Ribbon) -->
         <div class="top-stats-bar">
           <div class="stat-pill">🏢 <span id="twinSiteName">Warehouse Logistics Facility</span></div>
           <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
@@ -1651,100 +1881,128 @@
           <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
           <div class="stat-pill">🏗️ Racks: <strong id="twinRacksCount">0</strong></div>
           <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
-          <div class="stat-pill">🏷️ Markers: <strong id="twinMarkersCount">0</strong></div>
+          <div class="stat-pill">🏷️ Tags: <strong id="twinMarkersCount">0</strong></div>
           <div style="width:1px; height:12px; background:var(--border-subtle);"></div>
           <div class="stat-pill" title="Live Multi-Aisle Ground Traffic & Flight Coverage Coordination">
             <span id="trafficAisleStatus" style="font-family:var(--font-mono); font-size:11px; color:#f59e0b; font-weight:600;">🚜 Traffic: All-Aisle Patrol</span>
           </div>
         </div>
 
-        <!-- Viewport Toolbar (Right Side) -->
-        <div class="viewport-toolbar">
+        <!-- Viewport Top Command Deck (Right Side Ribbon with Popovers) -->
+        <div class="viewport-command-deck">
           <!-- Camera Perspectives -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Cam:</span>
-            <button class="toolbar-btn active" id="camIsoBtn" title="Elevated 3/4 Perspective">🌐 Overview</button>
-            <button class="toolbar-btn" id="camTopBtn" title="Top-Down Plan View">🧭 Top</button>
-            <button class="toolbar-btn" id="camAisleBtn" title="Corridor Eye-Level View">🚶 Corridor</button>
-            <button class="toolbar-btn" id="camFollowBtn" title="Chase Drone Flight">🚁 Follow</button>
-            <button class="toolbar-btn" id="camFpvBtn" title="First-Person Pilot & Scanner View">🎥 FPV Gimbal</button>
+          <div class="deck-group">
+            <button class="deck-btn active" id="camIsoBtn" title="Elevated 3/4 Perspective">🌐 Overview</button>
+            <button class="deck-btn" id="camTopBtn" title="Top-Down Plan View">🧭 Top</button>
+            <button class="deck-btn" id="camAisleBtn" title="Corridor Eye-Level View">🚶 Corridor</button>
+            <button class="deck-btn" id="camFollowBtn" title="Chase Drone Flight">🚁 Follow</button>
+            <button class="deck-btn" id="camFpvBtn" title="First-Person Pilot & Scanner View">🎥 FPV</button>
           </div>
 
           <!-- Aisle Quick Jump -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Aisle:</span>
-            <select id="aisleJumpSelect" class="toolbar-select">
-              <option value="">Jump to Aisle...</option>
+          <div class="deck-group">
+            <select id="aisleJumpSelect" class="deck-select" title="Jump camera to specific aisle">
+              <option value="">Jump Aisle...</option>
             </select>
           </div>
 
-          <!-- Visual Rendering Mode & Layers -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Style:</span>
-            <select id="visualModeSelect" class="toolbar-select">
-              <option value="realistic" selected>🏭 Realistic Logistics</option>
-              <option value="cyber">⚡ Cyber / Hologram</option>
-              <option value="heatmap">📊 Level Heatmap</option>
-            </select>
-            <div style="width:1px; height:14px; background:var(--border-subtle);"></div>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Bins">
-              <input type="checkbox" id="layerBins" checked> 📦
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Racks">
-              <input type="checkbox" id="layerRacks" checked> 🏗️
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle ArUco Markers">
-              <input type="checkbox" id="layerMarkers" checked> 🏷️
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Safety & NFZ">
-              <input type="checkbox" id="layerSafety" checked> 🚫
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Charging & Pads">
-              <input type="checkbox" id="layerPads" checked> ⚡
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Aisle Signs">
-              <input type="checkbox" id="layerSigns" checked> 🪧
-            </label>
-            <label style="font-size:11px; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Toggle Traffic (Forklifts & AMRs)">
-              <input type="checkbox" id="layerTraffic" checked> 🚜
-            </label>
+          <!-- Layers & Visual Style Dropdown Menu -->
+          <div class="deck-dropdown-wrap">
+            <button class="deck-btn deck-dropdown-btn" id="deckLayersTrigger" title="Rendering Style & Visibility Layers">
+              <span>🎨 Layers</span> <span style="font-size:9px; opacity:0.7;">▾</span>
+            </button>
+            <div class="deck-dropdown-menu" id="deckLayersMenu">
+              <div class="deck-menu-header">Rendering Style</div>
+              <select id="visualModeSelect" class="deck-select" style="width:100%; margin-bottom:8px;">
+                <option value="realistic" selected>🏭 Realistic Logistics</option>
+                <option value="cyber">⚡ Cyber / Hologram</option>
+                <option value="heatmap">📊 Level Heatmap</option>
+              </select>
+              <div class="deck-menu-header">3D Layers</div>
+              <div class="deck-checkbox-grid">
+                <label class="deck-checkbox-label" title="Toggle Bins">
+                  <input type="checkbox" id="layerBins" checked> <span>📦 Bins</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle Racks">
+                  <input type="checkbox" id="layerRacks" checked> <span>🏗️ Racks</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle ArUco Markers">
+                  <input type="checkbox" id="layerMarkers" checked> <span>🏷️ ArUco Tags</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle Safety & NFZ">
+                  <input type="checkbox" id="layerSafety" checked> <span>🚫 Safety/NFZ</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle Charging & Pads">
+                  <input type="checkbox" id="layerPads" checked> <span>⚡ Charging</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle Aisle Signs">
+                  <input type="checkbox" id="layerSigns" checked> <span>🪧 Aisle Signs</span>
+                </label>
+                <label class="deck-checkbox-label" title="Toggle Traffic (Forklifts & AMRs)">
+                  <input type="checkbox" id="layerTraffic" checked> <span>🚜 Ground Traffic</span>
+                </label>
+              </div>
+            </div>
           </div>
 
-          <!-- Forklift Multi-Aisle Flight Corridor Controls -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Forklift:</span>
-            <button class="toolbar-btn" id="dispatchForkliftBtn" title="Dispatch Forklift to start Multi-Aisle Patrol from active Drone Aisle">⚡ Patrol from Drone Aisle</button>
-            <button class="toolbar-btn" id="toggleTrafficModeBtn" title="Toggle between All-Aisles Weaving Patrol and Perimeter Cross-Docks">🔄 All Aisles / Crossway</button>
+          <!-- Dynamic Operations Dropdown Menu -->
+          <div class="deck-dropdown-wrap">
+            <button class="deck-btn deck-dropdown-btn" id="deckOpsTrigger" title="Warehouse Fleet & Dynamic Operations">
+              <span>⚡ Operations</span> <span style="font-size:9px; opacity:0.7;">▾</span>
+            </button>
+            <div class="deck-dropdown-menu deck-menu-ops" id="deckOpsMenu">
+              <div class="deck-menu-header">Automated Nest & Charging</div>
+              <div class="deck-menu-actions">
+                <button class="deck-action-btn" id="btnRtlNest" title="Return to Automated Drone Nest & Dock">🏠 RTL to Nest</button>
+                <button class="deck-action-btn" id="btnQuickCharge" title="Fast Inductive Recharging at Nest">⚡ Quick Charge</button>
+              </div>
+              <div class="deck-menu-header">Ground Traffic & Facility</div>
+              <div class="deck-menu-actions-vertical">
+                <button class="deck-action-btn" id="dispatchForkliftBtn" title="Dispatch Forklift to start Multi-Aisle Patrol from active Drone Aisle">🚜 Patrol from Drone Aisle</button>
+                <button class="deck-action-btn" id="toggleTrafficModeBtn" title="Toggle between All-Aisles Weaving Patrol and Perimeter Cross-Docks">🔄 All Aisles / Crossway</button>
+                <div id="craneControlGroup" style="display:none; width:100%;">
+                  <button class="deck-action-btn active" id="toggleCraneBtn" title="Toggle 30-Ton Overhead Bridge Crane Front/Back Travel" style="width:100%;">🏗️ Bridge Crane: Active</button>
+                </div>
+                <button class="deck-action-btn active" id="toggleWorkersBtn" title="Toggle Warehouse Pickers & OSHA 3m Standoff Zones">👷 Pickers: Active</button>
+              </div>
+              <div class="deck-menu-header">Indoor Localization</div>
+              <div class="deck-menu-actions-vertical">
+                <button class="deck-action-btn active" id="toggleVioBtn" title="Toggle Visual-Inertial Odometry Drift & Covariance Ellipsoid">📡 VIO Drift: ON</button>
+              </div>
+            </div>
           </div>
 
-          <!-- Bridge Crane Dynamic Motion Control -->
-          <div class="toolbar-group" id="craneControlGroup" style="display:none;">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Crane:</span>
-            <button class="toolbar-btn active" id="toggleCraneBtn" title="Toggle 30-Ton Overhead Bridge Crane Front/Back Travel">🏗️ Bridge Crane: Active</button>
+          <!-- AI Inventory Defect & Discrepancy Center Button -->
+          <button class="deck-btn-alert" id="btnOpenDiscrepancyModal" title="Open AI Inventory Defect & Discrepancy Audit Center">
+            📋 AI Audit <span class="deck-audit-badge" id="btnDiscrepancyCount">0</span>
+          </button>
+
+          <!-- Clean View Mode (Hides/Shows HUDs) -->
+          <button class="deck-btn-clean" id="btnToggleHudVisibility" title="Toggle HUD Overlays (Clean View Mode)">
+            👁️ Clean View
+          </button>
+        </div>
+
+        <!-- Center Alert Stack (Cleanly Stacks Warnings Without Overlapping) -->
+        <div id="centerAlertsContainer" class="center-alerts-container">
+          <!-- Pedestrian Safety Standoff Alert Banner -->
+          <div id="pedestrianAlertBanner" class="pedestrian-alert-banner" style="display:none;">
+            <span style="font-size:20px;">👷⚠️</span>
+            <div>
+              <div style="font-weight:800; font-size:11px; color:#f87171; letter-spacing:0.5px;">OSHA PEDESTRIAN SAFETY STANDOFF</div>
+              <div id="pedestrianAlertDesc" style="font-size:10.5px; color:#cbd5e1;">Worker detected in flight corridor (2.8m) — Hovering at safe distance</div>
+            </div>
+            <span class="pedestrian-alert-badge">HOLD STANDOFF</span>
           </div>
 
-          <!-- Automated Drone Nest & RTL Controls -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Nest/RTL:</span>
-            <button class="toolbar-btn" id="btnRtlNest" title="Return to Automated Drone Nest & Dock">🏠 RTL to Nest</button>
-            <button class="toolbar-btn" id="btnQuickCharge" title="Fast Inductive Recharging at Nest">⚡ Quick Charge</button>
-          </div>
-
-          <!-- VIO Sensor Drift & EKF Filter -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">VIO/EKF:</span>
-            <button class="toolbar-btn active" id="toggleVioBtn" title="Toggle Visual-Inertial Odometry Drift & Covariance Ellipsoid">📡 VIO Drift: ON</button>
-          </div>
-
-          <!-- Warehouse Pickers & Pedestrian Standoff -->
-          <div class="toolbar-group">
-            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Workers:</span>
-            <button class="toolbar-btn active" id="toggleWorkersBtn" title="Toggle Warehouse Pickers & OSHA 3m Standoff Zones">👷 Pickers: Active</button>
-          </div>
-
-          <!-- AI Inventory Defect & Discrepancy Center -->
-          <div class="toolbar-group">
-            <button class="toolbar-btn" id="btnOpenDiscrepancyModal" style="background:rgba(239,68,68,0.18); color:#fca5a5; border-color:rgba(239,68,68,0.4);" title="Open AI Inventory Defect & Discrepancy Audit Center">📋 AI Audit (<span id="btnDiscrepancyCount">0</span> Alert)</button>
+          <!-- Traffic Hazard Conflict Banner -->
+          <div id="trafficAlertBanner" class="traffic-alert-banner">
+            <span class="traffic-alert-icon">⚠️</span>
+            <div>
+              <div id="trafficAlertTitle" class="traffic-alert-title">TRAFFIC CONFLICT DETECTED</div>
+              <div id="trafficAlertDesc" class="traffic-alert-desc">Forklift intersecting corridor (2.1m) — Executing reactive climb</div>
+            </div>
+            <span id="trafficAlertAction" class="traffic-alert-badge">CLIMB +1.8m</span>
           </div>
         </div>
 
@@ -1755,39 +2013,120 @@
           <div id="bttItems" style="color:var(--accent-emerald); font-size:10px; margin-top:2px;"></div>
         </div>
 
-        <!-- VIO & GPS-Denied EKF Telemetry Widget -->
-        <div id="vioDriftHudWidget" class="vio-hud-widget">
-          <div class="vio-hud-header">
-            <span class="status-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span>
-            <span style="font-weight:700; color:#38bdf8; font-size:10px; letter-spacing:0.5px;">VIO/EKF2 INDOOR ESTIMATOR</span>
-            <span id="vioEkfBadge" class="vio-badge-optimal">LOCKED (TAGS)</span>
-          </div>
-          <div class="vio-hud-grid">
-            <div class="vio-metric"><span class="lbl">Drift Error:</span><strong id="vioDriftVal">1.2 cm</strong></div>
-            <div class="vio-metric"><span class="lbl">3σ Bound:</span><strong id="vioSigmaVal">±2.4 cm</strong></div>
-            <div class="vio-metric"><span class="lbl">Uncorrected DR:</span><strong id="vioDrUncorrVal" style="color:#f59e0b;">18.4 cm</strong></div>
-            <div class="vio-metric"><span class="lbl">Last Fiducial:</span><strong id="vioLastTagVal" style="color:#10b981;">TAG-PAD-0</strong></div>
-          </div>
-        </div>
+        <!-- Left Side: Docked Avionics & Vision Column -->
+        <div id="leftAvionicsDock" class="left-avionics-dock">
+          <!-- Unified Telemetry & VIO Estimator Card -->
+          <div id="unifiedAvionicsCard" class="hud-dock-card">
+            <div class="hud-dock-header">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="status-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span>
+                <span class="hud-dock-title">Drone Avionics & VIO</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span id="hudSimTime" style="color:var(--accent-cyan); font-family:var(--font-mono); font-size:11px; font-weight:700;">0.0s</span>
+                <button id="avionicsMinimizeBtn" class="hud-dock-min-btn" title="Collapse / Expand Avionics">−</button>
+              </div>
+            </div>
+            <div id="avionicsBody">
+              <div class="telemetry-grid">
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Altitude</span>
+                  <span id="hudAlt" class="telemetry-value">0.00 m</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Ground Speed</span>
+                  <span id="hudSpeed" class="telemetry-value">0.00 m/s</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Battery Level</span>
+                  <span id="hudBattery" class="telemetry-value">100.0%</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">Flight State</span>
+                  <span id="hudAction" class="telemetry-value" style="color:#10b981; font-size:12px;">IDLE</span>
+                </div>
+                <div class="telemetry-item" style="grid-column: span 2;">
+                  <span class="telemetry-label">Aiming at Bin</span>
+                  <span id="hudTargetBin" class="telemetry-value" style="color:#f59e0b; font-size:12px;">N/A</span>
+                </div>
+              </div>
 
-        <!-- Pedestrian Safety Standoff Alert Banner -->
-        <div id="pedestrianAlertBanner" class="pedestrian-alert-banner" style="display:none;">
-          <span style="font-size:22px;">👷⚠️</span>
-          <div>
-            <div style="font-weight:800; font-size:12px; color:#f87171; letter-spacing:0.5px;">OSHA PEDESTRIAN SAFETY STANDOFF</div>
-            <div id="pedestrianAlertDesc" style="font-size:11px; color:#cbd5e1;">Worker detected in flight aisle corridor (Dist: 2.8m) — Hovering at safe distance</div>
+              <!-- VIO & GPS-Denied EKF Section -->
+              <div id="vioDriftHudWidget" class="hud-sub-section">
+                <div class="hud-sub-header">
+                  <span style="font-size:9.5px; text-transform:uppercase; color:#38bdf8; font-weight:700; letter-spacing:0.5px;">INDOOR VIO / EKF2 ESTIMATOR</span>
+                  <span id="vioEkfBadge" class="vio-badge-optimal">LOCKED (TAGS)</span>
+                </div>
+                <div class="vio-hud-grid">
+                  <div class="vio-metric"><span class="lbl">Drift Error:</span><strong id="vioDriftVal">1.2 cm</strong></div>
+                  <div class="vio-metric"><span class="lbl">3σ Bound:</span><strong id="vioSigmaVal">±2.4 cm</strong></div>
+                  <div class="vio-metric"><span class="lbl">Uncorrected DR:</span><strong id="vioDrUncorrVal" style="color:#f59e0b;">18.4 cm</strong></div>
+                  <div class="vio-metric"><span class="lbl">Last Fiducial:</span><strong id="vioLastTagVal" style="color:#10b981;">TAG-PAD-0</strong></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <span class="pedestrian-alert-badge">HOLD STANDOFF</span>
-        </div>
 
-        <!-- Traffic Hazard Conflict Banner -->
-        <div id="trafficAlertBanner" class="traffic-alert-banner">
-          <span class="traffic-alert-icon">⚠️</span>
-          <div>
-            <div id="trafficAlertTitle" class="traffic-alert-title">TRAFFIC CONFLICT DETECTED</div>
-            <div id="trafficAlertDesc" class="traffic-alert-desc">Forklift intersecting corridor (Dist: 2.1m) — Executing reactive climb</div>
+          <!-- Real Amazon Bin Image HUD Card (Docked in Left Column) -->
+          <div id="amazonBinHudCard" class="amazon-bin-hud minimized">
+            <div class="amz-hud-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:13px;">📦</span>
+                <span class="amz-hud-title">Amazon Bin Vision HUD</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span id="amzHudStatus" class="amz-status-pill amz-status-ready">STANDBY</span>
+                <button id="amzHudMinimizeBtn" class="amz-hud-btn" title="Toggle HUD Size">+</button>
+              </div>
+            </div>
+            <div id="amzHudBody" class="amz-hud-body">
+              <div class="amz-img-wrapper">
+                <img id="amzHudImage" src="/img/amazon/439407.jpg" alt="Real Amazon Shelf Photo" onerror="this.src='https://placehold.co/400x240/1e293b/94a3b8?text=Amazon+Bin+Image'">
+                <div id="amzLaserSweep" class="amz-laser-sweep"></div>
+                <div class="amz-img-overlay-tag">
+                  <span id="amzHudImgId">IMG #439407</span> • 1080p CMOS
+                </div>
+              </div>
+              <div class="amz-meta-row">
+                <div>
+                  <div class="amz-label">BIN IDENTIFIER</div>
+                  <div id="amzHudBinId" class="amz-value-bin">A01-R01-B01-L01-S1</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="amz-label">DECODED BARCODE</div>
+                  <div id="amzHudBarcode" class="amz-value-code">AMZN-439407</div>
+                </div>
+              </div>
+              <div class="amz-catalog-box">
+                <div class="amz-catalog-header">
+                  <span class="amz-label">SHELF CONTENTS & ASIN VERIFICATION</span>
+                  <span id="amzHudItemCount" class="amz-qty-pill">3 Items</span>
+                </div>
+                <div id="amzHudItemsList" class="amz-items-scroll">
+                  <div class="amz-item-row">
+                    <span style="color:#94a3b8; font-family:monospace; font-size:10px;">B00140V5Q8</span>
+                    <span style="color:#e2e8f0; font-size:11px;">Amazon Basics Electronics</span>
+                    <span style="color:#38bdf8; font-weight:700;">×2</span>
+                  </div>
+                </div>
+              </div>
+              <div class="amz-metrics-row">
+                <div class="amz-metric">
+                  <span class="amz-label">OPTICAL CONFIDENCE</span>
+                  <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+                    <div class="amz-conf-bar-bg">
+                      <div id="amzHudConfBar" class="amz-conf-bar-fill" style="width:98%;"></div>
+                    </div>
+                    <span id="amzHudConfVal" class="amz-conf-val">98%</span>
+                  </div>
+                </div>
+                <div class="amz-metric" style="text-align:right;">
+                  <span class="amz-label">STANDOFF / ANGLE</span>
+                  <div id="amzHudOptics" class="amz-value-dim">1.20 m • 5.8°</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <span id="trafficAlertAction" class="traffic-alert-badge">CLIMB +1.8m</span>
         </div>
 
         <!-- FPV Avionics & Scanner Reticle Overlay -->
@@ -1838,99 +2177,6 @@
             <span id="fpvSpeedVal" style="font-size:14px; font-weight:700;">1.20 m/s</span>
             <span style="font-size:9px; color:#64748b; margin-top:4px;">BATTERY</span>
             <span id="fpvBatVal" style="font-size:10px; color:#10b981;">98.5%</span>
-          </div>
-        </div>
-
-        <!-- Real Amazon Bin Image HUD Card -->
-        <div id="amazonBinHudCard" class="amazon-bin-hud">
-          <div class="amz-hud-header">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:13px;">📦</span>
-              <span class="amz-hud-title">Amazon Bin Vision HUD</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span id="amzHudStatus" class="amz-status-pill amz-status-ready">STANDBY</span>
-              <button id="amzHudMinimizeBtn" class="amz-hud-btn" title="Toggle HUD Size">−</button>
-            </div>
-          </div>
-          <div id="amzHudBody" class="amz-hud-body">
-            <div class="amz-img-wrapper">
-              <img id="amzHudImage" src="/img/amazon/439407.jpg" alt="Real Amazon Shelf Photo" onerror="this.src='https://placehold.co/400x240/1e293b/94a3b8?text=Amazon+Bin+Image'">
-              <div id="amzLaserSweep" class="amz-laser-sweep"></div>
-              <div class="amz-img-overlay-tag">
-                <span id="amzHudImgId">IMG #439407</span> • 1080p CMOS
-              </div>
-            </div>
-            <div class="amz-meta-row">
-              <div>
-                <div class="amz-label">BIN IDENTIFIER</div>
-                <div id="amzHudBinId" class="amz-value-bin">A01-R01-B01-L01-S1</div>
-              </div>
-              <div style="text-align:right;">
-                <div class="amz-label">DECODED BARCODE</div>
-                <div id="amzHudBarcode" class="amz-value-code">AMZN-439407</div>
-              </div>
-            </div>
-            <div class="amz-catalog-box">
-              <div class="amz-catalog-header">
-                <span class="amz-label">SHELF CONTENTS & ASIN VERIFICATION</span>
-                <span id="amzHudItemCount" class="amz-qty-pill">3 Items</span>
-              </div>
-              <div id="amzHudItemsList" class="amz-items-scroll">
-                <div class="amz-item-row">
-                  <span style="color:#94a3b8; font-family:monospace; font-size:10px;">B00140V5Q8</span>
-                  <span style="color:#e2e8f0; font-size:11px;">Amazon Basics Electronics</span>
-                  <span style="color:#38bdf8; font-weight:700;">×2</span>
-                </div>
-              </div>
-            </div>
-            <div class="amz-metrics-row">
-              <div class="amz-metric">
-                <span class="amz-label">OPTICAL CONFIDENCE</span>
-                <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-                  <div class="amz-conf-bar-bg">
-                    <div id="amzHudConfBar" class="amz-conf-bar-fill" style="width:98%;"></div>
-                  </div>
-                  <span id="amzHudConfVal" class="amz-conf-val">98%</span>
-                </div>
-              </div>
-              <div class="amz-metric" style="text-align:right;">
-                <span class="amz-label">STANDOFF / ANGLE</span>
-                <div id="amzHudOptics" class="amz-value-dim">1.20 m • 5.8°</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3D HUD Telemetry Overlay -->
-        <div class="hud-overlay">
-          <div class="hud-card">
-            <div class="hud-title">
-              <span>Telemetry HUD</span>
-              <span id="hudSimTime" style="color:var(--accent-blue); font-family:var(--font-mono);">0.0s</span>
-            </div>
-            <div class="telemetry-grid">
-              <div class="telemetry-item">
-                <span class="telemetry-label">Altitude</span>
-                <span id="hudAlt" class="telemetry-value">0.00 m</span>
-              </div>
-              <div class="telemetry-item">
-                <span class="telemetry-label">Ground Speed</span>
-                <span id="hudSpeed" class="telemetry-value">0.00 m/s</span>
-              </div>
-              <div class="telemetry-item">
-                <span class="telemetry-label">Battery Level</span>
-                <span id="hudBattery" class="telemetry-value">100.0%</span>
-              </div>
-              <div class="telemetry-item">
-                <span class="telemetry-label">Current Action</span>
-                <span id="hudAction" class="telemetry-value" style="color:#10b981;">IDLE</span>
-              </div>
-              <div class="telemetry-item" style="grid-column: span 2;">
-                <span class="telemetry-label">Aiming at Bin</span>
-                <span id="hudTargetBin" class="telemetry-value" style="color:#f59e0b;">N/A</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -3432,6 +3678,61 @@ let playSpeed = 5;
       if (btnExportCsv) {
         btnExportCsv.addEventListener('click', () => {
           exportDiscrepancyCSV();
+        });
+      }
+
+      // Dropdown Popover Toggles
+      const deckLayersTrigger = document.getElementById('deckLayersTrigger');
+      const deckLayersMenu = document.getElementById('deckLayersMenu');
+      const deckOpsTrigger = document.getElementById('deckOpsTrigger');
+      const deckOpsMenu = document.getElementById('deckOpsMenu');
+
+      if (deckLayersTrigger && deckLayersMenu) {
+        deckLayersTrigger.addEventListener('click', e => {
+          e.stopPropagation();
+          deckLayersMenu.classList.toggle('open');
+          if (deckOpsMenu) deckOpsMenu.classList.remove('open');
+        });
+      }
+
+      if (deckOpsTrigger && deckOpsMenu) {
+        deckOpsTrigger.addEventListener('click', e => {
+          e.stopPropagation();
+          deckOpsMenu.classList.toggle('open');
+          if (deckLayersMenu) deckLayersMenu.classList.remove('open');
+        });
+      }
+
+      // Close dropdowns on outside click
+      window.addEventListener('click', e => {
+        if (deckLayersMenu && !deckLayersMenu.contains(e.target) && e.target !== deckLayersTrigger) {
+          deckLayersMenu.classList.remove('open');
+        }
+        if (deckOpsMenu && !deckOpsMenu.contains(e.target) && e.target !== deckOpsTrigger) {
+          deckOpsMenu.classList.remove('open');
+        }
+      });
+
+      // Avionics Card Minimize / Expand Toggle
+      const avionicsMinBtn = document.getElementById('avionicsMinimizeBtn');
+      const avionicsBody = document.getElementById('avionicsBody');
+      if (avionicsMinBtn && avionicsBody) {
+        avionicsMinBtn.addEventListener('click', () => {
+          const isCollapsed = avionicsBody.style.display === 'none';
+          avionicsBody.style.display = isCollapsed ? 'block' : 'none';
+          avionicsMinBtn.innerText = isCollapsed ? '−' : '+';
+        });
+      }
+
+      // Clean View Mode Toggle (Hides/Shows HUDs)
+      const btnCleanView = document.getElementById('btnToggleHudVisibility');
+      const view3d = document.getElementById('view-3d');
+      if (btnCleanView && view3d) {
+        btnCleanView.addEventListener('click', () => {
+          view3d.classList.toggle('clean-view');
+          const isClean = view3d.classList.contains('clean-view');
+          btnCleanView.innerText = isClean ? '👁️ Restore HUD' : '👁️ Clean View';
+          btnCleanView.classList.toggle('active', isClean);
         });
       }
     }
@@ -5933,6 +6234,11 @@ let playSpeed = 5;
 
       // 2. Scan status badge and sweeping laser
       if (isLiveScan) {
+        if (hud.classList.contains('minimized')) {
+          hud.classList.remove('minimized');
+          const minBtn = document.getElementById('amzHudMinimizeBtn');
+          if (minBtn) minBtn.innerText = '−';
+        }
         if (statusPill) {
           statusPill.className = 'amz-status-pill amz-status-scanning';
           statusPill.innerText = 'SCANNING...';
