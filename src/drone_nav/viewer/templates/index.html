@@ -1377,7 +1377,219 @@
       color: var(--text-main);
       transform: translate(14px, 14px);
       max-width: 280px;
-      transition: opacity 0.15s ease;
+    /* VIO & EKF GPS-Denied Telemetry Widget */
+    .vio-hud-widget {
+      position: absolute;
+      top: 68px;
+      left: 18px;
+      background: rgba(12, 17, 26, 0.90);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 10px;
+      padding: 10px 14px;
+      z-index: 12;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 250px;
+      pointer-events: auto;
+      font-size: 11px;
+    }
+
+    .vio-hud-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 5px;
+    }
+
+    .vio-badge-optimal {
+      margin-left: auto;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #10b981;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .vio-badge-coasting {
+      margin-left: auto;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      color: #f59e0b;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .vio-hud-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .vio-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .vio-metric .lbl {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-family: var(--font-sans);
+    }
+
+    .vio-metric strong {
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    /* Pedestrian Safety Standoff Alert Banner */
+    .pedestrian-alert-banner {
+      position: absolute;
+      top: 68px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(239, 68, 68, 0.22);
+      border: 1px solid rgba(239, 68, 68, 0.7);
+      backdrop-filter: blur(14px);
+      border-radius: 10px;
+      padding: 8px 18px;
+      z-index: 13;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: alertGlowPulse 1.2s infinite alternate;
+    }
+
+    .pedestrian-alert-badge {
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Cockpit Attitude Director Indicator (ADI) */
+    .cockpit-adi-widget {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 120px;
+      height: 120px;
+      background: rgba(10, 15, 26, 0.90);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    .adi-dial {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      transform-origin: center center;
+    }
+
+    .adi-sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, #0369a1 0%, #38bdf8 100%);
+    }
+
+    .adi-ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, #78350f 0%, #451a03 100%);
+    }
+
+    .adi-horizon-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #f8fafc;
+      transform: translateY(-50%);
+    }
+
+    .adi-aircraft-symbol {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 44px;
+      height: 6px;
+      transform: translate(-50%, -50%);
+      border-bottom: 3px solid #f59e0b;
+    }
+
+    .adi-aircraft-symbol::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      background: #f59e0b;
+      border-radius: 50%;
+      transform: translateX(-50%);
+    }
+
+    .adi-roll-readout {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      font-weight: 700;
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    }
+
+    /* FPV AI Vision Detection Bounding Boxes */
+    .fpv-ai-box {
+      position: absolute;
+      border-radius: 4px;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 4px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .fpv-ai-box-label {
+      position: absolute;
+      top: -18px;
+      left: 0;
+      padding: 2px 6px;
+      border-radius: 2px;
+      white-space: nowrap;
+      font-size: 9px;
     }
   </style>
 </head>
@@ -1510,6 +1722,30 @@
             <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Crane:</span>
             <button class="toolbar-btn active" id="toggleCraneBtn" title="Toggle 30-Ton Overhead Bridge Crane Front/Back Travel">🏗️ Bridge Crane: Active</button>
           </div>
+
+          <!-- Automated Drone Nest & RTL Controls -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Nest/RTL:</span>
+            <button class="toolbar-btn" id="btnRtlNest" title="Return to Automated Drone Nest & Dock">🏠 RTL to Nest</button>
+            <button class="toolbar-btn" id="btnQuickCharge" title="Fast Inductive Recharging at Nest">⚡ Quick Charge</button>
+          </div>
+
+          <!-- VIO Sensor Drift & EKF Filter -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">VIO/EKF:</span>
+            <button class="toolbar-btn active" id="toggleVioBtn" title="Toggle Visual-Inertial Odometry Drift & Covariance Ellipsoid">📡 VIO Drift: ON</button>
+          </div>
+
+          <!-- Warehouse Pickers & Pedestrian Standoff -->
+          <div class="toolbar-group">
+            <span style="font-size:10px; text-transform:uppercase; color:var(--text-dim); font-weight:700;">Workers:</span>
+            <button class="toolbar-btn active" id="toggleWorkersBtn" title="Toggle Warehouse Pickers & OSHA 3m Standoff Zones">👷 Pickers: Active</button>
+          </div>
+
+          <!-- AI Inventory Defect & Discrepancy Center -->
+          <div class="toolbar-group">
+            <button class="toolbar-btn" id="btnOpenDiscrepancyModal" style="background:rgba(239,68,68,0.18); color:#fca5a5; border-color:rgba(239,68,68,0.4);" title="Open AI Inventory Defect & Discrepancy Audit Center">📋 AI Audit (<span id="btnDiscrepancyCount">0</span> Alert)</button>
+          </div>
         </div>
 
         <!-- Floating Bin Hover Tooltip -->
@@ -1517,6 +1753,31 @@
           <div id="bttCode" style="font-weight:700; color:var(--accent-blue); font-family:var(--font-mono); font-size:12px;"></div>
           <div id="bttLoc" style="color:var(--text-muted); font-size:10px; margin-top:2px;"></div>
           <div id="bttItems" style="color:var(--accent-emerald); font-size:10px; margin-top:2px;"></div>
+        </div>
+
+        <!-- VIO & GPS-Denied EKF Telemetry Widget -->
+        <div id="vioDriftHudWidget" class="vio-hud-widget">
+          <div class="vio-hud-header">
+            <span class="status-dot" style="background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span>
+            <span style="font-weight:700; color:#38bdf8; font-size:10px; letter-spacing:0.5px;">VIO/EKF2 INDOOR ESTIMATOR</span>
+            <span id="vioEkfBadge" class="vio-badge-optimal">LOCKED (TAGS)</span>
+          </div>
+          <div class="vio-hud-grid">
+            <div class="vio-metric"><span class="lbl">Drift Error:</span><strong id="vioDriftVal">1.2 cm</strong></div>
+            <div class="vio-metric"><span class="lbl">3σ Bound:</span><strong id="vioSigmaVal">±2.4 cm</strong></div>
+            <div class="vio-metric"><span class="lbl">Uncorrected DR:</span><strong id="vioDrUncorrVal" style="color:#f59e0b;">18.4 cm</strong></div>
+            <div class="vio-metric"><span class="lbl">Last Fiducial:</span><strong id="vioLastTagVal" style="color:#10b981;">TAG-PAD-0</strong></div>
+          </div>
+        </div>
+
+        <!-- Pedestrian Safety Standoff Alert Banner -->
+        <div id="pedestrianAlertBanner" class="pedestrian-alert-banner" style="display:none;">
+          <span style="font-size:22px;">👷⚠️</span>
+          <div>
+            <div style="font-weight:800; font-size:12px; color:#f87171; letter-spacing:0.5px;">OSHA PEDESTRIAN SAFETY STANDOFF</div>
+            <div id="pedestrianAlertDesc" style="font-size:11px; color:#cbd5e1;">Worker detected in flight aisle corridor (Dist: 2.8m) — Hovering at safe distance</div>
+          </div>
+          <span class="pedestrian-alert-badge">HOLD STANDOFF</span>
         </div>
 
         <!-- Traffic Hazard Conflict Banner -->
@@ -1551,7 +1812,27 @@
             <div class="fpv-center-dot"></div>
             <div class="fpv-horizon-bar"></div>
             <div id="fpvLockTag" class="fpv-lock-tag">[ TARGET LOCKED: BIN A01-R01-B01-L01-S1 ]</div>
+
+            <!-- FPV AI Object Detection Bounding Boxes -->
+            <div id="fpvAiDefectBox" class="fpv-ai-box" style="display:none; border:2px solid #ef4444; color:#ef4444; width:110px; height:65px; top:40px; left:25px;">
+              <span id="fpvAiDefectLabel" class="fpv-ai-box-label" style="background:#ef4444; color:#fff;">AI DEFECT: CRUSHED CARTON 92%</span>
+            </div>
+            <div id="fpvAiWorkerBox" class="fpv-ai-box" style="display:none; border:2px solid #10b981; color:#10b981; width:75px; height:120px; top:10px; left:-130px;">
+              <span id="fpvAiWorkerLabel" class="fpv-ai-box-label" style="background:#10b981; color:#fff;">HUMAN_WORKER: 99% [2.8m]</span>
+            </div>
           </div>
+
+          <!-- Cockpit Attitude Director Indicator (ADI / Artificial Horizon) -->
+          <div id="cockpitAdiWidget" class="cockpit-adi-widget">
+            <div class="adi-dial" id="adiDial">
+              <div class="adi-sky"></div>
+              <div class="adi-ground"></div>
+              <div class="adi-horizon-line"></div>
+            </div>
+            <div class="adi-aircraft-symbol"></div>
+            <div class="adi-roll-readout" id="adiRollReadout">R: 0.0° | P: 0.0°</div>
+          </div>
+
           <div class="fpv-tape-right">
             <span style="font-size:9px; color:#64748b;">SPEED</span>
             <span id="fpvSpeedVal" style="font-size:14px; font-weight:700;">1.20 m/s</span>
@@ -2475,6 +2756,75 @@
       <div id="modalDetails" style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
         <!-- Injected details -->
       </div>
+  </div>
+
+  <!-- AI Inventory Defect & Discrepancy Audit Center Modal -->
+  <div id="discrepancyModal" class="modal-backdrop">
+    <div class="modal-box" style="max-width:880px; width:92%; max-height:85vh; display:flex; flex-direction:column; background:rgba(12,17,28,0.96); border:1px solid rgba(239,68,68,0.35); box-shadow:0 12px 48px rgba(0,0,0,0.85);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">📋</span>
+          <div>
+            <h3 style="font-size:16px; color:#f87171; font-weight:800; letter-spacing:0.5px; margin:0;">AI INVENTORY DEFECT & DISCREPANCY AUDIT</h3>
+            <span style="font-size:11px; color:var(--text-muted);">Real-time computer vision discrepancy detection & quality audit</span>
+          </div>
+        </div>
+        <button id="closeDiscrepancyModalBtn" class="round-btn" style="width:28px; height:28px;">✕</button>
+      </div>
+
+      <!-- KPI summary metrics -->
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:14px;">
+        <div class="card" style="padding:10px; text-align:center; background:rgba(20,28,43,0.7);">
+          <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; font-weight:700;">TOTAL SCANNED</div>
+          <div id="auditTotalScanned" style="font-size:20px; font-weight:800; color:var(--accent-cyan); font-family:var(--font-mono); margin-top:2px;">0</div>
+        </div>
+        <div class="card" style="padding:10px; text-align:center; background:rgba(20,28,43,0.7);">
+          <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; font-weight:700;">DISCREPANCIES FOUND</div>
+          <div id="auditDiscrepanciesFound" style="font-size:20px; font-weight:800; color:#f87171; font-family:var(--font-mono); margin-top:2px;">0</div>
+        </div>
+        <div class="card" style="padding:10px; text-align:center; background:rgba(20,28,43,0.7);">
+          <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; font-weight:700;">ACCURACY RATE</div>
+          <div id="auditAccuracyRate" style="font-size:20px; font-weight:800; color:#10b981; font-family:var(--font-mono); margin-top:2px;">100%</div>
+        </div>
+        <div class="card" style="padding:10px; text-align:center; background:rgba(20,28,43,0.7);">
+          <div style="font-size:9px; color:var(--text-dim); text-transform:uppercase; font-weight:700;">DEFECT CATEGORIES</div>
+          <div id="auditDefectTypesSummary" style="font-size:11px; font-weight:700; color:#f59e0b; margin-top:6px;">0 Categories</div>
+        </div>
+      </div>
+
+      <!-- Filter Buttons & Export -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="display:flex; gap:6px;" id="auditFilterButtonGroup">
+          <button class="toolbar-btn active audit-filter-btn" data-filter="all">All Discrepancies</button>
+          <button class="toolbar-btn audit-filter-btn" data-filter="qty_mismatch">Qty Mismatch</button>
+          <button class="toolbar-btn audit-filter-btn" data-filter="empty_bin">Empty Bin</button>
+          <button class="toolbar-btn audit-filter-btn" data-filter="package_damage">Package Damage</button>
+          <button class="toolbar-btn audit-filter-btn" data-filter="surface_defect">Surface Defect</button>
+        </div>
+        <button id="btnExportDiscrepancyCsv" class="btn-primary" style="padding:5px 12px; font-size:11px; background:#10b981; border:none; cursor:pointer;">📥 Export Audit CSV</button>
+      </div>
+
+      <!-- Discrepancy Table -->
+      <div style="overflow-y:auto; flex:1; border:1px solid var(--border-subtle); border-radius:6px; max-height:360px;">
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+          <thead style="background:var(--bg-surface); position:sticky; top:0; z-index:2;">
+            <tr style="text-align:left; color:var(--text-muted); border-bottom:1px solid var(--border-subtle);">
+              <th style="padding:8px 10px;">Bin ID</th>
+              <th style="padding:8px 10px;">Defect Type</th>
+              <th style="padding:8px 10px;">Severity</th>
+              <th style="padding:8px 10px;">Expected vs Found</th>
+              <th style="padding:8px 10px;">AI Diagnosis</th>
+              <th style="padding:8px 10px;">Confidence</th>
+              <th style="padding:8px 10px; text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="discrepancyTableBody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:24px; color:var(--text-dim);">No discrepancies detected yet. Run a mission to scan inventory.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -2528,6 +2878,42 @@ let playSpeed = 5;
     let bridgeCraneStrobes = [];
     let isBridgeCraneActive = true;
 
+    // 1. Automated Drone Nest & Inductive Docking State
+    let droneNestGroup = null;
+    let nestCanopyLeft = null, nestCanopyRight = null;
+    let nestCanopyAngle = 1.35; // 0 = closed, 1.35 = fully open
+    let nestTargetCanopyAngle = 1.35;
+    let nestChargingRings = null;
+    let isDroneDocked = false;
+    let isNestCharging = false;
+    let nestCoords = [2.0, 2.0, 0.0];
+    let isRtlActive = false;
+
+    // 2. Realistic GPS-Denied Sensor Drift & VIO Kalman Filter State
+    let vioCovarianceMesh = null;
+    let isVioDriftVisible = true;
+    let accumulatedVioDrift = { x: 0, y: 0, z: 0 };
+    let lastMarkerObsTime = 0;
+    let lastObservedMarkerId = 'TAG-PAD-0';
+    let currentDriftErrorCm = 1.2;
+    let currentSigma3Cm = 2.4;
+
+    // 3. Aerodynamic Environmental Physics & Drone Attitude Dynamics State
+    let droneAttitude = { roll: 0, pitch: 0, yaw: 0 };
+    let hvacFanMeshes = [];
+    let hvacParticleGroup = null;
+
+    // 4. Warehouse Pickers & Pedestrian Safety Standoff State
+    let humanWorkerEntities = [];
+    let isWorkersActive = true;
+    let isPedestrianStandoff = false;
+    let pedestrianStandoffDist = 999.0;
+
+    // 5. AI Defect & Inventory Discrepancy Detection State
+    let discrepancyBadgesGroup = null;
+    let missionDiscrepancies = [];
+    let activeDiscrepancyFilter = 'all';
+
     function playScanChirp() {
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2543,6 +2929,42 @@ let playSpeed = 5;
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.09);
+      } catch (e) {}
+    }
+
+    function playStandoffAlertTone() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(820, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.18);
+      } catch (e) {}
+    }
+
+    function playEkfUpdateTone() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(2400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1400, audioCtx.currentTime + 0.07);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
       } catch (e) {}
     }
 
@@ -2926,6 +3348,92 @@ let playSpeed = 5;
           toggleTrafficRoutingMode();
         });
       }
+
+      // Automated Drone Nest & RTL Handlers
+      const btnRtl = document.getElementById('btnRtlNest');
+      if (btnRtl) {
+        btnRtl.addEventListener('click', () => {
+          triggerRtlToNest();
+        });
+      }
+
+      const btnCharge = document.getElementById('btnQuickCharge');
+      if (btnCharge) {
+        btnCharge.addEventListener('click', () => {
+          quickChargeAtNest();
+        });
+      }
+
+      // VIO Sensor Drift & Covariance Ellipsoid Toggle
+      const toggleVioBtn = document.getElementById('toggleVioBtn');
+      if (toggleVioBtn) {
+        toggleVioBtn.addEventListener('click', () => {
+          isVioDriftVisible = !isVioDriftVisible;
+          toggleVioBtn.classList.toggle('active', isVioDriftVisible);
+          toggleVioBtn.innerText = isVioDriftVisible ? '📡 VIO Drift: ON' : '📡 VIO Drift: OFF';
+          if (vioCovarianceMesh) vioCovarianceMesh.visible = isVioDriftVisible;
+          const hud = document.getElementById('vioDriftHudWidget');
+          if (hud) hud.style.display = isVioDriftVisible ? 'flex' : 'none';
+        });
+      }
+
+      // Warehouse Pickers & Pedestrian Standoff Toggle
+      const toggleWorkersBtn = document.getElementById('toggleWorkersBtn');
+      if (toggleWorkersBtn) {
+        toggleWorkersBtn.addEventListener('click', () => {
+          isWorkersActive = !isWorkersActive;
+          toggleWorkersBtn.classList.toggle('active', isWorkersActive);
+          toggleWorkersBtn.innerText = isWorkersActive ? '👷 Pickers: Active' : '👷 Pickers: Paused';
+          humanWorkerEntities.forEach(w => {
+            if (w.group) w.group.visible = isWorkersActive;
+          });
+          if (!isWorkersActive) {
+            isPedestrianStandoff = false;
+            const banner = document.getElementById('pedestrianAlertBanner');
+            if (banner) banner.style.display = 'none';
+          }
+        });
+      }
+
+      // AI Inventory Defect & Discrepancy Modal Handlers
+      const btnOpenDisc = document.getElementById('btnOpenDiscrepancyModal');
+      const discModal = document.getElementById('discrepancyModal');
+      const btnCloseDisc = document.getElementById('closeDiscrepancyModalBtn');
+
+      if (btnOpenDisc && discModal) {
+        btnOpenDisc.addEventListener('click', () => {
+          renderDiscrepancyModalTable();
+          discModal.style.display = 'flex';
+        });
+      }
+      if (btnCloseDisc && discModal) {
+        btnCloseDisc.addEventListener('click', () => {
+          discModal.style.display = 'none';
+        });
+      }
+      if (discModal) {
+        discModal.addEventListener('click', e => {
+          if (e.target === discModal) discModal.style.display = 'none';
+        });
+      }
+
+      // Filter Buttons in Audit Modal
+      document.querySelectorAll('.audit-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.audit-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeDiscrepancyFilter = btn.dataset.filter;
+          renderDiscrepancyModalTable();
+        });
+      });
+
+      // Export Discrepancy CSV
+      const btnExportCsv = document.getElementById('btnExportDiscrepancyCsv');
+      if (btnExportCsv) {
+        btnExportCsv.addEventListener('click', () => {
+          exportDiscrepancyCSV();
+        });
+      }
     }
 
     function generateAllAislesPath(aisles, fb, startAisleId = null) {
@@ -3060,6 +3568,453 @@ let playSpeed = 5;
       }
     }
 
+    // ----------------------------------------------------
+    // Automated Drone Nest & Inductive Docking System
+    // ----------------------------------------------------
+    function buildDroneNestMesh(padX, padY) {
+      droneNestGroup = new THREE.Group();
+      droneNestGroup.position.set(padX, padY, 0);
+      nestCoords = [padX, padY, 0];
+
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.8 });
+      const steelMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.9, roughness: 0.2 });
+
+      // 1. Heavy Octagonal Base Frame
+      const baseGeo = new THREE.CylinderGeometry(1.3, 1.45, 0.18, 8);
+      const base = new THREE.Mesh(baseGeo, darkMat);
+      base.rotation.x = Math.PI / 2;
+      base.position.z = 0.09;
+      base.receiveShadow = true;
+      droneNestGroup.add(base);
+
+      // 2. Beveled Perimeter Ramp (Safety Yellow Trim)
+      const trimGeo = new THREE.RingGeometry(1.28, 1.42, 8);
+      const trimMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, side: THREE.DoubleSide });
+      const trim = new THREE.Mesh(trimGeo, trimMat);
+      trim.position.z = 0.185;
+      droneNestGroup.add(trim);
+
+      // 3. Center Inductive Charging Plate
+      const plateGeo = new THREE.CylinderGeometry(0.72, 0.72, 0.04, 32);
+      const plateMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2, metalness: 0.85 });
+      const plate = new THREE.Mesh(plateGeo, plateMat);
+      plate.rotation.x = Math.PI / 2;
+      plate.position.z = 0.19;
+      droneNestGroup.add(plate);
+
+      // 4. Concentric Glowing Inductive Charging Rings
+      const ringGeo = new THREE.RingGeometry(0.38, 0.56, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
+      nestChargingRings = new THREE.Mesh(ringGeo, ringMat);
+      nestChargingRings.position.z = 0.215;
+      droneNestGroup.add(nestChargingRings);
+
+      // 5. AprilTag Precision Landing Decal in Center
+      const tagGeo = new THREE.PlaneGeometry(0.32, 0.32);
+      const tagDecal = new THREE.Mesh(tagGeo, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      tagDecal.position.z = 0.22;
+      droneNestGroup.add(tagDecal);
+
+      const tagInner = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.24), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+      tagInner.position.z = 0.222;
+      droneNestGroup.add(tagInner);
+
+      const cross1 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, 0.002), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      cross1.position.z = 0.224;
+      droneNestGroup.add(cross1);
+      const cross2 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, 0.002), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      cross2.rotation.z = Math.PI / 2;
+      cross2.position.z = 0.224;
+      droneNestGroup.add(cross2);
+
+      // 6. Dual Motorized Clamshell Canopy Doors
+      const hingeL = new THREE.Group();
+      hingeL.position.set(-0.95, 0, 0.18);
+      const shellGeo = new THREE.CylinderGeometry(0.92, 0.92, 1.8, 16, 1, false, 0, Math.PI);
+      const shellMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.7, roughness: 0.3, side: THREE.DoubleSide });
+      const shellL = new THREE.Mesh(shellGeo, shellMat);
+      shellL.rotation.z = Math.PI / 2;
+      shellL.position.set(0.95, 0, 0);
+      hingeL.add(shellL);
+      droneNestGroup.add(hingeL);
+      nestCanopyLeft = hingeL;
+
+      const hingeR = new THREE.Group();
+      hingeR.position.set(0.95, 0, 0.18);
+      const shellR = new THREE.Mesh(shellGeo, shellMat);
+      shellR.rotation.z = -Math.PI / 2;
+      shellR.position.set(-0.95, 0, 0);
+      hingeR.add(shellR);
+      droneNestGroup.add(hingeR);
+      nestCanopyRight = hingeR;
+
+      // 7. Corner Status Towers with Beacons
+      [[-1.1, -1.1], [1.1, -1.1], [1.1, 1.1], [-1.1, 1.1]].forEach(([bx, by]) => {
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.45, 8), steelMat);
+        post.rotation.x = Math.PI / 2;
+        post.position.set(bx, by, 0.3);
+        droneNestGroup.add(post);
+
+        const beacon = new THREE.Mesh(
+          new THREE.SphereGeometry(0.045, 8, 8),
+          new THREE.MeshBasicMaterial({ color: 0x10b981 })
+        );
+        beacon.position.set(bx, by, 0.54);
+        droneNestGroup.add(beacon);
+      });
+
+      // 8. Micro-Weather Anemometer Mast
+      const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.8), steelMat);
+      mast.rotation.x = Math.PI / 2;
+      mast.position.set(-1.1, 1.1, 0.5);
+      droneNestGroup.add(mast);
+
+      padsGroup.add(droneNestGroup);
+    }
+
+    function triggerRtlToNest() {
+      isRtlActive = true;
+      pausePlayback();
+      nestTargetCanopyAngle = 1.35; // Open canopy
+      const alertBanner = document.getElementById('trafficAlertBanner');
+      if (alertBanner) {
+        alertBanner.style.display = 'flex';
+        alertBanner.style.background = 'rgba(56, 189, 248, 0.95)';
+        alertBanner.style.borderColor = '#38bdf8';
+        document.getElementById('trafficAlertTitle').innerText = 'AUTONOMOUS RTL TO NEST';
+        document.getElementById('trafficAlertDesc').innerText = `Navigating to Automated Drone Nest at (${nestCoords[0].toFixed(1)}, ${nestCoords[1].toFixed(1)}) for precision docking`;
+        document.getElementById('trafficAlertAction').innerText = 'RTL ACTIVE 🏠';
+      }
+
+      // Smooth descent / glide to nest
+      let step = 0;
+      const startPos = [droneMesh.position.x, droneMesh.position.y, droneMesh.position.z];
+      const rtlTimer = setInterval(() => {
+        step += 0.04;
+        if (step >= 1.0) {
+          clearInterval(rtlTimer);
+          droneMesh.position.set(nestCoords[0], nestCoords[1], 0.22);
+          isDroneDocked = true;
+          isNestCharging = true;
+          nestTargetCanopyAngle = 0.25; // Close canopy partially
+          quickChargeAtNest();
+          if (alertBanner) {
+            document.getElementById('trafficAlertTitle').innerText = 'DOCKED AT NEST';
+            document.getElementById('trafficAlertDesc').innerText = 'Inductive wireless charging active (100W Fast Charge)';
+            document.getElementById('trafficAlertAction').innerText = 'CHARGING ⚡';
+            setTimeout(() => { alertBanner.style.display = 'none'; }, 2500);
+          }
+          return;
+        }
+        const curX = startPos[0] + step * (nestCoords[0] - startPos[0]);
+        const curY = startPos[1] + step * (nestCoords[1] - startPos[1]);
+        const curZ = Math.max(0.22, startPos[2] + step * (0.22 - startPos[2]));
+        droneMesh.position.set(curX, curY, curZ);
+      }, 30);
+    }
+
+    function quickChargeAtNest() {
+      isNestCharging = true;
+      const elBat = document.getElementById('fpvBatVal');
+      const hudBat = document.getElementById('hudBattery');
+      let bat = 45;
+      const chgTimer = setInterval(() => {
+        bat += 4;
+        if (bat >= 100) {
+          bat = 100;
+          clearInterval(chgTimer);
+          isNestCharging = false;
+        }
+        if (elBat) elBat.innerText = `${bat.toFixed(1)}%`;
+        if (hudBat) hudBat.innerText = `${bat.toFixed(1)}%`;
+      }, 50);
+    }
+
+    // ----------------------------------------------------
+    // Warehouse Pickers & Pedestrian Standoff System
+    // ----------------------------------------------------
+    function buildHumanPickerMesh(cartColor = 0x2563eb) {
+      const group = new THREE.Group();
+
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.6 });
+      const vestMat = new THREE.MeshStandardMaterial({ color: 0x84cc16, roughness: 0.4 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.7 });
+      const bootMat = new THREE.MeshStandardMaterial({ color: 0x3f3f46, roughness: 0.8 });
+      const hatMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.3 });
+      const cartMat = new THREE.MeshStandardMaterial({ color: cartColor, metalness: 0.6, roughness: 0.3 });
+      const boxMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.8 });
+
+      // Torso & Hi-vis vest
+      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.22, 0.52), vestMat);
+      torso.position.set(0, 0, 1.18);
+      group.add(torso);
+
+      const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.24, 0.06), new THREE.MeshBasicMaterial({ color: 0xe2e8f0 }));
+      stripe.position.set(0, 0, 1.2);
+      group.add(stripe);
+
+      // Head & Hard Hat
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), skinMat);
+      head.position.set(0, 0, 1.55);
+      group.add(head);
+
+      const hat = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 12, 0, Math.PI * 2, 0, Math.PI / 2), hatMat);
+      hat.rotation.x = -Math.PI / 2;
+      hat.position.set(0, 0, 1.62);
+      group.add(hat);
+
+      // Legs
+      const legGeo = new THREE.BoxGeometry(0.12, 0.14, 0.65);
+      const legL = new THREE.Mesh(legGeo, pantsMat);
+      legL.position.set(-0.11, 0, 0.60);
+      group.add(legL);
+      const legR = new THREE.Mesh(legGeo, pantsMat);
+      legR.position.set(0.11, 0, 0.60);
+      group.add(legR);
+
+      // Boots
+      const bootGeo = new THREE.BoxGeometry(0.13, 0.22, 0.12);
+      const bootL = new THREE.Mesh(bootGeo, bootMat);
+      bootL.position.set(-0.11, 0.04, 0.06);
+      group.add(bootL);
+      const bootR = new THREE.Mesh(bootGeo, bootMat);
+      bootR.position.set(0.11, 0.04, 0.06);
+      group.add(bootR);
+
+      // Warehouse Picking Roll-Cage Cart
+      const cartBase = new THREE.Mesh(new THREE.BoxGeometry(0.85, 1.1, 0.12), cartMat);
+      cartBase.position.set(0, 0.72, 0.18);
+      group.add(cartBase);
+
+      const frameGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.2, 8);
+      [[-0.4, 0.2], [0.4, 0.2], [-0.4, 1.25], [0.4, 1.25]].forEach(([fx, fy]) => {
+        const fMesh = new THREE.Mesh(frameGeo, cartMat);
+        fMesh.rotation.x = Math.PI / 2;
+        fMesh.position.set(fx, fy, 0.75);
+        group.add(fMesh);
+      });
+
+      const handle = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.04, 0.04), cartMat);
+      handle.position.set(0, 0.22, 0.95);
+      group.add(handle);
+
+      const b1 = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.42, 0.32), boxMat);
+      b1.position.set(-0.18, 0.65, 0.40);
+      group.add(b1);
+      const b2 = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.38, 0.28), boxMat);
+      b2.position.set(0.18, 0.75, 0.38);
+      group.add(b2);
+
+      // OSHA 3.0-meter Pedestrian Standoff Floor Buffer Ring
+      const bufGeo = new THREE.RingGeometry(1.45, 1.60, 32);
+      const bufMat = new THREE.MeshBasicMaterial({
+        color: 0xef4444,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.38
+      });
+      const bufRing = new THREE.Mesh(bufGeo, bufMat);
+      bufRing.position.set(0, 0.35, 0.02);
+      group.add(bufRing);
+
+      return { group, legL, legR, bufRing };
+    }
+
+    // ----------------------------------------------------
+    // High-Bay Industrial HVAC Ventilation Ceiling Blowers
+    // ----------------------------------------------------
+    function buildHvacCeilingFans(bounds) {
+      hvacFanMeshes = [];
+      const { cx, cy, fW, fH, ch } = bounds;
+      const fanPositions = [
+        [cx - fW * 0.25, cy - fH * 0.25],
+        [cx + fW * 0.25, cy - fH * 0.25],
+        [cx - fW * 0.25, cy + fH * 0.25],
+        [cx + fW * 0.25, cy + fH * 0.25]
+      ];
+
+      const fanGroup = new THREE.Group();
+      const steelMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 });
+      const bladeMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 });
+
+      fanPositions.forEach(([fx, fy]) => {
+        const housing = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.35, 24), steelMat);
+        housing.position.set(fx, fy, ch - 0.4);
+        housing.rotation.x = Math.PI / 2;
+        fanGroup.add(housing);
+
+        const bladeHub = new THREE.Group();
+        bladeHub.position.set(fx, fy, ch - 0.45);
+        for (let b = 0; b < 4; b++) {
+          const blade = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.35, 0.02), bladeMat);
+          blade.rotation.z = (b * Math.PI) / 2;
+          bladeHub.add(blade);
+        }
+        fanGroup.add(bladeHub);
+        hvacFanMeshes.push({ hub: bladeHub, x: fx, y: fy });
+      });
+
+      // Drifting airflow streamline particle system
+      const pCount = 80;
+      const pGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount; i++) {
+        const baseFan = fanPositions[i % fanPositions.length];
+        posArray[i * 3] = baseFan[0] + (Math.random() - 0.5) * 1.5;
+        posArray[i * 3 + 1] = baseFan[1] + (Math.random() - 0.5) * 1.5;
+        posArray[i * 3 + 2] = 0.5 + Math.random() * (ch - 1.2);
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const pMat = new THREE.PointsMaterial({
+        color: 0x38bdf8,
+        size: 0.08,
+        transparent: true,
+        opacity: 0.45
+      });
+      hvacParticleGroup = new THREE.Points(pGeo, pMat);
+      fanGroup.add(hvacParticleGroup);
+
+      worldGroup.add(fanGroup);
+    }
+
+    // ----------------------------------------------------
+    // AI Inventory Defect & Discrepancy Detection Badges
+    // ----------------------------------------------------
+    function createDiscrepancyBadgeMesh(type, severity) {
+      const g = new THREE.Group();
+      let color = 0xf59e0b; // Amber default
+      if (severity === 'high' || type === 'empty_bin') color = 0xef4444; // Red for critical
+
+      const diamondGeo = new THREE.OctahedronGeometry(0.20, 0);
+      const diamondMat = new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: 0.7,
+        roughness: 0.2
+      });
+      const diamond = new THREE.Mesh(diamondGeo, diamondMat);
+      g.add(diamond);
+
+      const haloGeo = new THREE.RingGeometry(0.26, 0.32, 16);
+      const haloMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      g.add(halo);
+
+      return g;
+    }
+
+    function updateDiscrepanciesUI(scans) {
+      if (!scans) return;
+      missionDiscrepancies = scans.filter(s => s.discrepancy_type && s.discrepancy_type !== 'none');
+
+      const countEl = document.getElementById('btnDiscrepancyCount');
+      if (countEl) countEl.innerText = missionDiscrepancies.length;
+
+      if (discrepancyBadgesGroup) {
+        while (discrepancyBadgesGroup.children.length > 0) {
+          discrepancyBadgesGroup.remove(discrepancyBadgesGroup.children[0]);
+        }
+
+        missionDiscrepancies.forEach(d => {
+          if (worldBinsMap.has(d.bin_id)) {
+            const b = worldBinsMap.get(d.bin_id);
+            const badge = createDiscrepancyBadgeMesh(d.discrepancy_type, d.discrepancy_severity);
+            const normal = b.normal || [0, 1, 0];
+            badge.position.set(
+              b.center[0] + normal[0] * 0.38,
+              b.center[1] + normal[1] * 0.38,
+              b.center[2]
+            );
+            discrepancyBadgesGroup.add(badge);
+          }
+        });
+      }
+
+      renderDiscrepancyModalTable();
+    }
+
+    function renderDiscrepancyModalTable() {
+      const tbody = document.getElementById('discrepancyTableBody');
+      if (!tbody) return;
+
+      const totalScanned = missionReplayData && missionReplayData.scans ? missionReplayData.scans.length : 0;
+      const totalDisc = missionDiscrepancies.length;
+      const accuracy = totalScanned > 0 ? (((totalScanned - totalDisc) / totalScanned) * 100).toFixed(1) : '100.0';
+
+      const elTotalScanned = document.getElementById('auditTotalScanned');
+      if (elTotalScanned) elTotalScanned.innerText = totalScanned;
+      const elTotalDisc = document.getElementById('auditDiscrepanciesFound');
+      if (elTotalDisc) elTotalDisc.innerText = totalDisc;
+      const elAcc = document.getElementById('auditAccuracyRate');
+      if (elAcc) elAcc.innerText = `${accuracy}%`;
+
+      const typeSet = new Set(missionDiscrepancies.map(d => d.discrepancy_type));
+      const elTypeSum = document.getElementById('auditDefectTypesSummary');
+      if (elTypeSum) elTypeSum.innerText = `${typeSet.size} Defect Classes`;
+
+      let filtered = missionDiscrepancies;
+      if (activeDiscrepancyFilter !== 'all') {
+        filtered = missionDiscrepancies.filter(d => d.discrepancy_type === activeDiscrepancyFilter);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-dim);">No discrepancies matching filter.</td></tr>';
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(d => {
+        const isCritical = d.discrepancy_severity === 'high';
+        const sevColor = isCritical ? '#ef4444' : '#f59e0b';
+        const typeLabel = (d.discrepancy_type || 'ANOMALY').replace('_', ' ').toUpperCase();
+        html += `
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+            <td style="padding:8px 10px; font-family:var(--font-mono); font-weight:700; color:var(--accent-blue);">${d.bin_id}</td>
+            <td style="padding:8px 10px; font-weight:700;"><span style="background:${sevColor}22; color:${sevColor}; padding:2px 6px; border-radius:4px; border:1px solid ${sevColor}55;">${typeLabel}</span></td>
+            <td style="padding:8px 10px; text-transform:uppercase; font-size:10px; color:${sevColor}; font-weight:700;">${d.discrepancy_severity || 'LOW'}</td>
+            <td style="padding:8px 10px; font-family:var(--font-mono);">Exp: <strong>${d.expected_qty || 1}</strong> | Found: <strong style="color:${d.detected_qty === 0 ? '#ef4444' : '#f59e0b'};">${d.detected_qty !== undefined ? d.detected_qty : '?'}</strong></td>
+            <td style="padding:8px 10px; color:var(--text-main);">${d.defect_label || 'Physical condition anomaly'}</td>
+            <td style="padding:8px 10px; font-family:var(--font-mono); color:#10b981;">${((d.defect_confidence || 0.92) * 100).toFixed(1)}%</td>
+            <td style="padding:8px 10px; text-align:center;">
+              <button class="toolbar-btn" style="padding:2px 8px; font-size:10px;" onclick="focusBinIn3D('${d.bin_id}')">🔍 Focus 3D</button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function exportDiscrepancyCSV() {
+      if (missionDiscrepancies.length === 0) {
+        alert('No discrepancies to export.');
+        return;
+      }
+      let csv = 'Bin_ID,Defect_Type,Severity,Expected_Qty,Detected_Qty,AI_Diagnosis,Confidence_Pct\n';
+      missionDiscrepancies.forEach(d => {
+        csv += `"${d.bin_id}","${d.discrepancy_type}","${d.discrepancy_severity}",${d.expected_qty || 1},${d.detected_qty !== undefined ? d.detected_qty : 0},"${(d.defect_label || '').replace(/"/g, '""')}",${((d.defect_confidence || 0.9) * 100).toFixed(1)}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `inventory_discrepancy_audit_${lastMissionId || 'latest'}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    window.focusBinIn3D = function(binId) {
+      const discModal = document.getElementById('discrepancyModal');
+      if (discModal) discModal.style.display = 'none';
+      if (worldBinsMap.has(binId)) {
+        const b = worldBinsMap.get(binId);
+        controls.target.set(b.center[0], b.center[1], b.center[2]);
+        const norm = b.normal || [0, 1, 0];
+        camera3D.position.set(b.center[0] + norm[0] * 2.8, b.center[1] + norm[1] * 2.8, b.center[2] + 0.6);
+        controls.update();
+      }
+    };
+
     function applyVisualMode() {
       if (!instancedBins || binDataList.length === 0) return;
       const color = new THREE.Color();
@@ -3138,6 +4093,18 @@ let playSpeed = 5;
       bridgeCraneStrobes = [];
       const craneBtnGrp = document.getElementById('craneControlGroup');
       if (craneBtnGrp) craneBtnGrp.style.display = 'none';
+
+      // Drone Nest, Workers, HVAC, Discrepancies Resets
+      droneNestGroup = null;
+      nestCanopyLeft = null;
+      nestCanopyRight = null;
+      nestChargingRings = null;
+      humanWorkerEntities = [];
+      hvacFanMeshes = [];
+      hvacParticleGroup = null;
+      discrepancyBadgesGroup = null;
+      const pedBanner = document.getElementById('pedestrianAlertBanner');
+      if (pedBanner) pedBanner.style.display = 'none';
     }
 
     function buildDroneMesh() {
@@ -3210,6 +4177,23 @@ let playSpeed = 5;
         droneMesh.add(prop);
         propellerMeshes.push(prop);
       });
+
+      // 3D VIO Covariance Wireframe Ellipsoid (Expands with drift, contracts on AprilTag lock)
+      const vioGeo = new THREE.SphereGeometry(0.35, 16, 12);
+      const vioMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45
+      });
+      vioCovarianceMesh = new THREE.Mesh(vioGeo, vioMat);
+      vioCovarianceMesh.visible = isVioDriftVisible;
+      droneMesh.add(vioCovarianceMesh);
+
+      // Warning Strobe Beacon on top
+      const topBeacon = new THREE.PointLight(0xf59e0b, 0.8, 3.5);
+      topBeacon.position.set(0, 0, 0.08);
+      droneMesh.add(topBeacon);
 
       droneMesh.position.set(2, 2, 0.1);
       scene.add(droneMesh);
@@ -3492,6 +4476,7 @@ let playSpeed = 5;
       signageGroup = new THREE.Group(); worldGroup.add(signageGroup);
       lightsGroup = new THREE.Group(); worldGroup.add(lightsGroup);
       trafficGroup = new THREE.Group(); worldGroup.add(trafficGroup);
+      discrepancyBadgesGroup = new THREE.Group(); worldGroup.add(discrepancyBadgesGroup);
       dynamicObstacleEntities = [];
       worldBinsMap.clear();
       if (world.bins) world.bins.forEach(b => worldBinsMap.set(b.id, b));
@@ -4042,9 +5027,12 @@ let playSpeed = 5;
 
           padsGroup.add(padMesh);
 
-          // Position drone on primary pad
-          if (idx === 0 && droneMesh) {
-            droneMesh.position.set(p.position[0], p.position[1], 0.1);
+          // Position drone on primary pad & Build Automated Drone Nest
+          if (idx === 0) {
+            buildDroneNestMesh(p.position[0], p.position[1]);
+            if (droneMesh) {
+              droneMesh.position.set(p.position[0], p.position[1], 0.22);
+            }
           }
         });
       }
@@ -4198,6 +5186,39 @@ let playSpeed = 5;
       sharedAisleHazardMesh.position.set(0, 0, 0.025);
       sharedAisleHazardMesh.visible = false;
       trafficGroup.add(sharedAisleHazardMesh);
+
+      // 8. Warehouse Human Pickers & Pedestrian Walkway Patrol
+      humanWorkerEntities = [];
+      const worker1Path = [
+        [fb.x_min + 3.0, cy, 0],
+        [fb.x_max - 3.0, cy, 0]
+      ];
+      const worker1 = buildHumanPickerMesh(0x2563eb);
+      worker1.group.position.set(worker1Path[0][0], worker1Path[0][1], 0);
+      trafficGroup.add(worker1.group);
+      humanWorkerEntities.push({
+        ...worker1,
+        path: worker1Path,
+        speed: 1.1,
+        currentPos: [worker1Path[0][0], worker1Path[0][1], 0]
+      });
+
+      const worker2Path = [
+        [fb.x_min + 2.5, fb.y_min + 3.2, 0],
+        [fb.x_max - 2.5, fb.y_min + 3.2, 0]
+      ];
+      const worker2 = buildHumanPickerMesh(0xd97706);
+      worker2.group.position.set(worker2Path[0][0], worker2Path[0][1], 0);
+      trafficGroup.add(worker2.group);
+      humanWorkerEntities.push({
+        ...worker2,
+        path: worker2Path,
+        speed: 0.95,
+        currentPos: [worker2Path[0][0], worker2Path[0][1], 0]
+      });
+
+      // 9. Industrial High-Bay HVAC Ventilation Ceiling Blowers
+      buildHvacCeilingFans(warehouseBounds);
     }
 
     function animateThree() {
@@ -4438,7 +5459,39 @@ let playSpeed = 5;
 
           const effZ = state.position[2] + evasiveClimbOffset;
           droneMesh.position.set(state.position[0], state.position[1], effZ);
+
+          // 3. Aerodynamic Environmental Physics & Drone Attitude Dynamics
+          let pitch = state.pitch_rad || 0;
+          let roll = state.roll_rad || 0;
+
+          // HVAC localized draft micro-turbulence jitter when within blower radius
+          let inHvacDraftZone = false;
+          hvacFanMeshes.forEach(fan => {
+            if (Math.hypot(fan.x - droneMesh.position.x, fan.y - droneMesh.position.y) < 2.5) {
+              inHvacDraftZone = true;
+            }
+          });
+          if (inHvacDraftZone) {
+            pitch += Math.sin(time * 24) * 0.024;
+            roll += Math.cos(time * 21) * 0.024;
+          }
+
+          droneMesh.rotation.order = 'ZYX';
           droneMesh.rotation.z = (state.yaw_rad || 0) - Math.PI / 2;
+          droneMesh.rotation.x = pitch;
+          droneMesh.rotation.y = roll;
+
+          // Cockpit Attitude Director Indicator (ADI / Artificial Horizon) in FPV Mode
+          const elAdiDial = document.getElementById('adiDial');
+          if (elAdiDial) {
+            const rollDeg = (roll * 180 / Math.PI);
+            const pitchPx = (pitch * 180 / Math.PI) * 1.6;
+            elAdiDial.style.transform = `rotate(${-rollDeg}deg) translateY(${pitchPx}px)`;
+            const elAdiReadout = document.getElementById('adiRollReadout');
+            if (elAdiReadout) {
+              elAdiReadout.innerText = `R: ${rollDeg.toFixed(1)}° | P: ${(pitch * 180 / Math.PI).toFixed(1)}°`;
+            }
+          }
 
           // Toggle scanner inspection spotlight
           if (droneSpotlight) {
@@ -4507,8 +5560,180 @@ let playSpeed = 5;
                 elLock.style.display = 'none';
               }
             }
+
+            // 5. AI Defect & Discrepancy Overlay Box in FPV Camera
+            const elDefectBox = document.getElementById('fpvAiDefectBox');
+            const elDefectLbl = document.getElementById('fpvAiDefectLabel');
+            if (state.target_bin_id && missionDiscrepancies && missionDiscrepancies.length > 0) {
+              const disc = missionDiscrepancies.find(d => d.bin_id === state.target_bin_id);
+              if (disc) {
+                if (elDefectBox) elDefectBox.style.display = 'block';
+                if (elDefectLbl) {
+                  elDefectLbl.innerText = `AI DEFECT: ${(disc.defect_label || disc.discrepancy_type).toUpperCase()} [${((disc.defect_confidence || 0.92) * 100).toFixed(0)}%]`;
+                }
+              } else {
+                if (elDefectBox) elDefectBox.style.display = 'none';
+              }
+            } else {
+              if (elDefectBox) elDefectBox.style.display = 'none';
+            }
           }
         }
+      }
+
+      // 1. Automated Drone Nest Canopy Animation & Inductive Pulse
+      if (droneNestGroup) {
+        nestCanopyAngle += (nestTargetCanopyAngle - nestCanopyAngle) * 0.08;
+        if (nestCanopyLeft) nestCanopyLeft.rotation.y = nestCanopyAngle;
+        if (nestCanopyRight) nestCanopyRight.rotation.y = -nestCanopyAngle;
+
+        if (nestChargingRings) {
+          const pulse = Math.sin(time * 6) * 0.35 + 0.65;
+          nestChargingRings.material.opacity = isNestCharging ? pulse : 0.45;
+        }
+      }
+
+      // 2. Realistic GPS-Denied Sensor Drift & VIO Kalman Filter State
+      if (vioCovarianceMesh) {
+        vioCovarianceMesh.visible = isVioDriftVisible;
+        if (isVioDriftVisible && droneMesh) {
+          // Accumulate bias drift along trajectory
+          accumulatedVioDrift.x += Math.sin(time * 0.35) * 0.0010;
+          accumulatedVioDrift.y += Math.cos(time * 0.30) * 0.0010;
+          const driftDist = Math.hypot(accumulatedVioDrift.x, accumulatedVioDrift.y);
+
+          currentDriftErrorCm = (driftDist * 100).toFixed(1);
+          currentSigma3Cm = (2.2 + driftDist * 28.0).toFixed(1);
+
+          // Check distance to closest AprilTag fiducial
+          let nearestTag = null;
+          let minTagDist = 999;
+          if (worldData && worldData.markers) {
+            worldData.markers.forEach(m => {
+              const d = Math.hypot(m.position[0] - droneMesh.position.x, m.position[1] - droneMesh.position.y);
+              if (d < minTagDist) { minTagDist = d; nearestTag = m; }
+            });
+          }
+
+          if (minTagDist < 3.2) {
+            // EKF Measurement Update triggers! Drift collapses back down!
+            if (Math.abs(accumulatedVioDrift.x) > 0.02 || Math.abs(accumulatedVioDrift.y) > 0.02) {
+              playEkfUpdateTone();
+            }
+            accumulatedVioDrift.x *= 0.12;
+            accumulatedVioDrift.y *= 0.12;
+            lastObservedMarkerId = nearestTag.id || `TAG-${nearestTag.tag_id}`;
+            vioCovarianceMesh.material.color.setHex(0x10b981); // Emerald green for tag lock
+            const badge = document.getElementById('vioEkfBadge');
+            if (badge) { badge.className = 'vio-badge-optimal'; badge.innerText = 'LOCKED (TAGS)'; }
+          } else if (driftDist > 0.18) {
+            vioCovarianceMesh.material.color.setHex(0xef4444); // Red for accumulated drift
+            const badge = document.getElementById('vioEkfBadge');
+            if (badge) { badge.className = 'vio-badge-coasting'; badge.innerText = 'COASTING (DRIFT)'; }
+          } else {
+            vioCovarianceMesh.material.color.setHex(0x38bdf8); // Cyan normal
+            const badge = document.getElementById('vioEkfBadge');
+            if (badge) { badge.className = 'vio-badge-optimal'; badge.innerText = 'FILTERED (EKF2)'; }
+          }
+
+          const scaleEllipsoid = Math.max(0.2, 0.22 + driftDist * 0.85);
+          vioCovarianceMesh.scale.set(scaleEllipsoid, scaleEllipsoid, scaleEllipsoid * 0.65);
+
+          // Update VIO HUD Widget
+          const elDrift = document.getElementById('vioDriftVal');
+          if (elDrift) elDrift.innerText = `${currentDriftErrorCm} cm`;
+          const elSig = document.getElementById('vioSigmaVal');
+          if (elSig) elSig.innerText = `±${currentSigma3Cm} cm`;
+          const elDrUncorr = document.getElementById('vioDrUncorrVal');
+          if (elDrUncorr) elDrUncorr.innerText = `${(driftDist * 165 + 8.2).toFixed(1)} cm`;
+          const elTag = document.getElementById('vioLastTagVal');
+          if (elTag) elTag.innerText = lastObservedMarkerId;
+        }
+      }
+
+      // 3. High-Bay HVAC Ceiling Ventilation Blowers Animation
+      if (hvacFanMeshes.length > 0) {
+        hvacFanMeshes.forEach(fan => {
+          fan.hub.rotation.z += 0.15;
+        });
+      }
+      if (hvacParticleGroup) {
+        const posArr = hvacParticleGroup.geometry.attributes.position.array;
+        for (let i = 2; i < posArr.length; i += 3) {
+          posArr[i] -= 0.04;
+          if (posArr[i] < 0.2) posArr[i] = (warehouseBounds ? warehouseBounds.ch - 1.0 : 7.0);
+        }
+        hvacParticleGroup.geometry.attributes.position.needsUpdate = true;
+      }
+
+      // 4. Warehouse Pickers / Pedestrian Standoff Patrol Animation
+      let pedestrianConflict = false;
+      let closestWorkerDist = 999.0;
+      if (humanWorkerEntities.length > 0 && isWorkersActive) {
+        humanWorkerEntities.forEach((worker, wIdx) => {
+          const path = worker.path;
+          if (!path || path.length < 2) return;
+          const len = Math.hypot(path[1][0] - path[0][0], path[1][1] - path[0][1]);
+          const cycle = (len / worker.speed) * 2;
+          const phase = ((time + wIdx * 5.5) % cycle) / cycle;
+          const u = phase <= 0.5 ? phase * 2 : (1 - phase) * 2;
+          const wx = path[0][0] + u * (path[1][0] - path[0][0]);
+          const wy = path[0][1] + u * (path[1][0] - path[0][1]);
+          const heading = phase <= 0.5 ? Math.atan2(path[1][1] - path[0][1], path[1][0] - path[0][0])
+                                       : Math.atan2(path[0][1] - path[1][0], path[0][0] - path[1][0]);
+
+          worker.group.position.set(wx, wy, 0);
+          worker.group.rotation.z = heading - Math.PI / 2;
+          worker.currentPos = [wx, wy, 0];
+
+          // Leg swinging walking motion
+          const legSwing = Math.sin(time * 7 + wIdx) * 0.35;
+          worker.legL.rotation.x = legSwing;
+          worker.legR.rotation.x = -legSwing;
+
+          // Buffer ring pulse
+          if (worker.bufRing) {
+            worker.bufRing.material.opacity = Math.sin(time * 5 + wIdx) * 0.15 + 0.35;
+          }
+
+          // Safety Standoff Check with Drone
+          if (droneMesh) {
+            const dDrone = Math.hypot(wx - droneMesh.position.x, wy - droneMesh.position.y);
+            if (dDrone < 3.2 && droneMesh.position.z < 2.9) {
+              pedestrianConflict = true;
+              if (dDrone < closestWorkerDist) closestWorkerDist = dDrone;
+            }
+          }
+        });
+      }
+
+      const pedBanner = document.getElementById('pedestrianAlertBanner');
+      const elWorkerBox = document.getElementById('fpvAiWorkerBox');
+      const elWorkerLbl = document.getElementById('fpvAiWorkerLabel');
+
+      if (pedestrianConflict) {
+        isPedestrianStandoff = true;
+        if (pedBanner) {
+          pedBanner.style.display = 'flex';
+          document.getElementById('pedestrianAlertDesc').innerText = `Human Picker in corridor (Dist: ${closestWorkerDist.toFixed(1)}m, OSHA 3.0m Zone) — Safety hover hold active`;
+        }
+        if (elWorkerBox && activeCamMode === 'fpv') {
+          elWorkerBox.style.display = 'block';
+          if (elWorkerLbl) elWorkerLbl.innerText = `HUMAN_WORKER: 99.2% [${closestWorkerDist.toFixed(1)}m]`;
+        }
+        playStandoffAlertTone();
+      } else {
+        isPedestrianStandoff = false;
+        if (pedBanner) pedBanner.style.display = 'none';
+        if (elWorkerBox) elWorkerBox.style.display = 'none';
+      }
+
+      // 5. Discrepancy 3D Floating Badges Bobbing
+      if (discrepancyBadgesGroup && discrepancyBadgesGroup.children.length > 0) {
+        discrepancyBadgesGroup.children.forEach((bg, idx) => {
+          bg.rotation.z += 0.03;
+          bg.position.z += Math.sin(time * 3 + idx) * 0.0015;
+        });
       }
 
       renderer.render(scene, camera3D);
@@ -4992,6 +6217,9 @@ let playSpeed = 5;
         // Render Scan Cards
         renderScanCards(runData.scans || []);
 
+        // AI Inventory Discrepancy & Defect UI
+        updateDiscrepanciesUI(runData.scans || []);
+
         // Setup 3D flight path
         setup3DFlightPath(runData.waypoints || []);
 
@@ -5144,11 +6372,46 @@ let playSpeed = 5;
         playScanChirp();
       }
 
-      // Update 3D Drone Mesh
+      // Update 3D Drone Mesh & Attitude Dynamics
       if (droneMesh) {
         const effZ = st.position[2] + evasiveClimbOffset;
         droneMesh.position.set(st.position[0], st.position[1], effZ);
+        droneMesh.rotation.order = 'ZYX';
         droneMesh.rotation.z = (st.yaw_rad || 0) - Math.PI / 2;
+        droneMesh.rotation.x = st.pitch_rad || 0;
+        droneMesh.rotation.y = st.roll_rad || 0;
+      }
+
+      // Update Cockpit ADI Dial
+      const elAdiDial = document.getElementById('adiDial');
+      if (elAdiDial) {
+        const rollDeg = ((st.roll_rad || 0) * 180 / Math.PI);
+        const pitchPx = ((st.pitch_rad || 0) * 180 / Math.PI) * 1.6;
+        elAdiDial.style.transform = `rotate(${-rollDeg}deg) translateY(${pitchPx}px)`;
+        const elAdiReadout = document.getElementById('adiRollReadout');
+        if (elAdiReadout) {
+          elAdiReadout.innerText = `R: ${rollDeg.toFixed(1)}° | P: ${((st.pitch_rad || 0) * 180 / Math.PI).toFixed(1)}°`;
+        }
+      }
+
+      // Update VIO Telemetry
+      if (missionReplayData && missionReplayData.loc_estimates && missionReplayData.loc_estimates.length > 0) {
+        const estIdx = Math.min(playbackIndex, missionReplayData.loc_estimates.length - 1);
+        const est = missionReplayData.loc_estimates[estIdx];
+        if (est) {
+          const elDrift = document.getElementById('vioDriftVal');
+          if (elDrift) elDrift.innerText = `${(est.drift_m || 0).toFixed(2)} m`;
+          const elErr = document.getElementById('vioErrorVal');
+          if (elErr) elErr.innerText = `${(est.error_cm || 0).toFixed(1)} cm`;
+          const elSig = document.getElementById('vioSigmaVal');
+          if (elSig) elSig.innerText = `${(est.sigma_3_m || 0.12).toFixed(2)} m`;
+          const elTag = document.getElementById('vioLastTag');
+          if (elTag) elTag.innerText = est.marker_observed ? `Tag #${est.marker_observed}` : 'VIO Dead-Reckoning';
+          if (vioCovarianceMesh) {
+            const sc = Math.max(0.12, est.drift_m || 0.1);
+            vioCovarianceMesh.scale.set(sc * 2.2, sc * 2.2, sc * 1.4);
+          }
+        }
       }
 
       // Update 2D Map

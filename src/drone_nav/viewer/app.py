@@ -580,7 +580,10 @@ def api_mission_run(
                 "t_s": round(st.timestamp_s, 2),
                 "position": [round(st.position[0], 3), round(st.position[1], 3), round(st.position[2], 3)],
                 "velocity": [round(st.velocity[0], 2), round(st.velocity[1], 2), round(st.velocity[2], 2)],
+                "accel": [round(st.acceleration[0], 2), round(st.acceleration[1], 2), round(st.acceleration[2], 2)],
                 "speed_mps": round(st.speed_mps, 2),
+                "roll_rad": round(st.attitude_rpy[0], 4),
+                "pitch_rad": round(st.attitude_rpy[1], 4),
                 "yaw_rad": round(st.attitude_rpy[2], 3),
                 "battery_pct": round(st.battery_pct, 1),
                 "action": st.action,
@@ -588,7 +591,25 @@ def api_mission_run(
             }
         )
 
-    # Scans payload
+    # Downsample EKF localisation estimates for VIO drift & covariance visualization
+    sampled_loc = []
+    if loc_res and loc_res.estimates:
+        loc_step = max(1, len(loc_res.estimates) // 400)
+        for le in loc_res.estimates[::loc_step]:
+            sampled_loc.append(
+                {
+                    "t_s": round(le.timestamp_s, 2),
+                    "est_pos": [round(v, 3) for v in le.estimated_position],
+                    "dr_pos": [round(v, 3) for v in le.dead_reckoning_position],
+                    "err_cm": round(le.position_error_m * 100, 2),
+                    "dr_err_cm": round(le.dead_reckoning_error_m * 100, 2),
+                    "sigma_3_cm": round(le.pos_uncertainty_3sigma_m * 100, 2),
+                    "marker_observed": le.marker_observed,
+                    "observed_marker_id": le.observed_marker_id,
+                }
+            )
+
+    # Scans payload with AI Discrepancy & Defect Detection
     scans_data = []
     for b_id, rec in tracker.records.items():
         if rec.scanned:
@@ -605,6 +626,12 @@ def api_mission_run(
                     "drone_pos": list(rec.drone_pos_at_scan),
                     "bbox": rec.bbox,
                     "flight_id": rec.flight_id,
+                    "discrepancy_type": rec.discrepancy_type,
+                    "discrepancy_severity": rec.discrepancy_severity,
+                    "expected_qty": rec.expected_qty,
+                    "detected_qty": rec.detected_qty,
+                    "defect_label": rec.defect_label,
+                    "defect_confidence": rec.defect_confidence,
                 }
             )
 
@@ -617,6 +644,7 @@ def api_mission_run(
         "bins_targeted": tracker.total_bins,
         "bins_scanned": tracker.scanned_bins,
         "successful_reads": tracker.successful_reads,
+        "total_discrepancies": tracker.total_discrepancies,
         "coverage_pct": tracker.coverage_pct,
         "read_success_rate": tracker.read_success_rate,
         "duration_s": round(primary_sim.total_time_s, 1),
@@ -627,6 +655,7 @@ def api_mission_run(
         "idempotency_hash": export_meta["idempotency_hash"],
         "export_dir": str(out_dir),
         "states": sampled_states,
+        "loc_estimates": sampled_loc,
         "waypoints": [
             {"pos": list(wp.position), "yaw_rad": wp.yaw_rad, "action": wp.action.value}
             for wp in mission.flights[0].waypoints
@@ -680,6 +709,37 @@ def api_mission_scans(mission_id: str) -> dict[str, Any]:
             return {"mission_id": mission_id, "total_scans": len(scans_j), "scans": scans_j}
         raise HTTPException(status_code=404, detail=f"Mission scans for '{mission_id}' not found")
     return {"mission_id": mission_id, "total_scans": len(run["scans"]), "scans": run["scans"]}
+
+
+@app.get("/api/v1/mission/discrepancies/{mission_id}")
+def api_mission_discrepancies(mission_id: str) -> dict[str, Any]:
+    """Retrieve AI defect and inventory discrepancy audit report for a mission."""
+    run = MISSION_RUNS.get(mission_id)
+    scans: list[dict[str, Any]] = []
+    if run:
+        scans = run.get("scans", [])
+    else:
+        out_dir = Path("exports") / mission_id
+        scans_path = out_dir / "scans.json"
+        if scans_path.exists():
+            scans = json.loads(scans_path.read_text(encoding="utf-8"))
+        else:
+            raise HTTPException(status_code=404, detail=f"Mission '{mission_id}' not found")
+
+    discrepancies = [s for s in scans if s.get("discrepancy_type", "none") != "none"]
+    by_type: dict[str, int] = {}
+    for d in discrepancies:
+        t = d.get("discrepancy_type", "unknown")
+        by_type[t] = by_type.get(t, 0) + 1
+
+    return {
+        "mission_id": mission_id,
+        "total_scanned": len(scans),
+        "total_discrepancies": len(discrepancies),
+        "accuracy_rate_pct": round(((len(scans) - len(discrepancies)) / max(1, len(scans))) * 100.0, 2),
+        "breakdown": by_type,
+        "discrepancies": discrepancies,
+    }
 
 
 @app.post("/api/v1/mission/compare")

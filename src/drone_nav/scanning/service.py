@@ -96,6 +96,40 @@ class ScanningMissionSimulator:
                         target_bin=target_bin,
                     )
 
+                    # AI Defect & Inventory Discrepancy Detection Simulation
+                    expected_qty = target_bin.amazon_expected_qty if target_bin.amazon_expected_qty > 0 else 1
+                    discrepancy_type = "none"
+                    discrepancy_severity = "none"
+                    detected_qty = expected_qty
+                    defect_label = "Verified Stock Match"
+                    defect_conf = 0.96
+
+                    # Realistic anomaly injection on subset of bins
+                    if target_bin.coil_img_id:
+                        if bin_counter % 9 == 4:
+                            discrepancy_type = "surface_defect"
+                            discrepancy_severity = "medium"
+                            defect_label = "Surface Oxidation: Minor Coil Edge Corrosion"
+                            defect_conf = 0.91
+                    else:
+                        if bin_counter % 14 == 3:
+                            discrepancy_type = "qty_mismatch"
+                            discrepancy_severity = "medium"
+                            detected_qty = max(0, expected_qty - 1)
+                            defect_label = f"Quantity Shortage: Exp {expected_qty}, CV Count {detected_qty}"
+                            defect_conf = 0.93
+                        elif bin_counter % 17 == 5:
+                            discrepancy_type = "package_damage"
+                            discrepancy_severity = "high"
+                            defect_label = "Carton Defect: Crushed Side / Torn Barcode"
+                            defect_conf = 0.89
+                        elif bin_counter % 23 == 7:
+                            discrepancy_type = "empty_bin"
+                            discrepancy_severity = "high"
+                            detected_qty = 0
+                            defect_label = "Empty Slot Alert: WMS expects active inventory"
+                            defect_conf = 0.97
+
                     if is_visible:
                         read_result = self.reader.decode_label(
                             target_bin=target_bin,
@@ -117,6 +151,12 @@ class ScanningMissionSimulator:
                             drone_pos=drone_pos,
                             timestamp_s=state.timestamp_s,
                             start_time_iso=start_time_iso,
+                            discrepancy_type=discrepancy_type,
+                            discrepancy_severity=discrepancy_severity,
+                            expected_qty=expected_qty,
+                            detected_qty=detected_qty,
+                            defect_label=defect_label,
+                            defect_confidence=defect_conf,
                         )
                     else:
                         bin_counter += 1
@@ -133,6 +173,12 @@ class ScanningMissionSimulator:
                             drone_pos=drone_pos,
                             timestamp_s=state.timestamp_s,
                             start_time_iso=start_time_iso,
+                            discrepancy_type=discrepancy_type,
+                            discrepancy_severity=discrepancy_severity,
+                            expected_qty=expected_qty,
+                            detected_qty=detected_qty,
+                            defect_label=defect_label,
+                            defect_confidence=defect_conf,
                         )
 
         return tracker, sim_results

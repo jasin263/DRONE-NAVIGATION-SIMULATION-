@@ -25,6 +25,13 @@ class BinScanAuditRecord:
     timestamp_utc: str | None = None
     flight_id: int = 1
     drone_pos_at_scan: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    # AI Defect & Inventory Discrepancy Detection fields
+    discrepancy_type: str = "none"  # "none" | "qty_mismatch" | "empty_bin" | "package_damage" | "surface_defect"
+    discrepancy_severity: str = "none"  # "none" | "low" | "medium" | "high"
+    expected_qty: int = 0
+    detected_qty: int = 0
+    defect_label: str | None = None
+    defect_confidence: float = 0.0
 
 
 class CoverageTracker:
@@ -69,6 +76,14 @@ class CoverageTracker:
             return 0.0
         return round(self.successful_reads / self.scanned_bins, 4)
 
+    @property
+    def total_discrepancies(self) -> int:
+        return sum(1 for r in self.records.values() if r.discrepancy_type != "none")
+
+    @property
+    def discrepancy_records(self) -> list[BinScanAuditRecord]:
+        return [r for r in self.records.values() if r.discrepancy_type != "none"]
+
     def record_scan_event(
         self,
         bin_id: str,
@@ -83,6 +98,12 @@ class CoverageTracker:
         drone_pos: tuple[float, float, float],
         timestamp_s: float,
         start_time_iso: str | None = None,
+        discrepancy_type: str = "none",
+        discrepancy_severity: str = "none",
+        expected_qty: int = 0,
+        detected_qty: int = 0,
+        defect_label: str | None = None,
+        defect_confidence: float = 0.0,
     ) -> BinScanAuditRecord:
         """Update audit record when a bin is scanned."""
         rec = self.records.get(bin_id)
@@ -106,6 +127,12 @@ class CoverageTracker:
         rec.bbox = bbox
         rec.flight_id = flight_id
         rec.drone_pos_at_scan = drone_pos
+        rec.discrepancy_type = discrepancy_type
+        rec.discrepancy_severity = discrepancy_severity
+        rec.expected_qty = expected_qty
+        rec.detected_qty = detected_qty
+        rec.defect_label = defect_label
+        rec.defect_confidence = defect_confidence
 
         # Generate realistic ISO 8601 UTC timestamp
         if start_time_iso:
