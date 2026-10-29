@@ -2904,6 +2904,7 @@
                   <label class="deck-checkbox-label" title="Toggle Racks"><input type="checkbox" id="layerRacks" checked> <span>🏗️ Framing</span></label>
                   <label class="deck-checkbox-label" title="Toggle Tags"><input type="checkbox" id="layerMarkers" checked> <span>🏷️ Nav Tags</span></label>
                   <label class="deck-checkbox-label" title="Toggle Safety Zones"><input type="checkbox" id="layerSafety" checked> <span>🚫 Safety/NFZ</span></label>
+                  <label class="deck-checkbox-label" title="Toggle 3D LiDAR Volumetric Scanner Beam & Point Cloud"><input type="checkbox" id="layerLidarBeam" checked> <span>📡 LiDAR Scanner</span></label>
                   <label class="deck-checkbox-label" title="Toggle Blueprint Overlay"><input type="checkbox" id="layerBlueprintOverlay" checked> <span>🗺️ Blueprint Map</span></label>
                   <label class="deck-checkbox-label" title="Toggle Ground Traffic"><input type="checkbox" id="layerTraffic" checked> <span>🚜 Forklifts</span></label>
                   <!-- Preserved hidden inputs for script bindings -->
@@ -2938,6 +2939,7 @@
                   <button class="deck-action-btn" id="toggleTrafficModeBtn" title="Toggle between All-Aisles Weaving Patrol and Perimeter Cross-Docks">🔄 All Aisles / Crossway</button>
                   <div id="craneControlGroup" style="width:100%;">
                     <button class="deck-action-btn active" id="toggleCraneBtn" title="Toggle 3x 35-Ton Heavy Duty Overhead Cranes Active/Paused" style="width:100%;">🏗️ 3x Bridge Cranes: Active</button>
+                    <button class="deck-action-btn" id="btnTriggerCraneConflict" title="Dispatch Crane toward Drone Flight Corridor to demonstrate OSHA Airspace Deconfliction" style="width:100%; margin-top:4px;">⚠️ Sim Crane Airspace Conflict</button>
                   </div>
                   <button class="deck-action-btn active" id="toggleWorkersBtn" title="Toggle Warehouse Pickers & OSHA 3m Standoff Zones">👷 Pickers: Active</button>
                   <button class="deck-action-btn active" id="toggleVioBtn" title="Toggle Visual-Inertial Odometry Drift & Covariance Ellipsoid">📡 VIO Drift: ON</button>
@@ -2977,6 +2979,16 @@
               <div id="trafficAlertDesc" class="traffic-alert-desc">Forklift intersecting corridor (2.1m) — Executing reactive climb</div>
             </div>
             <span id="trafficAlertAction" class="traffic-alert-badge">CLIMB +1.8m</span>
+          </div>
+
+          <!-- Dynamic Crane-Drone Airspace Avoidance Banner (OSHA / ISO 21384-3) -->
+          <div id="craneAirspaceAlertBanner" class="traffic-alert-banner" style="display:none; background:rgba(220, 38, 38, 0.94); border-color:#ef4444;">
+            <span class="traffic-alert-icon">🏗️</span>
+            <div>
+              <div id="craneAlertTitle" class="traffic-alert-title">OSHA AIRSPACE CONFLICT: SUSPENDED LOAD</div>
+              <div id="craneAlertDesc" class="traffic-alert-desc">35-Ton Bridge Crane in inspection corridor (4.2m) — Executing reactive standoff & hold</div>
+            </div>
+            <span id="craneAlertAction" class="traffic-alert-badge" style="background:#ef4444;">STANDOFF</span>
           </div>
         </div>
 
@@ -3248,6 +3260,36 @@
                   <div id="amzHudBarcode" class="amz-value-code">STEEL-CRC-A-52-1-GA16</div>
                 </div>
               </div>
+              <!-- 3D LiDAR Volumetric Metrology & Steel Tonnage Verification -->
+              <div class="amz-lidar-box" style="margin-bottom:8px; background:rgba(6, 182, 212, 0.08); border:1px solid rgba(6, 182, 212, 0.35); border-radius:8px; padding:7px 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                  <span style="font-size:9px; font-weight:800; color:#06b6d4; letter-spacing:0.5px;">📡 3D LIDAR VOLUMETRIC METROLOGY</span>
+                  <span id="amzLidarTolerancePill" class="amz-qty-pill" style="background:rgba(16, 185, 129, 0.2); color:#10b981; font-size:8.5px;">MATCH 99.4% ✓</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 8px; font-family:var(--font-mono); font-size:10px;">
+                  <div>
+                    <div style="font-size:8px; color:#94a3b8; text-transform:uppercase;">LiDAR Outer Dia (OD)</div>
+                    <div id="amzLidarOd" style="color:#f8fafc; font-weight:700;">1.65 m (65.0")</div>
+                  </div>
+                  <div>
+                    <div style="font-size:8px; color:#94a3b8; text-transform:uppercase;">LiDAR Core Mandrel (ID)</div>
+                    <div id="amzLidarId" style="color:#f8fafc; font-weight:700;">0.508 m (20.0")</div>
+                  </div>
+                  <div>
+                    <div style="font-size:8px; color:#94a3b8; text-transform:uppercase;">Strip Width (W)</div>
+                    <div id="amzLidarWidth" style="color:#f8fafc; font-weight:700;">1.45 m (57.1")</div>
+                  </div>
+                  <div>
+                    <div style="font-size:8px; color:#94a3b8; text-transform:uppercase;">Calculated Tonnage (ρ=7,850)</div>
+                    <div id="amzLidarTonnage" style="color:#38bdf8; font-weight:800;">21.38 MT (47,135 lb)</div>
+                  </div>
+                </div>
+                <div style="margin-top:4px; font-size:8.5px; color:#64748b; display:flex; justify-content:space-between; border-top:1px dashed rgba(255,255,255,0.08); padding-top:3px;">
+                  <span>Manifest: <strong id="amzManifestWeight" style="color:#e2e8f0;">21,450 kg</strong></span>
+                  <span>Variance: <strong id="amzWeightVariance" style="color:#10b981;">-0.33% (Pass &lt; 1.5%)</strong></span>
+                </div>
+              </div>
+
               <div class="amz-catalog-box">
                 <div class="amz-catalog-header">
                   <span class="amz-label">STEEL COIL SPECIFICATIONS &amp; HEAT VERIFICATION</span>
@@ -4439,6 +4481,11 @@ let playSpeed = 5;
     let trafficGroup = null;
     let dynamicObstacleEntities = [];
     let evasiveClimbOffset = 0.0;
+    let craneEvasiveOffset = 0.0;
+    let craneAirspaceHoldTimer = 0.0;
+    let isCraneDeconflictionActive = false;
+    let droneLidarFan = null;
+    let droneLidarPoints = null;
     let trafficRoutingMode = 'all_aisles';
     let sharedAisleHazardMesh = null;
     let worldBinsMap = new Map();
@@ -6034,6 +6081,42 @@ let playSpeed = 5;
       droneSpotlight.position.set(0, 0, -1.1);
       droneSpotlight.visible = false;
       droneMesh.add(droneSpotlight);
+
+      // 3D LiDAR Volumetric Scanner Beam (Cyan Conical Laser Fan)
+      const lidarFanGeo = new THREE.ConeGeometry(1.35, 3.2, 16, 1, true);
+      const lidarFanMat = new THREE.MeshBasicMaterial({
+        color: 0x06b6d4,
+        transparent: true,
+        opacity: 0.18,
+        wireframe: true,
+        side: THREE.DoubleSide
+      });
+      droneLidarFan = new THREE.Mesh(lidarFanGeo, lidarFanMat);
+      droneLidarFan.rotation.x = -Math.PI / 2; // point downward toward floor/coils
+      droneLidarFan.position.set(0, 0, -1.6);
+      droneLidarFan.visible = false;
+      droneMesh.add(droneLidarFan);
+
+      // Dynamic LiDAR Point Cloud (160 return points on coil cylinder curvature)
+      const lidarPtsGeo = new THREE.BufferGeometry();
+      const ptPositions = new Float32Array(160 * 3);
+      const ptColors = new Float32Array(160 * 3);
+      for (let i = 0; i < 160; i++) {
+        const theta = (i / 160) * Math.PI * 2;
+        const rad = 0.45 + (i % 6) * 0.12;
+        ptPositions[i * 3] = Math.cos(theta) * rad;
+        ptPositions[i * 3 + 1] = Math.sin(theta) * rad;
+        ptPositions[i * 3 + 2] = -1.8 - (i % 8) * 0.12;
+        ptColors[i * 3] = 0.02;     // R
+        ptColors[i * 3 + 1] = 0.75; // G (Cyan-Emerald gradient)
+        ptColors[i * 3 + 2] = 0.88; // B
+      }
+      lidarPtsGeo.setAttribute('position', new THREE.BufferAttribute(ptPositions, 3));
+      lidarPtsGeo.setAttribute('color', new THREE.BufferAttribute(ptColors, 3));
+      const lidarPtsMat = new THREE.PointsMaterial({ size: 0.055, vertexColors: true, transparent: true, opacity: 0.88 });
+      droneLidarPoints = new THREE.Points(lidarPtsGeo, lidarPtsMat);
+      droneLidarPoints.visible = false;
+      droneMesh.add(droneLidarPoints);
 
       // Arms & Propellers
       const armMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9 });
@@ -8758,7 +8841,80 @@ function drawRSDC2DBlueprint(ctx2D, fb, worldToScreen2D, cam2D) {
             }
           }
 
-          const effZ = state.position[2] + evasiveClimbOffset;
+          // OSHA / ISO 21384-3 Crane-Drone Dynamic Airspace Conflict & Deconfliction Monitor
+          let craneAirspaceConflict = null;
+          const activeCranesList = [rsdcCraneA, rsdcCraneB, rsdcCraneC].filter(Boolean);
+          activeCranesList.forEach(c => {
+            if (!c.jointBridgeX || !c.jointTrolleyY) return;
+            const cX = c.jointBridgeX.current;
+            const cY = c.jointTrolleyY.current;
+            const cZ = Math.max(0.76, 8.2 - c.jointHoistZ.current);
+            const dXY = Math.hypot(state.position[0] - cX, state.position[1] - cY);
+            const dBridgeX = Math.abs(state.position[0] - cX);
+
+            // Trigger conflict when within 6.5m horizontal load radius or under high bridge transit
+            if (dXY < 6.8 || (dBridgeX < 3.8 && state.position[2] > 5.2)) {
+              craneAirspaceConflict = {
+                crane: c,
+                distXY: dXY,
+                hookZ: cZ,
+                isCritical: dXY < 4.2
+              };
+            }
+          });
+
+          const craneBanner = document.getElementById('craneAirspaceAlertBanner');
+          if (craneAirspaceConflict) {
+            isCraneDeconflictionActive = true;
+            const c = craneAirspaceConflict.crane;
+            const isCrit = craneAirspaceConflict.isCritical;
+
+            // Reactive Evasive Behavior: If critical, dip altitude or hold safe standoff
+            if (isCrit) {
+              craneEvasiveOffset = Math.max(-0.9, craneEvasiveOffset - 0.12); // Safe floor clearance (1.5m)
+            } else {
+              craneEvasiveOffset = Math.min(1.8, craneEvasiveOffset + 0.10);  // Standoff climb
+            }
+
+            if (craneBanner) {
+              craneBanner.style.display = 'flex';
+              craneBanner.style.background = isCrit ? 'rgba(220, 38, 38, 0.95)' : 'rgba(245, 158, 11, 0.95)';
+              craneBanner.style.borderColor = isCrit ? '#ef4444' : '#f59e0b';
+              const tEl = document.getElementById('craneAlertTitle');
+              if (tEl) tEl.innerText = isCrit ? '⚠️ OSHA AIRSPACE HOLD: SUSPENDED LOAD' : '⚠️ CRANE PROXIMITY STANDOFF';
+              const dEl = document.getElementById('craneAlertDesc');
+              if (dEl) dEl.innerText = `${c.name} active in ${c.bay} (${craneAirspaceConflict.distXY.toFixed(1)}m) — Reactive dynamic deconfliction active`;
+              const aEl = document.getElementById('craneAlertAction');
+              if (aEl) aEl.innerText = isCrit ? 'HOLD & STANDOFF' : 'DECONFLICTION';
+            }
+
+            // Pulse OSHA Exclusion Cylinder on conflicting crane
+            if (c.oshaExclusionMesh) {
+              c.oshaExclusionMesh.material.opacity = 0.35 + Math.sin(time * 8) * 0.18;
+              c.oshaExclusionMesh.material.color.setHex(isCrit ? 0xef4444 : 0xf59e0b);
+            }
+
+            const fState = document.getElementById('flightStateText');
+            if (fState) {
+              fState.innerText = isCrit ? 'AIRSPACE HOLD' : 'AIRSPACE DECONFL';
+              fState.style.color = isCrit ? '#ef4444' : '#f59e0b';
+            }
+          } else {
+            isCraneDeconflictionActive = false;
+            if (craneEvasiveOffset !== 0) {
+              craneEvasiveOffset *= 0.92;
+              if (Math.abs(craneEvasiveOffset) < 0.05) craneEvasiveOffset = 0.0;
+            }
+            if (craneBanner && craneBanner.style.display !== 'none') {
+              const tEl = document.getElementById('craneAlertTitle');
+              if (tEl) tEl.innerText = 'CRANE AIRSPACE CLEARED ✓';
+              const dEl = document.getElementById('craneAlertDesc');
+              if (dEl) dEl.innerText = 'Overhead bridge corridor clear — Nominal inspection resumed';
+              setTimeout(() => { if (!isCraneDeconflictionActive && craneBanner) craneBanner.style.display = 'none'; }, 1600);
+            }
+          }
+
+          const effZ = state.position[2] + evasiveClimbOffset + craneEvasiveOffset;
           droneMesh.position.set(state.position[0], state.position[1], effZ);
 
           // 3. Aerodynamic Environmental Physics & Drone Attitude Dynamics
@@ -8802,6 +8958,22 @@ function drawRSDC2DBlueprint(ctx2D, fb, worldToScreen2D, cam2D) {
               droneSpotlight.scale.set(1.35, 1.35, 1.2);
             } else {
               droneSpotlight.scale.set(1.0, 1.0, 1.0);
+            }
+
+            // Animate 3D LiDAR Scanner Fan and Point Cloud
+            const isLidarEnabled = document.getElementById('layerLidarBeam') ? document.getElementById('layerLidarBeam').checked : true;
+            if (droneLidarFan) {
+              droneLidarFan.visible = isLidarEnabled && (isScanning || !!hoveredBinData);
+              if (droneLidarFan.visible) {
+                droneLidarFan.rotation.z += 0.05;
+                droneLidarFan.material.opacity = 0.16 + Math.sin(time * 12) * 0.08;
+              }
+            }
+            if (droneLidarPoints) {
+              droneLidarPoints.visible = isLidarEnabled && (isScanning || !!hoveredBinData);
+              if (droneLidarPoints.visible) {
+                droneLidarPoints.rotation.z -= 0.03;
+              }
             }
           }
 
@@ -9304,6 +9476,19 @@ function drawRSDC2DBlueprint(ctx2D, fb, worldToScreen2D, cam2D) {
             ctx2D.fill();
           }
 
+          // OSHA 1910.179 / ISO 21384-3 Exclusion Zone Ring on 2D Blueprint Map (Radius: 5.0m)
+          const pExclRadius = 5.0 * cam2D.scale;
+          ctx2D.save();
+          ctx2D.strokeStyle = 'rgba(245, 158, 11, 0.35)';
+          ctx2D.fillStyle = 'rgba(245, 158, 11, 0.06)';
+          ctx2D.lineWidth = 1.2;
+          ctx2D.setLineDash([3, 3]);
+          ctx2D.beginPath();
+          ctx2D.arc(pTrolley.x, pTrolley.y, pExclRadius, 0, Math.PI * 2);
+          ctx2D.fill();
+          ctx2D.stroke();
+          ctx2D.restore();
+
           // 3. Label Badge
           ctx2D.fillStyle = 'rgba(15, 23, 42, 0.88)';
           ctx2D.strokeStyle = '#facc15';
@@ -9362,6 +9547,50 @@ function drawRSDC2DBlueprint(ctx2D, fb, worldToScreen2D, cam2D) {
 
       const decodedCode = (scanRecord && scanRecord.decoded_value) || bin.label_code || `STEEL-CRC-${bin.id || 'A-52-1'}-GA16`;
       if (barcodeEl) barcodeEl.innerText = decodedCode;
+
+      // 3. 3D LiDAR Volumetric Metrology & Steel Tonnage Verification (ρ = 7,850 kg/m^3)
+      const coilOuterDia = bin.od_m || (1.55 + ((bin.id ? bin.id.charCodeAt(bin.id.length - 1) : 48) % 30) * 0.015);
+      const coilCoreDia = bin.id_m || 0.508; // Standard 20.0" mandrel core
+      const coilWidth = bin.width_m || (1.35 + ((bin.id ? bin.id.charCodeAt(0) : 65) % 20) * 0.012);
+
+      // Steel Volume: V = pi * ((OD/2)^2 - (ID/2)^2) * W
+      const rOuter = coilOuterDia / 2.0;
+      const rInner = coilCoreDia / 2.0;
+      const steelVolumeM3 = Math.PI * (rOuter * rOuter - rInner * rInner) * coilWidth;
+
+      // Density calculation: M = V * 7,850 kg/m^3
+      const lidarCalculatedKg = steelVolumeM3 * 7850.0;
+      const lidarCalculatedMT = lidarCalculatedKg / 1000.0;
+      const lidarCalculatedLbs = lidarCalculatedKg * 2.20462;
+
+      // Manifest comparison and variance verification
+      const manifestKg = bin.weight_kg || Math.round(lidarCalculatedKg * (0.994 + (((bin.id ? bin.id.charCodeAt(1) : 50) % 10) - 5) * 0.0018));
+      const variancePct = ((lidarCalculatedKg - manifestKg) / manifestKg) * 100.0;
+      const isTolerancePass = Math.abs(variancePct) <= 1.5;
+
+      const elOd = document.getElementById('amzLidarOd');
+      if (elOd) elOd.innerText = `${coilOuterDia.toFixed(2)} m (${(coilOuterDia * 39.3701).toFixed(1)}")`;
+      const elId = document.getElementById('amzLidarId');
+      if (elId) elId.innerText = `${coilCoreDia.toFixed(3)} m (${(coilCoreDia * 39.3701).toFixed(1)}" Core)`;
+      const elW = document.getElementById('amzLidarWidth');
+      if (elW) elW.innerText = `${coilWidth.toFixed(2)} m (${(coilWidth * 39.3701).toFixed(1)}")`;
+      const elTon = document.getElementById('amzLidarTonnage');
+      if (elTon) elTon.innerText = `${lidarCalculatedMT.toFixed(2)} MT (${Math.round(lidarCalculatedLbs).toLocaleString()} lb)`;
+
+      const elTol = document.getElementById('amzLidarTolerancePill');
+      if (elTol) {
+        elTol.innerText = isTolerancePass ? `MATCH ${(100 - Math.abs(variancePct)).toFixed(1)}% ✓` : `VARIANCE ${variancePct.toFixed(1)}% ⚠️`;
+        elTol.style.background = isTolerancePass ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+        elTol.style.color = isTolerancePass ? '#10b981' : '#ef4444';
+      }
+
+      const elMan = document.getElementById('amzManifestWeight');
+      if (elMan) elMan.innerText = `${Math.round(manifestKg).toLocaleString()} kg`;
+      const elVar = document.getElementById('amzWeightVariance');
+      if (elVar) {
+        elVar.innerText = `${variancePct >= 0 ? '+' : ''}${variancePct.toFixed(2)}% (${isTolerancePass ? 'Pass < 1.5%' : 'FLAGGED'})`;
+        elVar.style.color = isTolerancePass ? '#10b981' : '#f59e0b';
+      }
 
       // 2. Scan status badge and sweeping laser
       if (isLiveScan) {
@@ -9783,6 +10012,26 @@ class RSDCBridgeCrane {
     this.trolleyGroup.position.set(0, this.jointTrolleyY.current, 8.9);
     this.trolleyGroup.userData = { type: 'crane', crane: this };
     this.bridgeGroup.add(this.trolleyGroup);
+
+    // OSHA 1910.179 / ISO 21384-3 Suspended Load Exclusion Cylinder Volume (4.5m Radius)
+    const oshaExclGeo = new THREE.CylinderGeometry(4.5, 4.5, 8.8, 24, 1, true);
+    const oshaExclMat = new THREE.MeshBasicMaterial({
+      color: 0xf59e0b,
+      transparent: true,
+      opacity: 0.12,
+      wireframe: true,
+      side: THREE.DoubleSide
+    });
+    this.oshaExclusionMesh = new THREE.Mesh(oshaExclGeo, oshaExclMat);
+    this.oshaExclusionMesh.position.set(0, 0, -4.4);
+    this.trolleyGroup.add(this.oshaExclusionMesh);
+
+    // Hazard Boundary Floor Ring (5.0m Radius on warehouse floor)
+    const oshaRingGeo = new THREE.RingGeometry(4.2, 4.7, 32);
+    const oshaRingMat = new THREE.MeshBasicMaterial({ color: 0xef4444, transparent: true, opacity: 0.32, side: THREE.DoubleSide });
+    this.oshaFloorRing = new THREE.Mesh(oshaRingGeo, oshaRingMat);
+    this.oshaFloorRing.position.set(0, 0, -8.82);
+    this.trolleyGroup.add(this.oshaFloorRing);
 
     const frame = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.4, 0.45), steelMat);
     frame.position.set(0, 0, 0.25);
@@ -11229,6 +11478,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('systemStatusText').innerText = (activeCamMode === 'crane_follow') ?
       `🎥 Tracking ${activeSelectedCrane ? activeSelectedCrane.name : 'Crane'} in 3D` : 'Camera returned to overview';
+  });
+
+  // Simulate Crane-Drone Airspace Conflict Button
+  document.getElementById('btnTriggerCraneConflict')?.addEventListener('click', () => {
+    const targetCrane = activeSelectedCrane || rsdcCraneB || rsdcCraneA;
+    if (targetCrane && droneMesh) {
+      targetCrane.jointBridgeX.setTarget(droneMesh.position.x);
+      targetCrane.jointTrolleyY.setTarget(droneMesh.position.y);
+      document.getElementById('systemStatusText').innerText =
+        `⚠️ Simulated Conflict: Dispatched ${targetCrane.name} toward active drone corridor!`;
+    }
   });
 
   // Dispatch Next Job Button
