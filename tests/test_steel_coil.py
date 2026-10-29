@@ -78,3 +78,55 @@ def test_api_world_steel_coil_preset(client: TestClient):
     assert "coil_img_id" in data["bins"][0]
     assert "coil_supplier" in data["bins"][0]
     assert "static_obstacles" in data
+
+
+def test_steel_coil_terminal_preset():
+    """Verify advanced 3-Zone Steel Coil Terminal preset and exact 144-coil layout."""
+    cfg = load_config("configs/presets/steel_coil_terminal.yaml")
+    assert cfg.site.id == "WH-STEEL-COIL-TERMINAL"
+    assert cfg.site.floor_bounds.x_max == 82.0
+    assert cfg.site.floor_bounds.y_max == 46.0
+    assert len(cfg.layout.zones) == 5
+    assert len(cfg.layout.aisles) == 16
+    assert len(cfg.layout.takeoff_landing_pads) >= 2
+
+    world = generate_world_from_config(cfg)
+    summary = world.get_summary()
+    assert summary.site_id == "WH-STEEL-COIL-TERMINAL"
+    assert summary.total_racks == 18
+    assert summary.total_bins == 144  # 3 zones * 2 banks * 3 rows * 8 coils
+    assert len(world.static_obstacles) >= 12
+    assert len(world.dynamic_obstacles) == 10  # 4 ground AGVs/humans + 6 overhead cranes (2 per zone)
+
+    crane_ids = [d.id for d in world.dynamic_obstacles if "CRANE" in d.id]
+    assert len(crane_ids) == 6  # 2 yellow bridges in Zone A, 2 in Zone B, 2 in Zone C
+    assert "CRANE-BRIDGE-ZA-TOP" in crane_ids
+    assert "CRANE-BRIDGE-ZA-BOT" in crane_ids
+    assert "CRANE-BRIDGE-ZB-TOP" in crane_ids
+    assert "CRANE-BRIDGE-ZB-BOT" in crane_ids
+    assert "CRANE-BRIDGE-ZC-TOP" in crane_ids
+    assert "CRANE-BRIDGE-ZC-BOT" in crane_ids
+
+
+    # Verify all 144 coils have full client mill catalog records
+    coils = list(world.bins.values())
+    assert len(coils) == 144
+    for c in coils:
+        assert c.coil_img_id is not None
+        assert c.coil_supplier is not None
+        assert c.coil_weight_kg is not None
+        assert c.coil_weight_kg > 0
+
+
+def test_api_world_steel_coil_terminal(client: TestClient):
+    """Verify /api/world?config=steel_coil_terminal API delivery."""
+    res = client.get("/api/world?config=steel_coil_terminal")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["site_id"] == "WH-STEEL-COIL-TERMINAL"
+    assert len(data["bins"]) == 144
+    assert data["summary"]["total_bins"] == 144
+    assert data["summary"]["total_aisles"] == 16
+    assert data["summary"]["total_racks"] == 18
+
+

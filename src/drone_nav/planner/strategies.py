@@ -22,7 +22,7 @@ class NaiveStrategy:
 class SerpentineStrategy:
     """Optimized serpentine strategy: visits aisles sequentially with smooth entry/exit.
 
-    Respects one-way aisles and scans left/right flanking racks in an organized sweep.
+    Respects one-way aisles, predominant warehouse orientation, and scans flanking racks in an organized sweep.
     """
 
     def order_bins(self, world: World, bins: list[Bin]) -> list[Bin]:
@@ -31,35 +31,60 @@ class SerpentineStrategy:
         for b in bins:
             bins_by_aisle.setdefault(b.aisle_id, []).append(b)
 
-        # Sort aisles by physical X coordinate
         aisle_map = {a.id: a for a in world.aisles}
-        sorted_aisle_ids = sorted(
-            bins_by_aisle.keys(),
-            key=lambda a_id: aisle_map[a_id].x_start if a_id in aisle_map else 0.0,
-        )
+
+        # Check predominant orientation
+        total_dx = sum(abs(a.x_end - a.x_start) for a in world.aisles)
+        total_dy = sum(abs(a.y_end - a.y_start) for a in world.aisles)
+        is_predominantly_x = total_dx >= total_dy
+
+        if is_predominantly_x:
+            # Sort aisles along Y (North to South / South to North)
+            sorted_aisle_ids = sorted(
+                bins_by_aisle.keys(),
+                key=lambda a_id: (aisle_map[a_id].y_start + aisle_map[a_id].y_end) / 2.0 if a_id in aisle_map else 0.0,
+            )
+        else:
+            # Sort aisles along X
+            sorted_aisle_ids = sorted(
+                bins_by_aisle.keys(),
+                key=lambda a_id: (aisle_map[a_id].x_start + aisle_map[a_id].x_end) / 2.0 if a_id in aisle_map else 0.0,
+            )
 
         ordered: list[Bin] = []
         for aisle_idx, a_id in enumerate(sorted_aisle_ids):
             a_bins = bins_by_aisle[a_id]
             aisle_obj = aisle_map.get(a_id)
 
-            # Determine traversal direction along Y
-            # If one_way forward -> South to North (increasing Y)
-            # If one_way backward -> North to South (decreasing Y)
-            # If bidirectional -> alternate direction (serpentine snake: even index S->N, odd index N->S)
-            if aisle_obj and aisle_obj.one_way:
-                reverse_y = (aisle_obj.direction == "backward")
-            else:
-                reverse_y = (aisle_idx % 2 == 1)
+            if is_predominantly_x:
+                if aisle_obj and aisle_obj.one_way:
+                    reverse_dir = (aisle_obj.direction == "backward")
+                else:
+                    reverse_dir = (aisle_idx % 2 == 1)
 
-            # Sort bins primarily by Y position (along aisle), secondarily by rack side, then level
-            a_bins.sort(
-                key=lambda b: (
-                    -b.center[1] if reverse_y else b.center[1],
-                    b.rack_id,
-                    b.level_index,
+                # Sort bins primarily by X position (along longitudinal aisle), then rack side, then level
+                a_bins.sort(
+                    key=lambda b: (
+                        -b.center[0] if reverse_dir else b.center[0],
+                        b.rack_id,
+                        b.level_index,
+                    )
                 )
-            )
+            else:
+                if aisle_obj and aisle_obj.one_way:
+                    reverse_dir = (aisle_obj.direction == "backward")
+                else:
+                    reverse_dir = (aisle_idx % 2 == 1)
+
+                # Sort bins primarily by Y position (along aisle), then rack side, then level
+                a_bins.sort(
+                    key=lambda b: (
+                        -b.center[1] if reverse_dir else b.center[1],
+                        b.rack_id,
+                        b.level_index,
+                    )
+                )
+
             ordered.extend(a_bins)
 
         return ordered
@@ -132,33 +157,41 @@ class MinimumTimeStrategy:
     """Minimum-time strategy: clusters bay levels and accounts for 3D climb and turn costs."""
 
     def order_bins(self, world: World, bins: list[Bin]) -> list[Bin]:
-        # Group by aisle, then order each rack face in a vertical serpentine (up one bay, down the next)
         bins_by_aisle: dict[str, list[Bin]] = {}
         for b in bins:
             bins_by_aisle.setdefault(b.aisle_id, []).append(b)
 
         aisle_map = {a.id: a for a in world.aisles}
-        sorted_aisle_ids = sorted(
-            bins_by_aisle.keys(),
-            key=lambda a_id: aisle_map[a_id].x_start if a_id in aisle_map else 0.0,
-        )
+
+        total_dx = sum(abs(a.x_end - a.x_start) for a in world.aisles)
+        total_dy = sum(abs(a.y_end - a.y_start) for a in world.aisles)
+        is_predominantly_x = total_dx >= total_dy
+
+        if is_predominantly_x:
+            sorted_aisle_ids = sorted(
+                bins_by_aisle.keys(),
+                key=lambda a_id: (aisle_map[a_id].y_start + aisle_map[a_id].y_end) / 2.0 if a_id in aisle_map else 0.0,
+            )
+        else:
+            sorted_aisle_ids = sorted(
+                bins_by_aisle.keys(),
+                key=lambda a_id: (aisle_map[a_id].x_start + aisle_map[a_id].x_end) / 2.0 if a_id in aisle_map else 0.0,
+            )
 
         ordered: list[Bin] = []
         for aisle_idx, a_id in enumerate(sorted_aisle_ids):
             a_bins = bins_by_aisle[a_id]
             aisle_obj = aisle_map.get(a_id)
 
-            reverse_y = (aisle_obj.direction == "backward") if (aisle_obj and aisle_obj.one_way) else (aisle_idx % 2 == 1)
+            reverse = (aisle_obj.direction == "backward") if (aisle_obj and aisle_obj.one_way) else (aisle_idx % 2 == 1)
 
-            # Group bins by bay
             bins_by_bay: dict[int, list[Bin]] = {}
             for b in a_bins:
                 bins_by_bay.setdefault(b.bay_index, []).append(b)
 
-            sorted_bays = sorted(bins_by_bay.keys(), reverse=reverse_y)
+            sorted_bays = sorted(bins_by_bay.keys(), reverse=reverse)
             for bay_idx, b_idx in enumerate(sorted_bays):
                 bay_bins = bins_by_bay[b_idx]
-                # Alternate climb up and descent down to save vertical energy and time
                 climb_up = (bay_idx % 2 == 0)
                 bay_bins.sort(key=lambda b: b.level_index if climb_up else -b.level_index)
                 ordered.extend(bay_bins)

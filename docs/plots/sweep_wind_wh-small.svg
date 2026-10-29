@@ -8,13 +8,13 @@
 <rect width="800" height="450" fill="url(#bgGrad)" rx="8"/>
 <text x="400.0" y="32" fill="#f8fafc" font-size="16" font-weight="bold" text-anchor="middle">Wind Disturbance Sweep Benchmark</text>
 <line x1="80" y1="60.0" x2="740" y2="60.0" stroke="#334155" stroke-dasharray="4,4"/>
-<text x="70" y="64.0" fill="#38bdf8" font-size="10" text-anchor="end">19.5 cm</text>
+<text x="70" y="64.0" fill="#38bdf8" font-size="10" text-anchor="end">14.0 cm</text>
 <line x1="80" y1="142.5" x2="740" y2="142.5" stroke="#334155" stroke-dasharray="4,4"/>
-<text x="70" y="146.5" fill="#38bdf8" font-size="10" text-anchor="end">14.6 cm</text>
+<text x="70" y="146.5" fill="#38bdf8" font-size="10" text-anchor="end">10.5 cm</text>
 <line x1="80" y1="225.0" x2="740" y2="225.0" stroke="#334155" stroke-dasharray="4,4"/>
-<text x="70" y="229.0" fill="#38bdf8" font-size="10" text-anchor="end">9.8 cm</text>
+<text x="70" y="229.0" fill="#38bdf8" font-size="10" text-anchor="end">7.0 cm</text>
 <line x1="80" y1="307.5" x2="740" y2="307.5" stroke="#334155" stroke-dasharray="4,4"/>
-<text x="70" y="311.5" fill="#38bdf8" font-size="10" text-anchor="end">4.9 cm</text>
+<text x="70" y="311.5" fill="#38bdf8" font-size="10" text-anchor="end">3.5 cm</text>
 <line x1="80" y1="390.0" x2="740" y2="390.0" stroke="#334155" stroke-dasharray="4,4"/>
 <text x="70" y="394.0" fill="#38bdf8" font-size="10" text-anchor="end">0.0 cm</text>
 <text x="80.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">0.0</text>
@@ -22,17 +22,17 @@
 <text x="410.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">1.0</text>
 <text x="575.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">1.5</text>
 <text x="740.0" y="412" fill="#94a3b8" font-size="11" text-anchor="middle">2.0</text>
-<polyline points="80.0,154.4 245.0,151.4 410.0,145.1 575.0,135.3 740.0,126.0" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-<polyline points="80.0,127.6 245.0,127.4 410.0,127.1 575.0,126.8 740.0,126.0" fill="none" stroke="#ec4899" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,3"/>
-<circle cx="80.0" cy="154.4" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="245.0" cy="151.4" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="410.0" cy="145.1" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="575.0" cy="135.3" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<polyline points="80.0,171.1 245.0,166.7 410.0,154.6 575.0,141.1 740.0,126.0" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+<polyline points="80.0,127.8 245.0,128.0 410.0,127.4 575.0,126.6 740.0,126.0" fill="none" stroke="#ec4899" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,3"/>
+<circle cx="80.0" cy="171.1" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="245.0" cy="166.7" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="410.0" cy="154.6" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="575.0" cy="141.1" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
 <circle cx="740.0" cy="126.0" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="80.0" cy="127.6" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="245.0" cy="127.4" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="410.0" cy="127.1" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
-<circle cx="575.0" cy="126.8" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="80.0" cy="127.8" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="245.0" cy="128.0" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="410.0" cy="127.4" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="575.0" cy="126.6" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
 <circle cx="740.0" cy="126.0" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="1.5"/>
 <g transform="translate(520, 20)">
 <circle cx="0" cy="0" r="4" fill="#38bdf8"/>

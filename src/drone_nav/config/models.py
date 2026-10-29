@@ -191,7 +191,7 @@ class StaticObstacleConfig(BaseModel):
 
 class DynamicObstacleConfig(BaseModel):
     id: str
-    type: Literal["walker", "forklift"] = "forklift"
+    type: Literal["walker", "forklift", "crane"] = "forklift"
     path: list[list[float]] = Field(min_length=2, description="List of [x, y, z] waypoints")
     speed_mps: float = Field(gt=0.0)
     schedule_start_s: float = Field(default=0.0, ge=0.0)

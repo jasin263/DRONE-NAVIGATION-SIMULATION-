@@ -29,12 +29,13 @@ from drone_nav.scanning.coil_catalog import SteelCoilCatalog
 
 def generate_world_from_config(
     config: WarehouseConfig,
-    catalog: AmazonBinCatalog | None = None,
+    catalog: AmazonBinCatalog | SteelCoilCatalog | None = None,
 ) -> World:
     """Generate a complete 3D World model from a validated WarehouseConfig.
 
-    If *catalog* is provided and loaded, real Amazon ASIN data is assigned to
-    each generated bin (label_code = primary ASIN, amazon_items populated).
+    If *catalog* is a SteelCoilCatalog or the site is an RSDC / steel coil facility,
+    real steel coil metadata and client image references are assigned to each unit.
+    If *catalog* is an AmazonBinCatalog and available, real ASIN data is assigned.
     Pass ``catalog=None`` (default) for purely synthetic label codes.
     """
     site = config.site
@@ -51,8 +52,14 @@ def generate_world_from_config(
         ceiling_height=site.ceiling_height,
     )
 
-    is_steel_coil = "coil" in site.id.lower() or "coil" in site.name.lower()
-    coil_cat = SteelCoilCatalog() if is_steel_coil else None
+    is_steel_coil = (
+        "coil" in site.id.lower()
+        or "coil" in site.name.lower()
+        or "rsdc" in site.id.lower()
+        or "rsdc" in site.name.lower()
+        or isinstance(catalog, SteelCoilCatalog)
+    )
+    coil_cat = catalog if isinstance(catalog, SteelCoilCatalog) else (SteelCoilCatalog() if is_steel_coil else None)
 
     marker_counter = 1
 
@@ -220,7 +227,7 @@ def generate_world_from_config(
                             coil_weight_kg = coil_rec.approx_weight_kg
                             coil_form_factor = coil_rec.form_factor
                             coil_landmark = coil_rec.column_landmark
-                        elif catalog is not None and catalog.is_available:
+                        elif catalog is not None and getattr(catalog, "is_available", False) and hasattr(catalog, "by_index"):
                             amazon_rec = catalog.by_index(bin_counter)
                             if amazon_rec is not None:
                                 label_code = amazon_rec.primary_asin

@@ -1,0 +1,799 @@
+version: "1.0"
+
+site:
+  id: "WH-STEEL-COIL-TERMINAL"
+  name: "RSDC of Michigan - Autonomous Steel Coil Processing & Logistics Terminal"
+  units: "metres"
+  coordinate_frame:
+    origin: [0.0, 0.0, 0.0]
+    x_axis: "east"
+    y_axis: "north"
+    z_axis: "up"
+    z_up: true
+  floor_bounds:
+    x_min: 0.0
+    x_max: 82.0
+    y_min: 0.0
+    y_max: 46.0
+  ceiling_height: 12.0
+  timezone: "UTC"
+
+layout:
+  zones:
+    - id: "Z-COIL-A"
+      name: "Coil Storage Zone A (Heavy Hot-Rolled & Master Coils)"
+      bounds:
+        x_min: 2.0
+        x_max: 26.0
+        y_min: 8.5
+        y_max: 44.0
+
+    - id: "Z-COIL-B"
+      name: "Coil Storage Zone B (Galvanized & Spangle Automotive Grade)"
+      bounds:
+        x_min: 27.5
+        x_max: 51.5
+        y_min: 8.5
+        y_max: 44.0
+
+    - id: "Z-COIL-C"
+      name: "Coil Storage Zone C (Cold-Rolled, Slit Coils & Precision Blanks)"
+      bounds:
+        x_min: 53.0
+        x_max: 79.0
+        y_min: 8.5
+        y_max: 44.0
+
+    - id: "Z-CROSS-AISLE"
+      name: "High-Speed Autonomous Cross-Aisle & Transfer Corridor"
+      bounds:
+        x_min: 1.0
+        x_max: 81.0
+        y_min: 23.0
+        y_max: 29.0
+
+    - id: "Z-FORKLIFT-LANE"
+      name: "Autonomous Forklift & Heavy AGV Transport Lane"
+      bounds:
+        x_min: 1.0
+        x_max: 81.0
+        y_min: 1.0
+        y_max: 7.5
+
+  aisles:
+    # =========================================================================
+    # ZONE A: Top Bank (Rows B13, B12, B11 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZA-TOP-N"
+      name: "Zone A Top Aisle North (Rows B13 & B12)"
+      x_start: 3.5
+      y_start: 38.5
+      x_end: 23.5
+      y_end: 38.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZA-B13"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZA-B12"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZA-TOP-S"
+      name: "Zone A Top Aisle South (Row B11)"
+      x_start: 3.5
+      y_start: 32.5
+      x_end: 23.5
+      y_end: 32.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZA-B11"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack: null
+
+    # =========================================================================
+    # ZONE A: Bottom Bank (Rows B3, B2, B1 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZA-BOT-N"
+      name: "Zone A Bottom Aisle North (Row B3)"
+      x_start: 3.5
+      y_start: 19.5
+      x_end: 23.5
+      y_end: 19.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack:
+        id: "R-ZA-B3"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZA-BOT-S"
+      name: "Zone A Bottom Aisle South (Rows B2 & B1)"
+      x_start: 3.5
+      y_start: 13.5
+      x_end: 23.5
+      y_end: 13.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZA-B2"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZA-B1"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    # =========================================================================
+    # ZONE B: Top Bank (Rows B13, B12, B11 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZB-TOP-N"
+      name: "Zone B Top Aisle North (Rows B13 & B12)"
+      x_start: 29.5
+      y_start: 38.5
+      x_end: 49.5
+      y_end: 38.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZB-B13"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZB-B12"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZB-TOP-S"
+      name: "Zone B Top Aisle South (Row B11)"
+      x_start: 29.5
+      y_start: 32.5
+      x_end: 49.5
+      y_end: 32.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZB-B11"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack: null
+
+    # =========================================================================
+    # ZONE B: Bottom Bank (Rows B3, B2, B1 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZB-BOT-N"
+      name: "Zone B Bottom Aisle North (Row B3)"
+      x_start: 29.5
+      y_start: 19.5
+      x_end: 49.5
+      y_end: 19.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack:
+        id: "R-ZB-B3"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZB-BOT-S"
+      name: "Zone B Bottom Aisle South (Rows B2 & B1)"
+      x_start: 29.5
+      y_start: 13.5
+      x_end: 49.5
+      y_end: 13.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZB-B2"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZB-B1"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    # =========================================================================
+    # ZONE C: Top Bank (Rows B13, B12, B11 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZC-TOP-N"
+      name: "Zone C Top Aisle North (Rows B13 & B12)"
+      x_start: 55.5
+      y_start: 38.5
+      x_end: 75.5
+      y_end: 38.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZC-B13"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZC-B12"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZC-TOP-S"
+      name: "Zone C Top Aisle South (Row B11)"
+      x_start: 55.5
+      y_start: 32.5
+      x_end: 75.5
+      y_end: 32.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZC-B11"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack: null
+
+    # =========================================================================
+    # ZONE C: Bottom Bank (Rows B3, B2, B1 - 24 Coils)
+    # =========================================================================
+    - id: "A-ZC-BOT-N"
+      name: "Zone C Bottom Aisle North (Row B3)"
+      x_start: 55.5
+      y_start: 19.5
+      x_end: 75.5
+      y_end: 19.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack:
+        id: "R-ZC-B3"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    - id: "A-ZC-BOT-S"
+      name: "Zone C Bottom Aisle South (Rows B2 & B1)"
+      x_start: 55.5
+      y_start: 13.5
+      x_end: 75.5
+      y_end: 13.5
+      width: 2.2
+      one_way: false
+      direction: "bidirectional"
+      left_rack:
+        id: "R-ZC-B2"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+      right_rack:
+        id: "R-ZC-B1"
+        bays: 8
+        levels: 1
+        bay_width: 2.5
+        level_heights: [0.8]
+        depth: 2.0
+        bin_width: 2.2
+        bin_height: 1.8
+        bins_per_bay_level: 1
+
+    # =========================================================================
+    # TRANSIT CORRIDORS: Cross-Aisle, Forklift Lane & Vertical Intersections
+    # =========================================================================
+    - id: "A-CROSS-AISLE"
+      name: "High-Speed Central Cross-Aisle"
+      x_start: 2.0
+      y_start: 26.0
+      x_end: 80.0
+      y_end: 26.0
+      width: 4.5
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack: null
+
+    - id: "A-FORKLIFT-LANE"
+      name: "Autonomous Forklift & AGV Highway (Both Directions)"
+      x_start: 2.0
+      y_start: 4.0
+      x_end: 80.0
+      y_end: 4.0
+      width: 5.0
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack: null
+
+    - id: "A-VERT-DIV-AB"
+      name: "Zone A-B Vertical Transfer Corridor"
+      x_start: 26.5
+      y_start: 7.0
+      x_end: 26.5
+      y_end: 43.0
+      width: 2.5
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack: null
+
+    - id: "A-VERT-DIV-BC"
+      name: "Zone B-C Vertical Transfer Corridor & Transfer Point"
+      x_start: 52.5
+      y_start: 7.0
+      x_end: 52.5
+      y_end: 43.0
+      width: 2.5
+      one_way: false
+      direction: "bidirectional"
+      left_rack: null
+      right_rack: null
+
+  bin_numbering_template: "COIL-{aisle_id}-{rack_id}-B{bay:02d}"
+
+  doors:
+    - id: "DOOR-WEST-RECEIVING"
+      position: [0.2, 4.0, 0.0]
+      width: 5.0
+      height: 5.5
+    - id: "DOOR-EAST-SHIPPING"
+      position: [81.8, 4.0, 0.0]
+      width: 5.0
+      height: 5.5
+    - id: "DOOR-CROSS-WEST"
+      position: [0.2, 26.0, 0.0]
+      width: 4.0
+      height: 4.5
+    - id: "DOOR-CROSS-EAST"
+      position: [81.8, 26.0, 0.0]
+      width: 4.0
+      height: 4.5
+
+  charging_stations:
+    - id: "CHARGE-OPERATIONS"
+      position: [39.0, 4.0, 0.0]
+      charge_rate_kw: 2.5
+    - id: "CHARGE-TRANSFER"
+      position: [52.5, 26.0, 0.0]
+      charge_rate_kw: 2.5
+    - id: "CHARGE-WEST-BAY"
+      position: [3.5, 26.0, 0.0]
+      charge_rate_kw: 1.8
+
+  takeoff_landing_pads:
+    - id: "PAD-OPERATIONS-NEST"
+      position: [39.0, 4.0, 0.0]
+      radius: 0.9
+    - id: "PAD-TRANSFER-INTERSECTION"
+      position: [52.5, 26.0, 0.0]
+      radius: 0.9
+    - id: "PAD-WEST-STANDBY"
+      position: [3.5, 26.0, 0.0]
+      radius: 0.8
+    - id: "PAD-EAST-STANDBY"
+      position: [77.5, 26.0, 0.0]
+      radius: 0.8
+
+  no_fly_zones:
+    - id: "NFZ-HIGH-BAY-CRANES"
+      name: "Overhead 40-Ton Gantry Crane Clearance Zone"
+      polygon:
+        - [0.0, 0.0]
+        - [82.0, 0.0]
+        - [82.0, 46.0]
+        - [0.0, 46.0]
+      z_min: 5.2
+      z_max: 12.0
+
+  people_zones:
+    - id: "PZ-OPERATIONS-CONTROL"
+      name: "Forklift / Operations Station (Charging / Maintenance)"
+      polygon:
+        - [34.0, 1.5]
+        - [44.0, 1.5]
+        - [44.0, 6.5]
+        - [34.0, 6.5]
+      max_speed_mps: 0.8
+    - id: "PZ-TRANSFER-POINT"
+      name: "Cross-Aisle Transfer & Staging Point"
+      polygon:
+        - [50.0, 24.0]
+        - [55.0, 24.0]
+        - [55.0, 28.0]
+        - [50.0, 28.0]
+      max_speed_mps: 0.8
+
+obstacles:
+  static:
+    # Perimeter Structural Columns (South Wall)
+    - id: "COL-S-01"
+      type: "pillar"
+      position: [2.0, 1.0, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-S-02"
+      type: "pillar"
+      position: [26.5, 1.0, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-S-03"
+      type: "pillar"
+      position: [52.5, 1.0, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-S-04"
+      type: "pillar"
+      position: [79.5, 1.0, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+
+    # Zone A / B Dividing Heavy Structural Columns
+    - id: "COL-AB-01"
+      type: "pillar"
+      position: [26.5, 10.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-AB-02"
+      type: "pillar"
+      position: [26.5, 19.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-AB-03"
+      type: "pillar"
+      position: [26.5, 32.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-AB-04"
+      type: "pillar"
+      position: [26.5, 41.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+
+    # Zone B / C Dividing Heavy Structural Columns
+    - id: "COL-BC-01"
+      type: "pillar"
+      position: [52.5, 10.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-BC-02"
+      type: "pillar"
+      position: [52.5, 19.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-BC-03"
+      type: "pillar"
+      position: [52.5, 32.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+    - id: "COL-BC-04"
+      type: "pillar"
+      position: [52.5, 41.5, 0.0]
+      dimensions: [0.6, 0.6, 12.0]
+
+    # Operations Station Safety Bollards
+    - id: "BOLLARD-OP-01"
+      type: "pillar"
+      position: [35.0, 6.8, 0.0]
+      dimensions: [0.25, 0.25, 1.2]
+    - id: "BOLLARD-OP-02"
+      type: "pillar"
+      position: [43.0, 6.8, 0.0]
+      dimensions: [0.25, 0.25, 1.2]
+
+    # RSDC Client Industrial Facilities & Machinery (from Warehouse Layout.pdf)
+    - id: "TANK-LIQUID-NITROGEN"
+      type: "pillar"
+      position: [78.5, 36.0, 0.0]
+      dimensions: [2.4, 2.4, 7.5]
+    - id: "EQUIP-CTL-LINE"
+      type: "pillar"
+      position: [42.0, 35.0, 0.0]
+      dimensions: [6.0, 3.0, 2.5]
+    - id: "EQUIP-LASER-BLANK"
+      type: "pillar"
+      position: [46.0, 35.0, 0.0]
+      dimensions: [4.5, 3.2, 2.8]
+    - id: "SHOP-DIE-WASH"
+      type: "pillar"
+      position: [22.0, 44.0, 0.0]
+      dimensions: [4.0, 3.0, 2.2]
+    - id: "AREA-SCRAP-STORAGE"
+      type: "pillar"
+      position: [14.0, 44.5, 0.0]
+      dimensions: [4.5, 3.0, 2.0]
+    - id: "COMPLEX-ADMIN-OFFICES"
+      type: "pillar"
+      position: [38.0, 2.5, 0.0]
+      dimensions: [22.0, 5.0, 3.5]
+    - id: "TOOL-CRIB"
+      type: "pillar"
+      position: [55.0, 3.0, 0.0]
+      dimensions: [5.0, 4.0, 3.0]
+    - id: "TRUCK-BAY-16"
+      type: "pillar"
+      position: [28.0, 7.0, 0.0]
+      dimensions: [4.5, 8.0, 3.5]
+    - id: "TRUCK-BAY-17"
+      type: "pillar"
+      position: [48.0, 7.0, 0.0]
+      dimensions: [4.5, 8.0, 3.5]
+
+  dynamic:
+    - id: "AGV-FORKLIFT-EAST"
+      type: "forklift"
+      path:
+        - [5.0, 3.0, 0.0]
+        - [77.0, 3.0, 0.0]
+        - [77.0, 5.0, 0.0]
+        - [5.0, 5.0, 0.0]
+        - [5.0, 3.0, 0.0]
+      speed_mps: 1.3
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "AGV-FORKLIFT-WEST"
+      type: "forklift"
+      path:
+        - [77.0, 5.0, 0.0]
+        - [5.0, 5.0, 0.0]
+        - [5.0, 3.0, 0.0]
+        - [77.0, 3.0, 0.0]
+        - [77.0, 5.0, 0.0]
+      speed_mps: 1.3
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "AMR-CROSS-TROLLEY"
+      type: "walker"
+      path:
+        - [4.0, 26.0, 0.0]
+        - [78.0, 26.0, 0.0]
+        - [4.0, 26.0, 0.0]
+      speed_mps: 0.9
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "HUMAN-SAFETY-MARSHAL"
+      type: "walker"
+      path:
+        - [36.0, 4.0, 0.0]
+        - [42.0, 4.0, 0.0]
+        - [52.5, 26.0, 0.0]
+        - [42.0, 4.0, 0.0]
+        - [36.0, 4.0, 0.0]
+      speed_mps: 0.8
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    # =========================================================================
+    # 6 OVERHEAD GANTRY CRANES (2 Yellow Bridges per Zone traversing Left - Right)
+    # =========================================================================
+    - id: "CRANE-BRIDGE-ZA-TOP"
+      type: "crane"
+      path:
+        - [6.0, 36.5, 9.5]
+        - [21.5, 36.5, 9.5]
+        - [6.0, 36.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "CRANE-BRIDGE-ZA-BOT"
+      type: "crane"
+      path:
+        - [6.0, 16.5, 9.5]
+        - [21.5, 16.5, 9.5]
+        - [6.0, 16.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "CRANE-BRIDGE-ZB-TOP"
+      type: "crane"
+      path:
+        - [32.0, 36.5, 9.5]
+        - [47.5, 36.5, 9.5]
+        - [32.0, 36.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "CRANE-BRIDGE-ZB-BOT"
+      type: "crane"
+      path:
+        - [32.0, 16.5, 9.5]
+        - [47.5, 16.5, 9.5]
+        - [32.0, 16.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "CRANE-BRIDGE-ZC-TOP"
+      type: "crane"
+      path:
+        - [58.0, 36.5, 9.5]
+        - [73.5, 36.5, 9.5]
+        - [58.0, 36.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+    - id: "CRANE-BRIDGE-ZC-BOT"
+      type: "crane"
+      path:
+        - [58.0, 16.5, 9.5]
+        - [73.5, 16.5, 9.5]
+        - [58.0, 16.5, 9.5]
+      speed_mps: 0.6
+      schedule_start_s: 0.0
+      schedule_end_s: 3600.0
+
+  random_seed: 42
+  random_count: 0
+
+drone:
+  mass_kg: 3.2
+  max_speed_mps: 2.8
+  max_accel_mps2: 1.8
+  max_yaw_rate_radps: 1.57
+  battery:
+    capacity_wh: 220.0
+    hover_power_w: 210.0
+    forward_power_w_per_mps: 20.0
+    climb_power_w_per_mps: 28.0
+    safe_reserve_pct: 20.0
+    critical_reserve_pct: 10.0
+  camera:
+    resolution_w: 1920
+    resolution_h: 1080
+    hfov_deg: 72.0
+    vfov_deg: 48.0
+    mount_angle_deg: 0.0
+    standoff_distance_m: 1.2
+    exposure_time_s: 0.003
+    max_blur_speed_mps: 1.2
+  sensors:
+    imu_accel_bias: 0.012
+    imu_accel_noise: 0.025
+    imu_gyro_bias: 0.002
+    imu_gyro_noise: 0.006
+    marker_pos_noise: 0.012
+    marker_miss_prob: 0.02
+    lidar_range_max_m: 25.0
+    lidar_noise_m: 0.012
+
+localisation:
+  marker_size_m: 0.22
+  marker_spacing:
+    rack_ends: true
+    every_n_bays: 2
+  pose_noise: 0.015
+  drift_model:
+    walk_std_mps: 0.02
+  fusion_filter:
+    process_noise_pos: 0.008
+    process_noise_vel: 0.04
+    meas_noise_marker: 0.015
+    meas_noise_imu: 0.06
+
+mission:
+  target_zones: ["Z-COIL-A", "Z-COIL-B", "Z-COIL-C"]
+  target_bins: []
+  priority: "normal"
+  scan_strategy: "serpentine"
+  max_flight_duration_s: 1800.0
+  return_to_charge_rules:
+    threshold_pct: 20.0
+    pad_id: "PAD-OPERATIONS-NEST"
+
+safety:
+  min_rack_clearance_m: 0.5
+  geofence_margin_m: 0.6
+  battery_reserve_pct: 20.0
+  link_loss_behaviour: "hover_then_land"
+  localisation_loss_behaviour: "hover_then_land"
+  emergency_stop_decel_mps2: 4.0
+
+export:
+  drims_endpoint_url: null
+  auth_token: null
+  site_id_mapping: "WH-STEEL-COIL-TERMINAL"
+  schema_version: "1.0"
+  mode: "file"
+  output_directory: "exports/steel_coil_terminal"

@@ -288,6 +288,10 @@ class SteelCoilCatalog:
         self._by_barcode = {r.barcode: r for r in self._records}
         self._by_coil_id = {r.coil_id: r for r in self._records}
 
+    @property
+    def is_available(self) -> bool:
+        return len(self._records) > 0
+
     def __len__(self) -> int:
         return len(self._records)
 

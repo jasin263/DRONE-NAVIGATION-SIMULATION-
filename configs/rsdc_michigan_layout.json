@@ -1,0 +1,7928 @@
+{
+  "version": "2.0",
+  "facility_id": "RSDC-MICHIGAN",
+  "name": "RSDC of Michigan Emergency Action Plan Facility",
+  "description": "Exact data-driven 3D replication of the RSDC of Michigan EAP blueprint map",
+  "scale": {
+    "unit": "metres",
+    "ft_to_unit": 0.3048,
+    "reference_render_px": [
+      935,
+      1210
+    ],
+    "origin_px": [
+      125,
+      185
+    ],
+    "scale_px_to_ft": 1.22,
+    "conversion_formula": "x_ft = (px_x - 125) * 1.22; z_ft = (px_y - 185) * 1.22; x_m = x_ft * 0.3048; y_m = z_ft * 0.3048; z_m = height_ft * 0.3048"
+  },
+  "handwritten_dimensions": {
+    "bays_depth_ft": {
+      "A_Bay": 100.0,
+      "B_Bay": 100.0,
+      "C_Bay": 100.0,
+      "total_depth_ft": 300.0
+    },
+    "production_columns_width_ft": {
+      "G_Bay": 100.0,
+      "F_Bay": 100.0,
+      "E_Bay": 100.0,
+      "D_Bay": 125.0,
+      "total_width_ft": 425.0
+    },
+    "rack_module_ft": 25.0,
+    "main_aisle_gap_ft": 25.0
+  },
+  "wall_specs": {
+    "warehouse_height_ft": 30.0,
+    "production_height_ft": 25.0,
+    "office_height_ft": 12.0,
+    "thickness_ft": 1.0,
+    "rack_height_ft": 20.0
+  },
+  "color_legend": {
+    "evacuation_assembly": {
+      "color": "#ffffff",
+      "hatch": "diagonal_black_white",
+      "desc": "Evacuation Assembly Areas (Hatched Black/White)"
+    },
+    "severe_weather_shelter": {
+      "color": "#22c55e",
+      "desc": "Severe Weather Shelter Assembly Areas (Bright Green)"
+    },
+    "pedestrian_walkways": {
+      "color": "#15803d",
+      "desc": "Pedestrian Walkways (Dark Green Floor Lines)"
+    },
+    "pedestrian_exit_doors": {
+      "color": "#ef4444",
+      "desc": "Pedestrian EXIT Doors (Red)"
+    },
+    "main_aisles_truck_bays": {
+      "color": "#2563eb",
+      "desc": "Main Aisles & Truck Bays (Blue Floor Paint)"
+    },
+    "warehouse_floor": {
+      "color": "#d4d4d8",
+      "desc": "Light Concrete Epoxy Floor (Warehouse Storage)"
+    },
+    "production_floor": {
+      "color": "#475569",
+      "desc": "Heavy Industrial Concrete Slab (Production)"
+    },
+    "office_floor": {
+      "color": "#22c55e",
+      "desc": "Severe Weather Bright Green Epoxy (Office Strip)"
+    },
+    "outdoor_ground": {
+      "color": "#1e293b",
+      "desc": "Asphalt Ground (Parking Lots & Muster Areas)"
+    }
+  },
+  "zones": [
+    {
+      "id": "ZONE-WH-STORAGE",
+      "name": "Warehouse Storage (A-Bay, B-Bay, C-Bay)",
+      "category": "warehouse",
+      "px_box": [
+        165,
+        213,
+        725,
+        458
+      ],
+      "bounds_ft": {
+        "x_min": 48.8,
+        "x_max": 732.0,
+        "z_min": 34.0,
+        "z_max": 334.0,
+        "width_ft": 683.2,
+        "depth_ft": 300.0
+      },
+      "sub_bays": [
+        {
+          "name": "A-Bay",
+          "z_min": 34.0,
+          "z_max": 134.0,
+          "depth_ft": 100.0,
+          "label": "A-BAY (100')"
+        },
+        {
+          "name": "B-Bay",
+          "z_min": 134.0,
+          "z_max": 234.0,
+          "depth_ft": 100.0,
+          "label": "B-BAY (100')"
+        },
+        {
+          "name": "C-Bay",
+          "z_min": 234.0,
+          "z_max": 334.0,
+          "depth_ft": 100.0,
+          "label": "C-BAY (100')"
+        }
+      ],
+      "wall_height_ft": 30.0,
+      "floor_material": "warehouse_floor",
+      "rack_module_pitch_ft": 25.0,
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 14.87,
+        "x_max": 223.11,
+        "z_min": 10.36,
+        "z_max": 101.8,
+        "width_m": 208.24,
+        "depth_m": 91.44
+      }
+    },
+    {
+      "id": "ZONE-WH-SHIPPING-BAY",
+      "name": "WH Shipping Truck Bay",
+      "category": "shipping",
+      "px_box": [
+        125,
+        185,
+        165,
+        515
+      ],
+      "bounds_ft": {
+        "x_min": 0.0,
+        "x_max": 48.8,
+        "z_min": 0.0,
+        "z_max": 402.6,
+        "width_ft": 48.8,
+        "depth_ft": 402.6
+      },
+      "wall_height_ft": 30.0,
+      "floor_material": "main_aisles_truck_bays",
+      "label_vertical": true,
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 0.0,
+        "x_max": 14.87,
+        "z_min": 0.0,
+        "z_max": 122.71,
+        "width_m": 14.87,
+        "depth_m": 122.71
+      }
+    },
+    {
+      "id": "ZONE-WH-RECEIVING-BAY",
+      "name": "WH Receiving Truck Bay",
+      "category": "receiving",
+      "px_box": [
+        728,
+        185,
+        760,
+        460
+      ],
+      "bounds_ft": {
+        "x_min": 735.66,
+        "x_max": 774.7,
+        "z_min": 0.0,
+        "z_max": 335.5,
+        "width_ft": 39.04,
+        "depth_ft": 335.5
+      },
+      "wall_height_ft": 30.0,
+      "floor_material": "main_aisles_truck_bays",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 224.23,
+        "x_max": 236.13,
+        "z_min": 0.0,
+        "z_max": 102.26,
+        "width_m": 11.9,
+        "depth_m": 102.26
+      }
+    },
+    {
+      "id": "ZONE-RAILCAR-BAYS",
+      "name": "Railcar Bays (Twin Track Spur)",
+      "category": "rail",
+      "px_box": [
+        770,
+        215,
+        820,
+        470
+      ],
+      "bounds_ft": {
+        "x_min": 786.9,
+        "x_max": 847.9,
+        "z_min": 36.6,
+        "z_max": 347.7,
+        "width_ft": 61.0,
+        "depth_ft": 311.1
+      },
+      "wall_height_ft": 30.0,
+      "floor_material": "warehouse_floor",
+      "has_rail_tracks": true,
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 239.85,
+        "x_max": 258.44,
+        "z_min": 11.16,
+        "z_max": 105.98,
+        "width_m": 18.59,
+        "depth_m": 94.82
+      }
+    },
+    {
+      "id": "ZONE-BACK-PARKING-LOT",
+      "name": "Back Parking Lot",
+      "category": "outdoor",
+      "px_box": [
+        300,
+        80,
+        580,
+        180
+      ],
+      "bounds_ft": {
+        "x_min": 213.5,
+        "x_max": 555.1,
+        "z_min": -128.1,
+        "z_max": -6.1,
+        "width_ft": 341.6,
+        "depth_ft": 122.0
+      },
+      "wall_height_ft": 0.0,
+      "floor_material": "outdoor_ground",
+      "has_roof": false,
+      "bounds_m": {
+        "x_min": 65.07,
+        "x_max": 169.19,
+        "z_min": -39.04,
+        "z_max": -1.86,
+        "width_m": 104.12,
+        "depth_m": 37.19
+      }
+    },
+    {
+      "id": "ZONE-PRODUCTION",
+      "name": "Production Area (G, F, E, D Bay Press & Blanking Lines)",
+      "category": "production",
+      "px_box": [
+        310,
+        440,
+        655,
+        750
+      ],
+      "bounds_ft": {
+        "x_min": 225.7,
+        "x_max": 650.7,
+        "z_min": 311.1,
+        "z_max": 689.3,
+        "width_ft": 425.0,
+        "depth_ft": 378.2
+      },
+      "sub_bays": [
+        {
+          "name": "G-Bay",
+          "x_min": 225.7,
+          "x_max": 325.7,
+          "width_ft": 100.0,
+          "label": "G-BAY (100')"
+        },
+        {
+          "name": "F-Bay",
+          "x_min": 325.7,
+          "x_max": 425.7,
+          "width_ft": 100.0,
+          "label": "F-BAY (100')"
+        },
+        {
+          "name": "E-Bay",
+          "x_min": 425.7,
+          "x_max": 525.7,
+          "width_ft": 100.0,
+          "label": "E-BAY (100')"
+        },
+        {
+          "name": "D-Bay",
+          "x_min": 525.7,
+          "x_max": 650.7,
+          "width_ft": 125.0,
+          "label": "D-BAY (125')"
+        }
+      ],
+      "wall_height_ft": 25.0,
+      "floor_material": "production_floor",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 68.79,
+        "x_max": 198.33,
+        "z_min": 94.82,
+        "z_max": 210.1,
+        "width_m": 129.54,
+        "depth_m": 115.28
+      }
+    },
+    {
+      "id": "ZONE-MAINTENANCE-ROOM",
+      "name": "Maintenance Room",
+      "category": "maintenance",
+      "px_box": [
+        228,
+        545,
+        305,
+        600
+      ],
+      "bounds_ft": {
+        "x_min": 125.66,
+        "x_max": 219.6,
+        "z_min": 439.2,
+        "z_max": 506.3,
+        "width_ft": 93.94,
+        "depth_ft": 67.1
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "production_floor",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 38.3,
+        "x_max": 66.93,
+        "z_min": 133.87,
+        "z_max": 154.32,
+        "width_m": 28.63,
+        "depth_m": 20.45
+      }
+    },
+    {
+      "id": "ZONE-SCRAP-STORAGE",
+      "name": "Scrap Storage Area",
+      "category": "storage",
+      "px_box": [
+        285,
+        690,
+        310,
+        720
+      ],
+      "bounds_ft": {
+        "x_min": 195.2,
+        "x_max": 225.7,
+        "z_min": 616.1,
+        "z_max": 652.7,
+        "width_ft": 30.5,
+        "depth_ft": 36.6
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "production_floor",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 59.5,
+        "x_max": 68.79,
+        "z_min": 187.79,
+        "z_max": 198.94,
+        "width_m": 9.3,
+        "depth_m": 11.16
+      }
+    },
+    {
+      "id": "ZONE-LIQUID-NITROGEN",
+      "name": "Liquid Nitrogen Cryogenic Tank",
+      "category": "hazmat",
+      "px_box": [
+        657,
+        565,
+        700,
+        580
+      ],
+      "bounds_ft": {
+        "x_min": 649.04,
+        "x_max": 701.5,
+        "z_min": 463.6,
+        "z_max": 481.9,
+        "width_ft": 52.46,
+        "depth_ft": 18.3
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "production_floor",
+      "has_roof": false,
+      "bounds_m": {
+        "x_min": 197.83,
+        "x_max": 213.82,
+        "z_min": 141.31,
+        "z_max": 146.88,
+        "width_m": 15.99,
+        "depth_m": 5.58
+      }
+    },
+    {
+      "id": "ZONE-TRUCK-BAY-ROW",
+      "name": "Truck Bay Row (Cross Building G-F-E-D)",
+      "category": "truck_row",
+      "px_box": [
+        305,
+        750,
+        655,
+        815
+      ],
+      "bounds_ft": {
+        "x_min": 219.6,
+        "x_max": 646.6,
+        "z_min": 689.3,
+        "z_max": 768.6,
+        "width_ft": 427.0,
+        "depth_ft": 79.3
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "main_aisles_truck_bays",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 66.93,
+        "x_max": 197.08,
+        "z_min": 210.1,
+        "z_max": 234.27,
+        "width_m": 130.15,
+        "depth_m": 24.17
+      }
+    },
+    {
+      "id": "ZONE-LOWER-FINISHED-GOODS",
+      "name": "Lower Finished Goods Area (E-Bay, D-Bay, Slitters, Woodshop)",
+      "category": "production",
+      "px_box": [
+        330,
+        815,
+        655,
+        960
+      ],
+      "bounds_ft": {
+        "x_min": 250.1,
+        "x_max": 646.6,
+        "z_min": 768.6,
+        "z_max": 945.5,
+        "width_ft": 396.5,
+        "depth_ft": 176.9
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "production_floor",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 76.23,
+        "x_max": 197.08,
+        "z_min": 234.27,
+        "z_max": 288.19,
+        "width_m": 120.85,
+        "depth_m": 53.92
+      }
+    },
+    {
+      "id": "ZONE-LOADING-DOCK-EAST",
+      "name": "Finished Goods Loading Dock",
+      "category": "dock",
+      "px_box": [
+        655,
+        950,
+        715,
+        965
+      ],
+      "bounds_ft": {
+        "x_min": 646.6,
+        "x_max": 719.8,
+        "z_min": 933.3,
+        "z_max": 951.6,
+        "width_ft": 73.2,
+        "depth_ft": 18.3
+      },
+      "wall_height_ft": 25.0,
+      "floor_material": "main_aisles_truck_bays",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 197.08,
+        "x_max": 219.4,
+        "z_min": 284.47,
+        "z_max": 290.05,
+        "width_m": 22.31,
+        "depth_m": 5.58
+      }
+    },
+    {
+      "id": "ZONE-OFFICE-STRIP",
+      "name": "Office Strip & Severe Weather Shelter",
+      "category": "office_shelter",
+      "px_box": [
+        305,
+        960,
+        655,
+        1025
+      ],
+      "bounds_ft": {
+        "x_min": 219.6,
+        "x_max": 646.6,
+        "z_min": 945.5,
+        "z_max": 1024.8,
+        "width_ft": 427.0,
+        "depth_ft": 79.3
+      },
+      "wall_height_ft": 12.0,
+      "floor_material": "office_floor",
+      "is_severe_weather_shelter": true,
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 66.93,
+        "x_max": 197.08,
+        "z_min": 288.19,
+        "z_max": 312.36,
+        "width_m": 130.15,
+        "depth_m": 24.17
+      }
+    },
+    {
+      "id": "ZONE-TOOL-CRIB",
+      "name": "Tool Crib & Lockers",
+      "category": "tool_crib",
+      "px_box": [
+        585,
+        1025,
+        655,
+        1040
+      ],
+      "bounds_ft": {
+        "x_min": 561.2,
+        "x_max": 646.6,
+        "z_min": 1024.8,
+        "z_max": 1043.1,
+        "width_ft": 85.4,
+        "depth_ft": 18.3
+      },
+      "wall_height_ft": 12.0,
+      "floor_material": "office_floor",
+      "has_roof": true,
+      "bounds_m": {
+        "x_min": 171.05,
+        "x_max": 197.08,
+        "z_min": 312.36,
+        "z_max": 317.94,
+        "width_m": 26.03,
+        "depth_m": 5.58
+      }
+    },
+    {
+      "id": "ZONE-MAIN-PARKING-LOT",
+      "name": "Main Parking Lot & Visitor Entrance",
+      "category": "outdoor",
+      "px_box": [
+        280,
+        1045,
+        680,
+        1180
+      ],
+      "bounds_ft": {
+        "x_min": 189.1,
+        "x_max": 677.1,
+        "z_min": 1049.2,
+        "z_max": 1213.9,
+        "width_ft": 488.0,
+        "depth_ft": 164.7
+      },
+      "wall_height_ft": 0.0,
+      "floor_material": "outdoor_ground",
+      "has_roof": false,
+      "bounds_m": {
+        "x_min": 57.64,
+        "x_max": 206.38,
+        "z_min": 319.8,
+        "z_max": 370.0,
+        "width_m": 148.74,
+        "depth_m": 50.2
+      }
+    }
+  ],
+  "exits": [
+    {
+      "id": "K",
+      "px": [
+        125,
+        185
+      ],
+      "orientation": "N",
+      "zone_id": "ZONE-WH-SHIPPING-BAY",
+      "desc": "Top of shipping bay, left",
+      "position_ft": [
+        0.0,
+        0.0
+      ],
+      "position_m": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "N",
+      "px": [
+        740,
+        185
+      ],
+      "orientation": "N",
+      "zone_id": "ZONE-WH-RECEIVING-BAY",
+      "desc": "Top of receiving bay, right",
+      "position_ft": [
+        750.3,
+        0.0
+      ],
+      "position_m": [
+        228.69,
+        0.0
+      ]
+    },
+    {
+      "id": "L",
+      "px": [
+        395,
+        213
+      ],
+      "orientation": "N",
+      "zone_id": "ZONE-WH-STORAGE",
+      "desc": "Top warehouse wall, A-Bay west",
+      "position_ft": [
+        329.4,
+        34.16
+      ],
+      "position_m": [
+        100.4,
+        10.41
+      ]
+    },
+    {
+      "id": "M",
+      "px": [
+        597,
+        213
+      ],
+      "orientation": "N",
+      "zone_id": "ZONE-WH-STORAGE",
+      "desc": "Top warehouse wall, A-Bay east",
+      "position_ft": [
+        575.84,
+        34.16
+      ],
+      "position_m": [
+        175.52,
+        10.41
+      ]
+    },
+    {
+      "id": "I",
+      "px": [
+        295,
+        458
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-PRODUCTION",
+      "desc": "Warehouse/production junction, left",
+      "position_ft": [
+        207.4,
+        333.06
+      ],
+      "position_m": [
+        63.22,
+        101.52
+      ]
+    },
+    {
+      "id": "P",
+      "px": [
+        655,
+        475
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-PRODUCTION",
+      "desc": "Warehouse/production junction, right",
+      "position_ft": [
+        646.6,
+        353.8
+      ],
+      "position_m": [
+        197.08,
+        107.84
+      ]
+    },
+    {
+      "id": "J",
+      "px": [
+        150,
+        500
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-WH-SHIPPING-BAY",
+      "desc": "Bottom of shipping bay, left",
+      "position_ft": [
+        30.5,
+        384.3
+      ],
+      "position_m": [
+        9.3,
+        117.13
+      ]
+    },
+    {
+      "id": "O",
+      "px": [
+        750,
+        500
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-WH-RECEIVING-BAY",
+      "desc": "Bottom of receiving bay, right",
+      "position_ft": [
+        762.5,
+        384.3
+      ],
+      "position_m": [
+        232.41,
+        117.13
+      ]
+    },
+    {
+      "id": "H",
+      "px": [
+        235,
+        597
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-MAINTENANCE-ROOM",
+      "desc": "Maintenance room exterior door, left",
+      "position_ft": [
+        134.2,
+        502.64
+      ],
+      "position_m": [
+        40.9,
+        153.2
+      ]
+    },
+    {
+      "id": "G",
+      "px": [
+        282,
+        610
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-MAINTENANCE-ROOM",
+      "desc": "Maintenance room south exit",
+      "position_ft": [
+        191.54,
+        518.5
+      ],
+      "position_m": [
+        58.38,
+        158.04
+      ]
+    },
+    {
+      "id": "F",
+      "px": [
+        310,
+        647
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-PRODUCTION",
+      "desc": "G-Bay left exterior wall",
+      "position_ft": [
+        225.7,
+        563.64
+      ],
+      "position_m": [
+        68.79,
+        171.8
+      ]
+    },
+    {
+      "id": "Q",
+      "px": [
+        650,
+        647
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-PRODUCTION",
+      "desc": "D-Bay right exterior wall",
+      "position_ft": [
+        640.5,
+        563.64
+      ],
+      "position_m": [
+        195.22,
+        171.8
+      ]
+    },
+    {
+      "id": "R",
+      "px": [
+        650,
+        743
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-PRODUCTION",
+      "desc": "D-Bay right exterior wall north of truck bays",
+      "position_ft": [
+        640.5,
+        680.76
+      ],
+      "position_m": [
+        195.22,
+        207.5
+      ]
+    },
+    {
+      "id": "E",
+      "px": [
+        250,
+        780
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-TRUCK-BAY-ROW",
+      "desc": "Left end of truck bay row (Doors 5/6)",
+      "position_ft": [
+        152.5,
+        725.9
+      ],
+      "position_m": [
+        46.48,
+        221.25
+      ]
+    },
+    {
+      "id": "S",
+      "px": [
+        720,
+        783
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-TRUCK-BAY-ROW",
+      "desc": "Right end of truck bay row (Doors 7/8)",
+      "position_ft": [
+        725.9,
+        729.56
+      ],
+      "position_m": [
+        221.25,
+        222.37
+      ]
+    },
+    {
+      "id": "D",
+      "px": [
+        300,
+        960
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-LOWER-FINISHED-GOODS",
+      "desc": "Lower finished goods left wall",
+      "position_ft": [
+        213.5,
+        945.5
+      ],
+      "position_m": [
+        65.07,
+        288.19
+      ]
+    },
+    {
+      "id": "C",
+      "px": [
+        305,
+        993
+      ],
+      "orientation": "W",
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "desc": "Office strip left entrance",
+      "position_ft": [
+        219.6,
+        985.76
+      ],
+      "position_m": [
+        66.93,
+        300.46
+      ]
+    },
+    {
+      "id": "B",
+      "px": [
+        430,
+        1030
+      ],
+      "orientation": "S",
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "desc": "Bottom office wall west",
+      "position_ft": [
+        372.1,
+        1030.9
+      ],
+      "position_m": [
+        113.42,
+        314.22
+      ]
+    },
+    {
+      "id": "A",
+      "px": [
+        530,
+        1030
+      ],
+      "orientation": "S",
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "desc": "Bottom office wall east",
+      "position_ft": [
+        494.1,
+        1030.9
+      ],
+      "position_m": [
+        150.6,
+        314.22
+      ]
+    },
+    {
+      "id": "T",
+      "px": [
+        650,
+        980
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "desc": "Office strip right exit north",
+      "position_ft": [
+        640.5,
+        969.9
+      ],
+      "position_m": [
+        195.22,
+        295.63
+      ]
+    },
+    {
+      "id": "U",
+      "px": [
+        650,
+        1035
+      ],
+      "orientation": "E",
+      "zone_id": "ZONE-TOOL-CRIB",
+      "desc": "Tool crib right exit south",
+      "position_ft": [
+        640.5,
+        1037.0
+      ],
+      "position_m": [
+        195.22,
+        316.08
+      ]
+    }
+  ],
+  "doors": [
+    {
+      "id": "DOOR-1",
+      "num": 1,
+      "px": [
+        145,
+        185
+      ],
+      "type": "overhead_dock",
+      "desc": "Shipping bay top dock door",
+      "position_ft": [
+        24.4,
+        0.0
+      ],
+      "position_m": [
+        7.44,
+        0.0
+      ]
+    },
+    {
+      "id": "DOOR-2",
+      "num": 2,
+      "px": [
+        740,
+        185
+      ],
+      "type": "overhead_dock",
+      "desc": "Receiving bay top dock door",
+      "position_ft": [
+        750.3,
+        0.0
+      ],
+      "position_m": [
+        228.69,
+        0.0
+      ]
+    },
+    {
+      "id": "DOOR-3",
+      "num": 3,
+      "px": [
+        145,
+        515
+      ],
+      "type": "overhead_dock",
+      "desc": "Shipping bay bottom dock door",
+      "position_ft": [
+        24.4,
+        402.6
+      ],
+      "position_m": [
+        7.44,
+        122.71
+      ]
+    },
+    {
+      "id": "DOOR-4",
+      "num": 4,
+      "px": [
+        740,
+        460
+      ],
+      "type": "overhead_dock",
+      "desc": "Receiving bay bottom dock door",
+      "position_ft": [
+        750.3,
+        335.5
+      ],
+      "position_m": [
+        228.69,
+        102.26
+      ]
+    },
+    {
+      "id": "DOOR-5",
+      "num": 5,
+      "px": [
+        305,
+        765
+      ],
+      "type": "drive_in_truck",
+      "desc": "Left end of truck bay row door 5",
+      "position_ft": [
+        219.6,
+        707.6
+      ],
+      "position_m": [
+        66.93,
+        215.68
+      ]
+    },
+    {
+      "id": "DOOR-6",
+      "num": 6,
+      "px": [
+        305,
+        795
+      ],
+      "type": "drive_in_truck",
+      "desc": "Left end of truck bay row door 6",
+      "position_ft": [
+        219.6,
+        744.2
+      ],
+      "position_m": [
+        66.93,
+        226.83
+      ]
+    },
+    {
+      "id": "DOOR-7",
+      "num": 7,
+      "px": [
+        655,
+        765
+      ],
+      "type": "drive_in_truck",
+      "desc": "Right end of truck bay row door 7",
+      "position_ft": [
+        646.6,
+        707.6
+      ],
+      "position_m": [
+        197.08,
+        215.68
+      ]
+    },
+    {
+      "id": "DOOR-8",
+      "num": 8,
+      "px": [
+        655,
+        795
+      ],
+      "type": "drive_in_truck",
+      "desc": "Right end of truck bay row door 8",
+      "position_ft": [
+        646.6,
+        744.2
+      ],
+      "position_m": [
+        197.08,
+        226.83
+      ]
+    },
+    {
+      "id": "DOOR-9",
+      "num": 9,
+      "px": [
+        235,
+        560
+      ],
+      "type": "service",
+      "desc": "Near maintenance room door 9",
+      "position_ft": [
+        134.2,
+        457.5
+      ],
+      "position_m": [
+        40.9,
+        139.45
+      ]
+    },
+    {
+      "id": "DOOR-10",
+      "num": 10,
+      "px": [
+        235,
+        575
+      ],
+      "type": "service",
+      "desc": "Near maintenance room door 10",
+      "position_ft": [
+        134.2,
+        475.8
+      ],
+      "position_m": [
+        40.9,
+        145.02
+      ]
+    },
+    {
+      "id": "DOOR-11",
+      "num": 11,
+      "px": [
+        235,
+        590
+      ],
+      "type": "service",
+      "desc": "Near maintenance room door 11",
+      "position_ft": [
+        134.2,
+        494.1
+      ],
+      "position_m": [
+        40.9,
+        150.6
+      ]
+    }
+  ],
+  "assembly_areas": [
+    {
+      "id": "ASSEMBLY-1",
+      "number": 1,
+      "name": "Assembly Area #1",
+      "desc": "Front Offices / I.T. Offices, GM Reps, Mill Reps, OLW & Visitors",
+      "px_box": [
+        440,
+        1120,
+        540,
+        1160
+      ],
+      "bounds_ft": {
+        "x_min": 384.3,
+        "x_max": 506.3,
+        "z_min": 1140.7,
+        "z_max": 1189.5,
+        "width_ft": 122.0,
+        "depth_ft": 48.8
+      },
+      "muster_type": "evacuation",
+      "color": "#ffffff",
+      "bounds_m": {
+        "x_min": 117.13,
+        "x_max": 154.32,
+        "z_min": 347.69,
+        "z_max": 362.56,
+        "width_m": 37.19,
+        "depth_m": 14.87
+      }
+    },
+    {
+      "id": "ASSEMBLY-2",
+      "number": 2,
+      "name": "Assembly Area #2",
+      "desc": "WH Shipping & WH Receiving",
+      "px_box": [
+        400,
+        125,
+        540,
+        165
+      ],
+      "bounds_ft": {
+        "x_min": 335.5,
+        "x_max": 506.3,
+        "z_min": -73.2,
+        "z_max": -24.4,
+        "width_ft": 170.8,
+        "depth_ft": 48.8
+      },
+      "muster_type": "evacuation",
+      "color": "#ffffff",
+      "bounds_m": {
+        "x_min": 102.26,
+        "x_max": 154.32,
+        "z_min": -22.31,
+        "z_max": -7.44,
+        "width_m": 52.06,
+        "depth_m": 14.87
+      }
+    },
+    {
+      "id": "ASSEMBLY-3",
+      "number": 3,
+      "name": "Assembly Area #3",
+      "desc": "Die Maintenance, Die Setter, Maintenance & Blanking Lines #1-#4",
+      "px_box": [
+        130,
+        850,
+        230,
+        930
+      ],
+      "bounds_ft": {
+        "x_min": 6.1,
+        "x_max": 128.1,
+        "z_min": 811.3,
+        "z_max": 908.9,
+        "width_ft": 122.0,
+        "depth_ft": 97.6
+      },
+      "muster_type": "evacuation",
+      "color": "#ffffff",
+      "bounds_m": {
+        "x_min": 1.86,
+        "x_max": 39.04,
+        "z_min": 247.28,
+        "z_max": 277.03,
+        "width_m": 37.19,
+        "depth_m": 29.75
+      }
+    },
+    {
+      "id": "ASSEMBLY-4",
+      "number": 4,
+      "name": "Assembly Area #4",
+      "desc": "Finished Goods Shipping, CTL, Slitters & Woodshop",
+      "px_box": [
+        735,
+        850,
+        840,
+        935
+      ],
+      "bounds_ft": {
+        "x_min": 744.2,
+        "x_max": 872.3,
+        "z_min": 811.3,
+        "z_max": 915.0,
+        "width_ft": 128.1,
+        "depth_ft": 103.7
+      },
+      "muster_type": "evacuation",
+      "color": "#ffffff",
+      "bounds_m": {
+        "x_min": 226.83,
+        "x_max": 265.88,
+        "z_min": 247.28,
+        "z_max": 278.89,
+        "width_m": 39.04,
+        "depth_m": 31.61
+      }
+    }
+  ],
+  "equipment": [
+    {
+      "id": "EQ-CRANE-A",
+      "type": "crane_lift",
+      "px": [
+        400,
+        335
+      ],
+      "name": "Yellow Crane/Lift A Bay (South Tier)",
+      "color": "#facc15",
+      "dimensions_ft": [
+        8.0,
+        60.0,
+        22.0
+      ],
+      "position_ft": [
+        335.5,
+        183.0
+      ],
+      "position_m": [
+        102.26,
+        55.78
+      ]
+    },
+    {
+      "id": "EQ-CRANE-B",
+      "type": "crane_lift",
+      "px": [
+        560,
+        335
+      ],
+      "name": "Yellow Crane/Lift B Bay (Center Tier)",
+      "color": "#facc15",
+      "dimensions_ft": [
+        8.0,
+        60.0,
+        22.0
+      ],
+      "position_ft": [
+        530.7,
+        183.0
+      ],
+      "position_m": [
+        161.76,
+        55.78
+      ]
+    },
+    {
+      "id": "EQ-CRANE-C",
+      "type": "crane_lift",
+      "px": [
+        400,
+        414
+      ],
+      "name": "Yellow Crane/Lift C Bay (North Tier)",
+      "color": "#facc15",
+      "dimensions_ft": [
+        8.0,
+        60.0,
+        22.0
+      ],
+      "position_ft": [
+        335.5,
+        284.0
+      ],
+      "position_m": [
+        102.26,
+        86.56
+      ]
+    },
+    {
+      "id": "EQ-BLANKING-1",
+      "type": "press_line",
+      "px": [
+        275,
+        520
+      ],
+      "name": "Blanking Line #1 (G-Bay)",
+      "color": "#1e3a8a",
+      "dimensions_ft": [
+        20.0,
+        45.0,
+        14.0
+      ],
+      "position_ft": [
+        183.0,
+        408.7
+      ],
+      "position_m": [
+        55.78,
+        124.57
+      ]
+    },
+    {
+      "id": "EQ-BLANKING-2",
+      "type": "press_line",
+      "px": [
+        375,
+        520
+      ],
+      "name": "Blanking Line #2 (F-Bay)",
+      "color": "#1e3a8a",
+      "dimensions_ft": [
+        20.0,
+        45.0,
+        14.0
+      ],
+      "position_ft": [
+        305.0,
+        408.7
+      ],
+      "position_m": [
+        92.96,
+        124.57
+      ]
+    },
+    {
+      "id": "EQ-BLANKING-3",
+      "type": "press_line",
+      "px": [
+        475,
+        520
+      ],
+      "name": "Blanking Line #3 (E-Bay)",
+      "color": "#1e3a8a",
+      "dimensions_ft": [
+        20.0,
+        45.0,
+        14.0
+      ],
+      "position_ft": [
+        427.0,
+        408.7
+      ],
+      "position_m": [
+        130.15,
+        124.57
+      ]
+    },
+    {
+      "id": "EQ-BLANKING-4",
+      "type": "press_line",
+      "px": [
+        585,
+        520
+      ],
+      "name": "Blanking Line #4 (D-Bay)",
+      "color": "#1e3a8a",
+      "dimensions_ft": [
+        20.0,
+        45.0,
+        14.0
+      ],
+      "position_ft": [
+        561.2,
+        408.7
+      ],
+      "position_m": [
+        171.05,
+        124.57
+      ]
+    },
+    {
+      "id": "EQ-CTL-LINE",
+      "type": "ctl_press",
+      "px": [
+        480,
+        870
+      ],
+      "name": "Cut-To-Length (CTL) Line",
+      "color": "#be123c",
+      "dimensions_ft": [
+        24.0,
+        60.0,
+        12.0
+      ],
+      "position_ft": [
+        433.1,
+        835.7
+      ],
+      "position_m": [
+        132.01,
+        254.72
+      ]
+    },
+    {
+      "id": "EQ-SLITTERS",
+      "type": "slitter_line",
+      "px": [
+        550,
+        870
+      ],
+      "name": "Slitters Lines #1 - #4",
+      "color": "#0284c7",
+      "dimensions_ft": [
+        22.0,
+        50.0,
+        10.0
+      ],
+      "position_ft": [
+        518.5,
+        835.7
+      ],
+      "position_m": [
+        158.04,
+        254.72
+      ]
+    },
+    {
+      "id": "EQ-WOODSHOP",
+      "type": "woodshop",
+      "px": [
+        600,
+        870
+      ],
+      "name": "Woodshop Skid Fab",
+      "color": "#d97706",
+      "dimensions_ft": [
+        20.0,
+        35.0,
+        8.0
+      ],
+      "position_ft": [
+        579.5,
+        835.7
+      ],
+      "position_m": [
+        176.63,
+        254.72
+      ]
+    },
+    {
+      "id": "EQ-DIE-WASH",
+      "type": "die_wash",
+      "px": [
+        350,
+        580
+      ],
+      "name": "Die Wash Station",
+      "color": "#0f766e",
+      "dimensions_ft": [
+        14.0,
+        18.0,
+        8.0
+      ],
+      "position_ft": [
+        274.5,
+        481.9
+      ],
+      "position_m": [
+        83.67,
+        146.88
+      ]
+    },
+    {
+      "id": "EQ-NITROGEN",
+      "type": "tank_ln2",
+      "px": [
+        678,
+        572
+      ],
+      "name": "Liquid Nitrogen Tank (NFPA 704)",
+      "color": "#f8fafc",
+      "dimensions_ft": [
+        12.0,
+        12.0,
+        24.0
+      ],
+      "position_ft": [
+        674.66,
+        472.14
+      ],
+      "position_m": [
+        205.64,
+        143.91
+      ]
+    }
+  ],
+  "walkways": [
+    {
+      "id": "WW-PERIMETER-NORTH",
+      "name": "North Perimeter Safety Walkway",
+      "px_path": [
+        [
+          165,
+          213
+        ],
+        [
+          725,
+          213
+        ]
+      ],
+      "width_ft": 4.0,
+      "path_ft": [
+        [
+          48.8,
+          34.16
+        ],
+        [
+          732.0,
+          34.16
+        ]
+      ],
+      "path_m": [
+        [
+          14.87,
+          10.41
+        ],
+        [
+          223.11,
+          10.41
+        ]
+      ]
+    },
+    {
+      "id": "WW-CROSS-CORRIDOR",
+      "name": "Central Cross Walkway",
+      "px_path": [
+        [
+          165,
+          458
+        ],
+        [
+          725,
+          458
+        ]
+      ],
+      "width_ft": 5.0,
+      "path_ft": [
+        [
+          48.8,
+          333.06
+        ],
+        [
+          732.0,
+          333.06
+        ]
+      ],
+      "path_m": [
+        [
+          14.87,
+          101.52
+        ],
+        [
+          223.11,
+          101.52
+        ]
+      ]
+    },
+    {
+      "id": "WW-PRODUCTION-G",
+      "name": "G-Bay Main Aisle Walkway",
+      "px_path": [
+        [
+          325,
+          458
+        ],
+        [
+          325,
+          750
+        ]
+      ],
+      "width_ft": 5.0,
+      "path_ft": [
+        [
+          244.0,
+          333.06
+        ],
+        [
+          244.0,
+          689.3
+        ]
+      ],
+      "path_m": [
+        [
+          74.37,
+          101.52
+        ],
+        [
+          74.37,
+          210.1
+        ]
+      ]
+    },
+    {
+      "id": "WW-PRODUCTION-F",
+      "name": "F-Bay Main Aisle Walkway",
+      "px_path": [
+        [
+          425,
+          458
+        ],
+        [
+          425,
+          750
+        ]
+      ],
+      "width_ft": 5.0,
+      "path_ft": [
+        [
+          366.0,
+          333.06
+        ],
+        [
+          366.0,
+          689.3
+        ]
+      ],
+      "path_m": [
+        [
+          111.56,
+          101.52
+        ],
+        [
+          111.56,
+          210.1
+        ]
+      ]
+    },
+    {
+      "id": "WW-PRODUCTION-E",
+      "name": "E-Bay Main Aisle Walkway",
+      "px_path": [
+        [
+          525,
+          458
+        ],
+        [
+          525,
+          960
+        ]
+      ],
+      "width_ft": 5.0,
+      "path_ft": [
+        [
+          488.0,
+          333.06
+        ],
+        [
+          488.0,
+          945.5
+        ]
+      ],
+      "path_m": [
+        [
+          148.74,
+          101.52
+        ],
+        [
+          148.74,
+          288.19
+        ]
+      ]
+    },
+    {
+      "id": "WW-PRODUCTION-D",
+      "name": "D-Bay Main Aisle Walkway",
+      "px_path": [
+        [
+          630,
+          458
+        ],
+        [
+          630,
+          960
+        ]
+      ],
+      "width_ft": 5.0,
+      "path_ft": [
+        [
+          616.1,
+          333.06
+        ],
+        [
+          616.1,
+          945.5
+        ]
+      ],
+      "path_m": [
+        [
+          187.79,
+          101.52
+        ],
+        [
+          187.79,
+          288.19
+        ]
+      ]
+    },
+    {
+      "id": "WW-OFFICE-FRONT",
+      "name": "South Office Frontage Walkway",
+      "px_path": [
+        [
+          305,
+          960
+        ],
+        [
+          655,
+          960
+        ]
+      ],
+      "width_ft": 4.0,
+      "path_ft": [
+        [
+          219.6,
+          945.5
+        ],
+        [
+          646.6,
+          945.5
+        ]
+      ],
+      "path_m": [
+        [
+          66.93,
+          288.19
+        ],
+        [
+          197.08,
+          288.19
+        ]
+      ]
+    }
+  ],
+  "office_rooms": [
+    {
+      "name": "Front Lobby",
+      "px": [
+        330,
+        980
+      ],
+      "size_ft": [
+        30.0,
+        20.0
+      ],
+      "position_ft": [
+        250.1,
+        969.9
+      ],
+      "position_m": [
+        76.23,
+        295.63
+      ]
+    },
+    {
+      "name": "Office Area",
+      "px": [
+        375,
+        980
+      ],
+      "size_ft": [
+        40.0,
+        20.0
+      ],
+      "position_ft": [
+        305.0,
+        969.9
+      ],
+      "position_m": [
+        92.96,
+        295.63
+      ]
+    },
+    {
+      "name": "Large Conference Room",
+      "px": [
+        420,
+        980
+      ],
+      "size_ft": [
+        35.0,
+        20.0
+      ],
+      "position_ft": [
+        359.9,
+        969.9
+      ],
+      "position_m": [
+        109.7,
+        295.63
+      ]
+    },
+    {
+      "name": "Training Room",
+      "px": [
+        470,
+        980
+      ],
+      "size_ft": [
+        40.0,
+        20.0
+      ],
+      "position_ft": [
+        420.9,
+        969.9
+      ],
+      "position_m": [
+        128.29,
+        295.63
+      ]
+    },
+    {
+      "name": "Assoc. Lunchroom",
+      "px": [
+        520,
+        980
+      ],
+      "size_ft": [
+        45.0,
+        20.0
+      ],
+      "position_ft": [
+        481.9,
+        969.9
+      ],
+      "position_m": [
+        146.88,
+        295.63
+      ]
+    },
+    {
+      "name": "Plant Mgr. Office",
+      "px": [
+        330,
+        1010
+      ],
+      "size_ft": [
+        25.0,
+        20.0
+      ],
+      "position_ft": [
+        250.1,
+        1006.5
+      ],
+      "position_m": [
+        76.23,
+        306.78
+      ]
+    },
+    {
+      "name": "Ops. Mgr. Office",
+      "px": [
+        365,
+        1010
+      ],
+      "size_ft": [
+        25.0,
+        20.0
+      ],
+      "position_ft": [
+        292.8,
+        1006.5
+      ],
+      "position_m": [
+        89.25,
+        306.78
+      ]
+    },
+    {
+      "name": "Maint. Mgr. Office",
+      "px": [
+        400,
+        1010
+      ],
+      "size_ft": [
+        25.0,
+        20.0
+      ],
+      "position_ft": [
+        335.5,
+        1006.5
+      ],
+      "position_m": [
+        102.26,
+        306.78
+      ]
+    },
+    {
+      "name": "Quality Coord. Office",
+      "px": [
+        440,
+        1010
+      ],
+      "size_ft": [
+        30.0,
+        20.0
+      ],
+      "position_ft": [
+        384.3,
+        1006.5
+      ],
+      "position_m": [
+        117.13,
+        306.78
+      ]
+    },
+    {
+      "name": "I.T. & Server Room",
+      "px": [
+        485,
+        1010
+      ],
+      "size_ft": [
+        35.0,
+        20.0
+      ],
+      "position_ft": [
+        439.2,
+        1006.5
+      ],
+      "position_m": [
+        133.87,
+        306.78
+      ]
+    },
+    {
+      "name": "Mill Rep. Offices",
+      "px": [
+        530,
+        1010
+      ],
+      "size_ft": [
+        35.0,
+        20.0
+      ],
+      "position_ft": [
+        494.1,
+        1006.5
+      ],
+      "position_m": [
+        150.6,
+        306.78
+      ]
+    },
+    {
+      "name": "Sales & Service",
+      "px": [
+        575,
+        1010
+      ],
+      "size_ft": [
+        35.0,
+        20.0
+      ],
+      "position_ft": [
+        549.0,
+        1006.5
+      ],
+      "position_m": [
+        167.34,
+        306.78
+      ]
+    },
+    {
+      "name": "Restrooms & Lockers",
+      "px": [
+        620,
+        1010
+      ],
+      "size_ft": [
+        35.0,
+        20.0
+      ],
+      "position_ft": [
+        603.9,
+        1006.5
+      ],
+      "position_m": [
+        184.07,
+        306.78
+      ]
+    },
+    {
+      "name": "Tool Crib",
+      "px": [
+        620,
+        1032
+      ],
+      "size_ft": [
+        40.0,
+        15.0
+      ],
+      "position_ft": [
+        603.9,
+        1033.34
+      ],
+      "position_m": [
+        184.07,
+        314.96
+      ]
+    }
+  ],
+  "rack_rows": [
+    {
+      "slot_id": "BAY-COL-52",
+      "slot_number": "52",
+      "x_m": 19.5,
+      "x_ft": 64.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-51",
+      "slot_number": "51",
+      "x_m": 23.4,
+      "x_ft": 76.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-50",
+      "slot_number": "50",
+      "x_m": 27.3,
+      "x_ft": 89.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-49",
+      "slot_number": "49",
+      "x_m": 31.21,
+      "x_ft": 102.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-48",
+      "slot_number": "48",
+      "x_m": 35.11,
+      "x_ft": 115.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-47",
+      "slot_number": "47",
+      "x_m": 39.01,
+      "x_ft": 128.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-46",
+      "slot_number": "46",
+      "x_m": 42.91,
+      "x_ft": 140.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-45",
+      "slot_number": "45",
+      "x_m": 46.81,
+      "x_ft": 153.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-44",
+      "slot_number": "44",
+      "x_m": 50.72,
+      "x_ft": 166.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-43",
+      "slot_number": "43",
+      "x_m": 54.62,
+      "x_ft": 179.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-42",
+      "slot_number": "42",
+      "x_m": 58.52,
+      "x_ft": 192.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-41",
+      "slot_number": "41",
+      "x_m": 62.42,
+      "x_ft": 204.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-40",
+      "slot_number": "40",
+      "x_m": 66.32,
+      "x_ft": 217.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-39",
+      "slot_number": "39",
+      "x_m": 70.23,
+      "x_ft": 230.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-38",
+      "slot_number": "38",
+      "x_m": 74.13,
+      "x_ft": 243.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-37",
+      "slot_number": "37",
+      "x_m": 78.03,
+      "x_ft": 256.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-36",
+      "slot_number": "36",
+      "x_m": 81.93,
+      "x_ft": 268.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-35",
+      "slot_number": "35",
+      "x_m": 85.83,
+      "x_ft": 281.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-34",
+      "slot_number": "34",
+      "x_m": 89.74,
+      "x_ft": 294.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-33",
+      "slot_number": "33",
+      "x_m": 93.64,
+      "x_ft": 307.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-32",
+      "slot_number": "32",
+      "x_m": 97.54,
+      "x_ft": 320.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-31",
+      "slot_number": "31",
+      "x_m": 101.44,
+      "x_ft": 332.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-30",
+      "slot_number": "30",
+      "x_m": 105.34,
+      "x_ft": 345.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-29",
+      "slot_number": "29",
+      "x_m": 109.25,
+      "x_ft": 358.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "West Section",
+          "rows": 4,
+          "y_start_m": 74.0,
+          "y_end_m": 88.5,
+          "coil_capacity": 4
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-28",
+      "slot_number": "28",
+      "x_m": 113.15,
+      "x_ft": 371.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-27",
+      "slot_number": "27",
+      "x_m": 117.05,
+      "x_ft": 384.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-26",
+      "slot_number": "26",
+      "x_m": 120.95,
+      "x_ft": 396.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-25",
+      "slot_number": "25",
+      "x_m": 124.85,
+      "x_ft": 409.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-24",
+      "slot_number": "24",
+      "x_m": 128.75,
+      "x_ft": 422.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-23",
+      "slot_number": "23",
+      "x_m": 132.66,
+      "x_ft": 435.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-22",
+      "slot_number": "22",
+      "x_m": 136.56,
+      "x_ft": 448.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-21",
+      "slot_number": "21",
+      "x_m": 140.46,
+      "x_ft": 460.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-20",
+      "slot_number": "20",
+      "x_m": 144.36,
+      "x_ft": 473.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-19",
+      "slot_number": "19",
+      "x_m": 148.26,
+      "x_ft": 486.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-18",
+      "slot_number": "18",
+      "x_m": 152.17,
+      "x_ft": 499.2,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-17",
+      "slot_number": "17",
+      "x_m": 156.07,
+      "x_ft": 512.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-16",
+      "slot_number": "16",
+      "x_m": 159.97,
+      "x_ft": 524.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-15",
+      "slot_number": "15",
+      "x_m": 163.87,
+      "x_ft": 537.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-14",
+      "slot_number": "14",
+      "x_m": 167.77,
+      "x_ft": 550.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-13",
+      "slot_number": "13",
+      "x_m": 171.68,
+      "x_ft": 563.3,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-12",
+      "slot_number": "12",
+      "x_m": 175.58,
+      "x_ft": 576.0,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-11",
+      "slot_number": "11",
+      "x_m": 179.48,
+      "x_ft": 588.8,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-10",
+      "slot_number": "10",
+      "x_m": 183.38,
+      "x_ft": 601.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-09",
+      "slot_number": "09",
+      "x_m": 187.28,
+      "x_ft": 614.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-08",
+      "slot_number": "08",
+      "x_m": 191.19,
+      "x_ft": 627.3,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-07",
+      "slot_number": "07",
+      "x_m": 195.09,
+      "x_ft": 640.1,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-06",
+      "slot_number": "06",
+      "x_m": 198.99,
+      "x_ft": 652.9,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-05",
+      "slot_number": "05",
+      "x_m": 202.89,
+      "x_ft": 665.6,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-04",
+      "slot_number": "04",
+      "x_m": 206.79,
+      "x_ft": 678.4,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-03",
+      "slot_number": "03",
+      "x_m": 210.7,
+      "x_ft": 691.3,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-02",
+      "slot_number": "02",
+      "x_m": 214.6,
+      "x_ft": 704.1,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    },
+    {
+      "slot_id": "BAY-COL-01",
+      "slot_number": "01",
+      "x_m": 218.5,
+      "x_ft": 716.9,
+      "bays": [
+        {
+          "bay": "A-Bay",
+          "rows": 6,
+          "y_start_m": 13.5,
+          "y_end_m": 37.5,
+          "coil_capacity": 6
+        },
+        {
+          "bay": "B-Bay",
+          "rows": 8,
+          "y_start_m": 43.0,
+          "y_end_m": 69.0,
+          "coil_capacity": 8
+        },
+        {
+          "bay": "C-Bay",
+          "section": "East Section",
+          "rows": 6,
+          "y_start_m": 74.0,
+          "y_end_m": 98.0,
+          "coil_capacity": 6
+        }
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "WALL-N-WH-1",
+      "x1_ft": 0.0,
+      "z1_ft": 0.0,
+      "x2_ft": 48.8,
+      "z2_ft": 0.0,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-WH-SHIPPING-BAY",
+      "has_door": "DOOR-1",
+      "x1_m": 0.0,
+      "z1_m": 0.0,
+      "x2_m": 14.87,
+      "z2_m": 0.0,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-N-WH-2",
+      "x1_ft": 48.8,
+      "z1_ft": 34.0,
+      "x2_ft": 732.0,
+      "z2_ft": 34.0,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-WH-STORAGE",
+      "exits": [
+        "L",
+        "M"
+      ],
+      "x1_m": 14.87,
+      "z1_m": 10.36,
+      "x2_m": 223.11,
+      "z2_m": 10.36,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-N-WH-3",
+      "x1_ft": 732.0,
+      "z1_ft": 0.0,
+      "x2_ft": 774.7,
+      "z2_ft": 0.0,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-WH-RECEIVING-BAY",
+      "has_door": "DOOR-2",
+      "exits": [
+        "N"
+      ],
+      "x1_m": 223.11,
+      "z1_m": 0.0,
+      "x2_m": 236.13,
+      "z2_m": 0.0,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-W-SHIP",
+      "x1_ft": 0.0,
+      "z1_ft": 0.0,
+      "x2_ft": 0.0,
+      "z2_ft": 402.6,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-WH-SHIPPING-BAY",
+      "exits": [
+        "K",
+        "J"
+      ],
+      "doors": [
+        "DOOR-3"
+      ],
+      "x1_m": 0.0,
+      "z1_m": 0.0,
+      "x2_m": 0.0,
+      "z2_m": 122.71,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-E-RECV",
+      "x1_ft": 774.7,
+      "z1_ft": 0.0,
+      "x2_ft": 774.7,
+      "z2_ft": 335.5,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-WH-RECEIVING-BAY",
+      "exits": [
+        "O"
+      ],
+      "doors": [
+        "DOOR-4"
+      ],
+      "x1_m": 236.13,
+      "z1_m": 0.0,
+      "x2_m": 236.13,
+      "z2_m": 102.26,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-E-RAIL",
+      "x1_ft": 847.9,
+      "z1_ft": 36.6,
+      "x2_ft": 847.9,
+      "z2_ft": 347.7,
+      "height_ft": 30.0,
+      "zone_id": "ZONE-RAILCAR-BAYS",
+      "x1_m": 258.44,
+      "z1_m": 11.16,
+      "x2_m": 258.44,
+      "z2_m": 105.98,
+      "height_m": 9.14
+    },
+    {
+      "id": "WALL-W-PROD-MAINT",
+      "x1_ft": 125.7,
+      "z1_ft": 439.2,
+      "x2_ft": 125.7,
+      "z2_ft": 506.3,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-MAINTENANCE-ROOM",
+      "exits": [
+        "H",
+        "G"
+      ],
+      "doors": [
+        "DOOR-9",
+        "DOOR-10",
+        "DOOR-11"
+      ],
+      "x1_m": 38.31,
+      "z1_m": 133.87,
+      "x2_m": 38.31,
+      "z2_m": 154.32,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-W-PROD-G",
+      "x1_ft": 225.7,
+      "z1_ft": 506.3,
+      "x2_ft": 225.7,
+      "z2_ft": 689.3,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-PRODUCTION",
+      "exits": [
+        "F",
+        "I"
+      ],
+      "x1_m": 68.79,
+      "z1_m": 154.32,
+      "x2_m": 68.79,
+      "z2_m": 210.1,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-E-PROD-D",
+      "x1_ft": 650.7,
+      "z1_ft": 311.1,
+      "x2_ft": 650.7,
+      "z2_ft": 689.3,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-PRODUCTION",
+      "exits": [
+        "P",
+        "Q",
+        "R"
+      ],
+      "x1_m": 198.33,
+      "z1_m": 94.82,
+      "x2_m": 198.33,
+      "z2_m": 210.1,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-W-TRUCK-BAY",
+      "x1_ft": 219.6,
+      "z1_ft": 689.3,
+      "x2_ft": 219.6,
+      "z2_ft": 768.6,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-TRUCK-BAY-ROW",
+      "doors": [
+        "DOOR-5",
+        "DOOR-6"
+      ],
+      "exits": [
+        "E"
+      ],
+      "x1_m": 66.93,
+      "z1_m": 210.1,
+      "x2_m": 66.93,
+      "z2_m": 234.27,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-E-TRUCK-BAY",
+      "x1_ft": 646.6,
+      "z1_ft": 689.3,
+      "x2_ft": 646.6,
+      "z2_ft": 768.6,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-TRUCK-BAY-ROW",
+      "doors": [
+        "DOOR-7",
+        "DOOR-8"
+      ],
+      "exits": [
+        "S"
+      ],
+      "x1_m": 197.08,
+      "z1_m": 210.1,
+      "x2_m": 197.08,
+      "z2_m": 234.27,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-W-FG",
+      "x1_ft": 250.1,
+      "z1_ft": 768.6,
+      "x2_ft": 250.1,
+      "z2_ft": 945.5,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-LOWER-FINISHED-GOODS",
+      "exits": [
+        "D"
+      ],
+      "x1_m": 76.23,
+      "z1_m": 234.27,
+      "x2_m": 76.23,
+      "z2_m": 288.19,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-E-FG",
+      "x1_ft": 646.6,
+      "z1_ft": 768.6,
+      "x2_ft": 646.6,
+      "z2_ft": 945.5,
+      "height_ft": 25.0,
+      "zone_id": "ZONE-LOWER-FINISHED-GOODS",
+      "x1_m": 197.08,
+      "z1_m": 234.27,
+      "x2_m": 197.08,
+      "z2_m": 288.19,
+      "height_m": 7.62
+    },
+    {
+      "id": "WALL-W-OFFICE",
+      "x1_ft": 219.6,
+      "z1_ft": 945.5,
+      "x2_ft": 219.6,
+      "z2_ft": 1024.8,
+      "height_ft": 12.0,
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "exits": [
+        "C"
+      ],
+      "x1_m": 66.93,
+      "z1_m": 288.19,
+      "x2_m": 66.93,
+      "z2_m": 312.36,
+      "height_m": 3.66
+    },
+    {
+      "id": "WALL-S-OFFICE",
+      "x1_ft": 219.6,
+      "z1_ft": 1024.8,
+      "x2_ft": 646.6,
+      "z2_ft": 1024.8,
+      "height_ft": 12.0,
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "exits": [
+        "B",
+        "A"
+      ],
+      "x1_m": 66.93,
+      "z1_m": 312.36,
+      "x2_m": 197.08,
+      "z2_m": 312.36,
+      "height_m": 3.66
+    },
+    {
+      "id": "WALL-E-OFFICE",
+      "x1_ft": 646.6,
+      "z1_ft": 945.5,
+      "x2_ft": 646.6,
+      "z2_ft": 1043.1,
+      "height_ft": 12.0,
+      "zone_id": "ZONE-OFFICE-STRIP",
+      "exits": [
+        "T",
+        "U"
+      ],
+      "x1_m": 197.08,
+      "z1_m": 288.19,
+      "x2_m": 197.08,
+      "z2_m": 317.94,
+      "height_m": 3.66
+    }
+  ],
+  "equipment_kinematics": {
+    "simulation_settings": {
+      "gravity_mps2": 9.81,
+      "default_time_step_s": 0.016,
+      "speed_multiplier": 1.0,
+      "safe_crane_clearance_ft": 18.0,
+      "safe_crane_clearance_m": 5.49
+    },
+    "bridge_cranes": [
+      {
+        "id": "EQ-CRANE-A",
+        "name": "Warehouse Bridge Crane A (Bay A - South Tier)",
+        "bay": "A-Bay",
+        "color": "#facc15",
+        "capacity_tons": 35.0,
+        "blueprint_mark_px": [
+          548,
+          253
+        ],
+        "girder_orientation": "Y_SPAN_X_TRAVEL",
+        "span_length_ft": 100.0,
+        "span_length_m": 30.48,
+        "limits": {
+          "bridge_x_ft": [
+            60.0,
+            680.0
+          ],
+          "bridge_x_m": [
+            18.29,
+            218.0
+          ],
+          "trolley_y_ft": [
+            38.0,
+            130.0
+          ],
+          "trolley_y_m": [
+            11.58,
+            39.62
+          ],
+          "hoist_z_ft": [
+            2.6,
+            25.5
+          ],
+          "hoist_z_m": [
+            0.8,
+            7.8
+          ]
+        },
+        "park_position_m": [
+          157.3,
+          25.64,
+          7.2
+        ],
+        "kinematics": {
+          "bridge_speed_max_mps": 2.8,
+          "bridge_accel_mps2": 1.2,
+          "bridge_decel_mps2": 1.4,
+          "trolley_speed_max_mps": 1.8,
+          "trolley_accel_mps2": 0.9,
+          "trolley_decel_mps2": 1.1,
+          "hoist_speed_max_mps": 1.2,
+          "hoist_accel_mps2": 0.7,
+          "hoist_decel_mps2": 0.9,
+          "cable_damping_zeta": 0.18
+        },
+        "initial_state": "AUTONOMOUS_CYCLE"
+      },
+      {
+        "id": "EQ-CRANE-B",
+        "name": "Warehouse Bridge Crane B (Bay B - Center Tier)",
+        "bay": "B-Bay",
+        "color": "#facc15",
+        "capacity_tons": 35.0,
+        "blueprint_mark_px": [
+          711,
+          332
+        ],
+        "girder_orientation": "Y_SPAN_X_TRAVEL",
+        "span_length_ft": 100.0,
+        "span_length_m": 30.48,
+        "limits": {
+          "bridge_x_ft": [
+            60.0,
+            680.0
+          ],
+          "bridge_x_m": [
+            18.29,
+            218.0
+          ],
+          "trolley_y_ft": [
+            138.0,
+            230.0
+          ],
+          "trolley_y_m": [
+            42.06,
+            70.1
+          ],
+          "hoist_z_ft": [
+            2.6,
+            25.5
+          ],
+          "hoist_z_m": [
+            0.8,
+            7.8
+          ]
+        },
+        "park_position_m": [
+          217.91,
+          56.12,
+          7.2
+        ],
+        "kinematics": {
+          "bridge_speed_max_mps": 2.8,
+          "bridge_accel_mps2": 1.2,
+          "bridge_decel_mps2": 1.4,
+          "trolley_speed_max_mps": 1.8,
+          "trolley_accel_mps2": 0.9,
+          "trolley_decel_mps2": 1.1,
+          "hoist_speed_max_mps": 1.2,
+          "hoist_accel_mps2": 0.7,
+          "hoist_decel_mps2": 0.9,
+          "cable_damping_zeta": 0.18
+        },
+        "initial_state": "AUTONOMOUS_CYCLE"
+      },
+      {
+        "id": "EQ-CRANE-C",
+        "name": "Warehouse Bridge Crane C (Bay C - North Tier)",
+        "bay": "C-Bay",
+        "color": "#facc15",
+        "capacity_tons": 35.0,
+        "blueprint_mark_px": [
+          400,
+          414
+        ],
+        "girder_orientation": "Y_SPAN_X_TRAVEL",
+        "span_length_ft": 100.0,
+        "span_length_m": 30.48,
+        "limits": {
+          "bridge_x_ft": [
+            60.0,
+            680.0
+          ],
+          "bridge_x_m": [
+            18.29,
+            218.0
+          ],
+          "trolley_y_ft": [
+            238.0,
+            330.0
+          ],
+          "trolley_y_m": [
+            72.54,
+            100.58
+          ],
+          "hoist_z_ft": [
+            2.6,
+            25.5
+          ],
+          "hoist_z_m": [
+            0.8,
+            7.8
+          ]
+        },
+        "park_position_m": [
+          102.26,
+          86.6,
+          7.2
+        ],
+        "kinematics": {
+          "bridge_speed_max_mps": 2.8,
+          "bridge_accel_mps2": 1.2,
+          "bridge_decel_mps2": 1.4,
+          "trolley_speed_max_mps": 1.8,
+          "trolley_accel_mps2": 0.9,
+          "trolley_decel_mps2": 1.1,
+          "hoist_speed_max_mps": 1.2,
+          "hoist_accel_mps2": 0.7,
+          "hoist_decel_mps2": 0.9,
+          "cable_damping_zeta": 0.18
+        },
+        "initial_state": "AUTONOMOUS_CYCLE"
+      }
+    ],
+    "crane_jobs": [
+      {
+        "id": "JOB-CRANE-A-01",
+        "assigned_crane": "EQ-CRANE-A",
+        "type": "BAY_A_RELOCATION",
+        "description": "Relocate Master Coil from Col 40 (A-Bay) to Col 15 staging",
+        "pick_coords_m": [
+          66.32,
+          25.64,
+          0.76
+        ],
+        "drop_coords_m": [
+          163.87,
+          25.64,
+          0.76
+        ],
+        "cargo_id": "COIL-A-40-3",
+        "cargo_label": "ArcelorMittal Galv #7401",
+        "weight_kg": 18200
+      },
+      {
+        "id": "JOB-CRANE-B-01",
+        "assigned_crane": "EQ-CRANE-B",
+        "type": "BAY_B_TRANSFER",
+        "description": "Transfer Processing Coil from Col 50 (B-Bay) to Center Col 25",
+        "pick_coords_m": [
+          27.3,
+          56.12,
+          0.76
+        ],
+        "drop_coords_m": [
+          124.85,
+          56.12,
+          0.76
+        ],
+        "cargo_id": "COIL-B-50-4",
+        "cargo_label": "Cleveland Cliffs HR #8820",
+        "weight_kg": 22400
+      },
+      {
+        "id": "JOB-CRANE-C-01",
+        "assigned_crane": "EQ-CRANE-C",
+        "type": "BAY_C_FEED",
+        "description": "Transfer Coil from Col 35 (C-Bay) to Col 10 staging",
+        "pick_coords_m": [
+          85.83,
+          83.67,
+          0.76
+        ],
+        "drop_coords_m": [
+          183.38,
+          83.67,
+          0.76
+        ],
+        "cargo_id": "COIL-C-35-2",
+        "cargo_label": "US Steel Prime CR #3310",
+        "weight_kg": 20800
+      }
+    ]
+  },
+  "coil_storage_grid": {
+    "summary": {
+      "total_columns": 52,
+      "total_coils": 992,
+      "description": "RSDC of Michigan Authoritative Storage Coil Grid (A: 312, B: 416, C: 264)",
+      "total_omitted_coils": 156,
+      "active_placed_coils": 836
+    },
+    "bays": {
+      "A_Bay": {
+        "name": "A-BAY",
+        "tier": "North Storage Tier",
+        "columns": 52,
+        "rows": 6,
+        "total_coils": 312,
+        "y_start_m": 13.5,
+        "y_end_m": 37.5
+      },
+      "B_Bay": {
+        "name": "B-BAY",
+        "tier": "Center Storage Tier",
+        "columns": 52,
+        "rows": 8,
+        "total_coils": 416,
+        "y_start_m": 43.0,
+        "y_end_m": 69.0
+      },
+      "C_Bay": {
+        "name": "C-BAY",
+        "tier": "South Storage Tier",
+        "total_coils": 264,
+        "sections": [
+          {
+            "section_name": "West Section (Columns 52 to 29)",
+            "columns": 24,
+            "col_start_idx": 0,
+            "col_end_idx": 23,
+            "rows": 4,
+            "total_coils": 96,
+            "y_start_m": 74.0,
+            "y_end_m": 88.5
+          },
+          {
+            "section_name": "East Section (Columns 28 to 01)",
+            "columns": 28,
+            "col_start_idx": 24,
+            "col_end_idx": 51,
+            "rows": 6,
+            "total_coils": 168,
+            "y_start_m": 74.0,
+            "y_end_m": 98.0
+          }
+        ]
+      }
+    },
+    "blueprint_omissions": [
+      {
+        "bay": "B",
+        "column_indices": [
+          21
+        ],
+        "column_numbers": [
+          "31"
+        ],
+        "rows": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "reason": "CRANE_TOWER_WEST",
+        "description": "West yellow overhead bridge crane runway lift and maintenance tower"
+      },
+      {
+        "bay": "A",
+        "column_indices": [
+          21
+        ],
+        "column_numbers": [
+          "31"
+        ],
+        "rows": [
+          4,
+          5,
+          6
+        ],
+        "reason": "CRANE_TOWER_WEST",
+        "description": "West crane tower runway clearance"
+      },
+      {
+        "bay": "B",
+        "column_indices": [
+          43,
+          44
+        ],
+        "column_numbers": [
+          "09",
+          "08"
+        ],
+        "rows": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "reason": "CRANE_TOWER_EAST",
+        "description": "East yellow overhead bridge crane runway lift and maintenance tower"
+      },
+      {
+        "bay": "A",
+        "column_indices": [
+          43,
+          44
+        ],
+        "column_numbers": [
+          "09",
+          "08"
+        ],
+        "rows": [
+          4,
+          5,
+          6
+        ],
+        "reason": "CRANE_TOWER_EAST",
+        "description": "East crane tower runway clearance"
+      },
+      {
+        "bay": "C",
+        "column_indices": [
+          43,
+          44
+        ],
+        "column_numbers": [
+          "09",
+          "08"
+        ],
+        "rows": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "reason": "CRANE_TOWER_EAST",
+        "description": "East crane tower runway clearance in Bay C"
+      },
+      {
+        "bay": "A",
+        "column_indices": [
+          15,
+          31
+        ],
+        "column_numbers": [
+          "37",
+          "21"
+        ],
+        "rows": [
+          1
+        ],
+        "reason": "PEDESTRIAN_EXIT_CLEARANCE",
+        "description": "Clear egress corridor for Emergency Exit L and Exit M"
+      },
+      {
+        "bay": "C",
+        "column_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "column_numbers": [
+          "52",
+          "51",
+          "50",
+          "49",
+          "48",
+          "47",
+          "46"
+        ],
+        "rows": [
+          4
+        ],
+        "reason": "SHIPPING_WALKWAY_CLEARANCE",
+        "description": "Clear corridor for WH Shipping Dock entrance and staging"
+      },
+      {
+        "bay": "C",
+        "column_indices": [
+          10
+        ],
+        "column_numbers": [
+          "42"
+        ],
+        "rows": [
+          4
+        ],
+        "reason": "EXIT_I_CLEARANCE",
+        "description": "Clear egress corridor for Emergency Exit I"
+      },
+      {
+        "bay": "C",
+        "column_indices": [
+          42
+        ],
+        "column_numbers": [
+          "10"
+        ],
+        "rows": [
+          6
+        ],
+        "reason": "EXIT_P_CLEARANCE",
+        "description": "Clear egress corridor for Emergency Exit P"
+      }
+    ],
+    "exact_path_omissions": [
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 1,
+        "x_m": 19.5,
+        "y_m": 13.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 2,
+        "x_m": 19.5,
+        "y_m": 18.3,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 3,
+        "x_m": 19.5,
+        "y_m": 23.1,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 4,
+        "x_m": 19.5,
+        "y_m": 27.9,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 5,
+        "x_m": 19.5,
+        "y_m": 32.7,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 6,
+        "x_m": 19.5,
+        "y_m": 37.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 1,
+        "x_m": 19.5,
+        "y_m": 43.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 2,
+        "x_m": 19.5,
+        "y_m": 46.71,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 3,
+        "x_m": 19.5,
+        "y_m": 50.43,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 4,
+        "x_m": 19.5,
+        "y_m": 54.14,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 5,
+        "x_m": 19.5,
+        "y_m": 57.86,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 6,
+        "x_m": 19.5,
+        "y_m": 61.57,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 7,
+        "x_m": 19.5,
+        "y_m": 65.29,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 8,
+        "x_m": 19.5,
+        "y_m": 69.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 1,
+        "x_m": 19.5,
+        "y_m": 74.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 2,
+        "x_m": 19.5,
+        "y_m": 78.83,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 3,
+        "x_m": 19.5,
+        "y_m": 83.67,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 0,
+        "col_num": "52",
+        "row_num": 4,
+        "x_m": 19.5,
+        "y_m": 88.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 1,
+        "x_m": 27.3,
+        "y_m": 13.5,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 2,
+        "x_m": 27.3,
+        "y_m": 18.3,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 3,
+        "x_m": 27.3,
+        "y_m": 23.1,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 4,
+        "x_m": 27.3,
+        "y_m": 27.9,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 5,
+        "x_m": 27.3,
+        "y_m": 32.7,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 6,
+        "x_m": 27.3,
+        "y_m": 37.5,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 1,
+        "x_m": 27.3,
+        "y_m": 43.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 2,
+        "x_m": 27.3,
+        "y_m": 46.71,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 3,
+        "x_m": 27.3,
+        "y_m": 50.43,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 4,
+        "x_m": 27.3,
+        "y_m": 54.14,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 5,
+        "x_m": 27.3,
+        "y_m": 57.86,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 6,
+        "x_m": 27.3,
+        "y_m": 61.57,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 7,
+        "x_m": 27.3,
+        "y_m": 65.29,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 8,
+        "x_m": 27.3,
+        "y_m": 69.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 1,
+        "x_m": 27.3,
+        "y_m": 74.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 2,
+        "x_m": 27.3,
+        "y_m": 78.83,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 3,
+        "x_m": 27.3,
+        "y_m": 83.67,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 2,
+        "col_num": "50",
+        "row_num": 4,
+        "x_m": 27.3,
+        "y_m": 88.5,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 3,
+        "col_num": "49",
+        "row_num": 8,
+        "x_m": 31.21,
+        "y_m": 69.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 4,
+        "x_m": 97.54,
+        "y_m": 27.9,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 5,
+        "x_m": 97.54,
+        "y_m": 32.7,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 6,
+        "x_m": 97.54,
+        "y_m": 37.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 1,
+        "x_m": 97.54,
+        "y_m": 43.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 2,
+        "x_m": 97.54,
+        "y_m": 46.71,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 3,
+        "x_m": 97.54,
+        "y_m": 50.43,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 4,
+        "x_m": 97.54,
+        "y_m": 54.14,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 5,
+        "x_m": 97.54,
+        "y_m": 57.86,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 6,
+        "x_m": 97.54,
+        "y_m": 61.57,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 7,
+        "x_m": 97.54,
+        "y_m": 65.29,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 8,
+        "x_m": 97.54,
+        "y_m": 69.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 1,
+        "x_m": 97.54,
+        "y_m": 74.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 20,
+        "col_num": "32",
+        "row_num": 2,
+        "x_m": 97.54,
+        "y_m": 78.83,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 24,
+        "col_num": "28",
+        "row_num": 5,
+        "x_m": 113.15,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 25,
+        "col_num": "27",
+        "row_num": 5,
+        "x_m": 117.05,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 25,
+        "col_num": "27",
+        "row_num": 6,
+        "x_m": 117.05,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 26,
+        "col_num": "26",
+        "row_num": 5,
+        "x_m": 120.95,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 27,
+        "col_num": "25",
+        "row_num": 5,
+        "x_m": 124.85,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 28,
+        "col_num": "24",
+        "row_num": 5,
+        "x_m": 128.75,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 29,
+        "col_num": "23",
+        "row_num": 5,
+        "x_m": 132.66,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 29,
+        "col_num": "23",
+        "row_num": 6,
+        "x_m": 132.66,
+        "y_m": 98.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 30,
+        "col_num": "22",
+        "row_num": 5,
+        "x_m": 136.56,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 31,
+        "col_num": "21",
+        "row_num": 5,
+        "x_m": 140.46,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 31,
+        "col_num": "21",
+        "row_num": 6,
+        "x_m": 140.46,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 32,
+        "col_num": "20",
+        "row_num": 4,
+        "x_m": 144.36,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 32,
+        "col_num": "20",
+        "row_num": 5,
+        "x_m": 144.36,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 33,
+        "col_num": "19",
+        "row_num": 4,
+        "x_m": 148.26,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 34,
+        "col_num": "18",
+        "row_num": 4,
+        "x_m": 152.17,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 37,
+        "col_num": "15",
+        "row_num": 4,
+        "x_m": 163.87,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 37,
+        "col_num": "15",
+        "row_num": 5,
+        "x_m": 163.87,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 37,
+        "col_num": "15",
+        "row_num": 6,
+        "x_m": 163.87,
+        "y_m": 98.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 4,
+        "x_m": 167.77,
+        "y_m": 27.9,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 5,
+        "x_m": 167.77,
+        "y_m": 32.7,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 6,
+        "x_m": 167.77,
+        "y_m": 37.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 1,
+        "x_m": 167.77,
+        "y_m": 43.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 2,
+        "x_m": 167.77,
+        "y_m": 46.71,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 3,
+        "x_m": 167.77,
+        "y_m": 50.43,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 4,
+        "x_m": 167.77,
+        "y_m": 54.14,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 5,
+        "x_m": 167.77,
+        "y_m": 57.86,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 6,
+        "x_m": 167.77,
+        "y_m": 61.57,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 7,
+        "x_m": 167.77,
+        "y_m": 65.29,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 8,
+        "x_m": 167.77,
+        "y_m": 69.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 1,
+        "x_m": 167.77,
+        "y_m": 74.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 2,
+        "x_m": 167.77,
+        "y_m": 78.8,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 3,
+        "x_m": 167.77,
+        "y_m": 83.6,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 4,
+        "x_m": 167.77,
+        "y_m": 88.4,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 5,
+        "x_m": 167.77,
+        "y_m": 93.2,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 38,
+        "col_num": "14",
+        "row_num": 6,
+        "x_m": 167.77,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 39,
+        "col_num": "13",
+        "row_num": 4,
+        "x_m": 171.68,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 39,
+        "col_num": "13",
+        "row_num": 5,
+        "x_m": 171.68,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 39,
+        "col_num": "13",
+        "row_num": 6,
+        "x_m": 171.68,
+        "y_m": 98.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 40,
+        "col_num": "12",
+        "row_num": 4,
+        "x_m": 175.58,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 40,
+        "col_num": "12",
+        "row_num": 5,
+        "x_m": 175.58,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 41,
+        "col_num": "11",
+        "row_num": 4,
+        "x_m": 179.48,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 41,
+        "col_num": "11",
+        "row_num": 5,
+        "x_m": 179.48,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 42,
+        "col_num": "10",
+        "row_num": 5,
+        "x_m": 183.38,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 43,
+        "col_num": "09",
+        "row_num": 5,
+        "x_m": 187.28,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 44,
+        "col_num": "08",
+        "row_num": 5,
+        "x_m": 191.19,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 45,
+        "col_num": "07",
+        "row_num": 5,
+        "x_m": 195.09,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 45,
+        "col_num": "07",
+        "row_num": 6,
+        "x_m": 195.09,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 1,
+        "x_m": 198.99,
+        "y_m": 13.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 2,
+        "x_m": 198.99,
+        "y_m": 18.3,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 3,
+        "x_m": 198.99,
+        "y_m": 23.1,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 4,
+        "x_m": 198.99,
+        "y_m": 27.9,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 5,
+        "x_m": 198.99,
+        "y_m": 32.7,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 6,
+        "x_m": 198.99,
+        "y_m": 37.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 1,
+        "x_m": 198.99,
+        "y_m": 43.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 2,
+        "x_m": 198.99,
+        "y_m": 46.71,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 3,
+        "x_m": 198.99,
+        "y_m": 50.43,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 4,
+        "x_m": 198.99,
+        "y_m": 54.14,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 5,
+        "x_m": 198.99,
+        "y_m": 57.86,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 6,
+        "x_m": 198.99,
+        "y_m": 61.57,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 7,
+        "x_m": 198.99,
+        "y_m": 65.29,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 8,
+        "x_m": 198.99,
+        "y_m": 69.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 1,
+        "x_m": 198.99,
+        "y_m": 74.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 2,
+        "x_m": 198.99,
+        "y_m": 78.8,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 3,
+        "x_m": 198.99,
+        "y_m": 83.6,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 4,
+        "x_m": 198.99,
+        "y_m": 88.4,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 5,
+        "x_m": 198.99,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 46,
+        "col_num": "06",
+        "row_num": 6,
+        "x_m": 198.99,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 1,
+        "x_m": 202.89,
+        "y_m": 13.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 2,
+        "x_m": 202.89,
+        "y_m": 18.3,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 3,
+        "x_m": 202.89,
+        "y_m": 23.1,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 4,
+        "x_m": 202.89,
+        "y_m": 27.9,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 5,
+        "x_m": 202.89,
+        "y_m": 32.7,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 6,
+        "x_m": 202.89,
+        "y_m": 37.5,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 1,
+        "x_m": 202.89,
+        "y_m": 43.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 2,
+        "x_m": 202.89,
+        "y_m": 46.71,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 3,
+        "x_m": 202.89,
+        "y_m": 50.43,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 4,
+        "x_m": 202.89,
+        "y_m": 54.14,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 5,
+        "x_m": 202.89,
+        "y_m": 57.86,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 6,
+        "x_m": 202.89,
+        "y_m": 61.57,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 7,
+        "x_m": 202.89,
+        "y_m": 65.29,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 8,
+        "x_m": 202.89,
+        "y_m": 69.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 1,
+        "x_m": 202.89,
+        "y_m": 74.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 2,
+        "x_m": 202.89,
+        "y_m": 78.8,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 3,
+        "x_m": 202.89,
+        "y_m": 83.6,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 4,
+        "x_m": 202.89,
+        "y_m": 88.4,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 5,
+        "x_m": 202.89,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 47,
+        "col_num": "05",
+        "row_num": 6,
+        "x_m": 202.89,
+        "y_m": 98.0,
+        "reason": "FORKLIFT_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 1,
+        "x_m": 206.79,
+        "y_m": 13.5,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 2,
+        "x_m": 206.79,
+        "y_m": 18.3,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 3,
+        "x_m": 206.79,
+        "y_m": 23.1,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 4,
+        "x_m": 206.79,
+        "y_m": 27.9,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 5,
+        "x_m": 206.79,
+        "y_m": 32.7,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "A",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 6,
+        "x_m": 206.79,
+        "y_m": 37.5,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 1,
+        "x_m": 206.79,
+        "y_m": 43.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 2,
+        "x_m": 206.79,
+        "y_m": 46.71,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 3,
+        "x_m": 206.79,
+        "y_m": 50.43,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 4,
+        "x_m": 206.79,
+        "y_m": 54.14,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 5,
+        "x_m": 206.79,
+        "y_m": 57.86,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 6,
+        "x_m": 206.79,
+        "y_m": 61.57,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 7,
+        "x_m": 206.79,
+        "y_m": 65.29,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "B",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 8,
+        "x_m": 206.79,
+        "y_m": 69.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 1,
+        "x_m": 206.79,
+        "y_m": 74.0,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 2,
+        "x_m": 206.79,
+        "y_m": 78.8,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 3,
+        "x_m": 206.79,
+        "y_m": 83.6,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 4,
+        "x_m": 206.79,
+        "y_m": 88.4,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      },
+      {
+        "bay": "C",
+        "col_idx": 48,
+        "col_num": "04",
+        "row_num": 5,
+        "x_m": 206.79,
+        "y_m": 93.2,
+        "reason": "PEDESTRIAN_PATH_CONFLICT"
+      }
+    ]
+  },
+  "pedestrian_walkway_specs": {
+    "color": "#15803d",
+    "description": "Green pedestrian walkways extracted directly from EAP blueprint",
+    "segments": [
+      {
+        "type": "rect",
+        "x_min": 71.9,
+        "x_max": 143.93,
+        "y_min": 91.39,
+        "y_max": 93.39,
+        "width": 72.02,
+        "length": 2.0,
+        "raw_pdf": [
+          202.2,
+          283.7,
+          354.2,
+          287.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 71.79,
+        "x_max": 143.64,
+        "y_min": 90.59,
+        "y_max": 91.39,
+        "width": 71.85,
+        "length": 0.8,
+        "raw_pdf": [
+          202.0,
+          282.2,
+          353.6,
+          283.7
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 71.79,
+        "x_max": 143.64,
+        "y_min": 90.59,
+        "y_max": 91.39,
+        "width": 71.85,
+        "length": 0.8,
+        "raw_pdf": [
+          202.0,
+          282.2,
+          353.6,
+          283.7
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 152.96,
+        "x_max": 172.29,
+        "y_min": 85.78,
+        "y_max": 86.72,
+        "width": 19.33,
+        "length": 0.93,
+        "raw_pdf": [
+          373.3,
+          273.6,
+          414.1,
+          275.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 152.96,
+        "x_max": 172.29,
+        "y_min": 85.78,
+        "y_max": 86.72,
+        "width": 19.33,
+        "length": 0.93,
+        "raw_pdf": [
+          373.3,
+          273.6,
+          414.1,
+          275.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 170.98,
+        "x_max": 171.84,
+        "y_min": 96.86,
+        "y_max": 103.67,
+        "width": 0.85,
+        "length": 6.81,
+        "raw_pdf": [
+          411.4,
+          293.5,
+          413.2,
+          305.8
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 180.59,
+        "x_max": 205.6,
+        "y_min": 93.59,
+        "y_max": 94.66,
+        "width": 25.01,
+        "length": 1.07,
+        "raw_pdf": [
+          431.6,
+          287.6,
+          484.4,
+          289.6
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 180.59,
+        "x_max": 205.6,
+        "y_min": 93.59,
+        "y_max": 94.66,
+        "width": 25.01,
+        "length": 1.07,
+        "raw_pdf": [
+          431.6,
+          287.6,
+          484.4,
+          289.6
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 30.58,
+        "x_max": 63.95,
+        "y_min": 96.19,
+        "y_max": 96.79,
+        "width": 33.37,
+        "length": 0.6,
+        "raw_pdf": [
+          115.0,
+          292.3,
+          185.4,
+          293.4
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 30.58,
+        "x_max": 63.95,
+        "y_min": 96.19,
+        "y_max": 96.79,
+        "width": 33.37,
+        "length": 0.6,
+        "raw_pdf": [
+          115.0,
+          292.3,
+          185.4,
+          293.4
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 30.29,
+        "x_max": 31.03,
+        "y_min": 91.59,
+        "y_max": 96.79,
+        "width": 0.74,
+        "length": 5.21,
+        "raw_pdf": [
+          114.4,
+          284.0,
+          115.9,
+          293.4
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 30.29,
+        "x_max": 31.03,
+        "y_min": 91.59,
+        "y_max": 96.79,
+        "width": 0.74,
+        "length": 5.21,
+        "raw_pdf": [
+          114.4,
+          284.0,
+          115.9,
+          293.4
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 21.54,
+        "x_max": 31.15,
+        "y_min": 90.79,
+        "y_max": 91.52,
+        "width": 9.61,
+        "length": 0.73,
+        "raw_pdf": [
+          95.9,
+          282.6,
+          116.2,
+          283.9
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 21.54,
+        "x_max": 31.15,
+        "y_min": 90.79,
+        "y_max": 91.52,
+        "width": 9.61,
+        "length": 0.73,
+        "raw_pdf": [
+          95.9,
+          282.6,
+          116.2,
+          283.9
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 130.97,
+        "x_max": 131.82,
+        "y_min": 90.99,
+        "y_max": 201.98,
+        "width": 0.85,
+        "length": 111.0,
+        "raw_pdf": [
+          326.9,
+          283.0,
+          328.7,
+          482.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 130.97,
+        "x_max": 131.82,
+        "y_min": 90.99,
+        "y_max": 201.98,
+        "width": 0.85,
+        "length": 111.0,
+        "raw_pdf": [
+          326.9,
+          283.0,
+          328.7,
+          482.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 109.19,
+        "x_max": 109.93,
+        "y_min": 91.39,
+        "y_max": 162.14,
+        "width": 0.74,
+        "length": 70.75,
+        "raw_pdf": [
+          280.9,
+          283.7,
+          282.5,
+          410.9
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 109.19,
+        "x_max": 109.93,
+        "y_min": 91.39,
+        "y_max": 162.14,
+        "width": 0.74,
+        "length": 70.75,
+        "raw_pdf": [
+          280.9,
+          283.7,
+          282.5,
+          410.9
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 82.14,
+        "x_max": 82.87,
+        "y_min": 91.05,
+        "y_max": 201.98,
+        "width": 0.74,
+        "length": 110.93,
+        "raw_pdf": [
+          223.8,
+          283.1,
+          225.4,
+          482.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 82.14,
+        "x_max": 82.87,
+        "y_min": 91.05,
+        "y_max": 201.98,
+        "width": 0.74,
+        "length": 110.93,
+        "raw_pdf": [
+          223.8,
+          283.1,
+          225.4,
+          482.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 162.97,
+        "x_max": 163.71,
+        "y_min": 86.12,
+        "y_max": 110.21,
+        "width": 0.74,
+        "length": 24.09,
+        "raw_pdf": [
+          394.4,
+          274.2,
+          396.0,
+          317.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 162.97,
+        "x_max": 163.71,
+        "y_min": 86.12,
+        "y_max": 110.21,
+        "width": 0.74,
+        "length": 24.09,
+        "raw_pdf": [
+          394.4,
+          274.2,
+          396.0,
+          317.5
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 169.11,
+        "x_max": 169.85,
+        "y_min": 40.53,
+        "y_max": 86.32,
+        "width": 0.74,
+        "length": 45.79,
+        "raw_pdf": [
+          407.4,
+          192.2,
+          409.0,
+          274.6
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 169.11,
+        "x_max": 169.85,
+        "y_min": 40.53,
+        "y_max": 86.32,
+        "width": 0.74,
+        "length": 45.79,
+        "raw_pdf": [
+          407.4,
+          192.2,
+          409.0,
+          274.6
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 28.3,
+        "x_max": 32.06,
+        "y_min": 39.59,
+        "y_max": 40.4,
+        "width": 3.75,
+        "length": 0.8,
+        "raw_pdf": [
+          110.2,
+          190.6,
+          118.1,
+          192.0
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 28.87,
+        "x_max": 31.2,
+        "y_min": 40.19,
+        "y_max": 41.0,
+        "width": 2.33,
+        "length": 0.8,
+        "raw_pdf": [
+          111.4,
+          191.6,
+          116.3,
+          193.1
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 28.08,
+        "x_max": 29.61,
+        "y_min": 40.19,
+        "y_max": 41.0,
+        "width": 1.53,
+        "length": 0.8,
+        "raw_pdf": [
+          109.7,
+          191.6,
+          112.9,
+          193.1
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 31.32,
+        "x_max": 32.06,
+        "y_min": 40.19,
+        "y_max": 41.0,
+        "width": 0.74,
+        "length": 0.8,
+        "raw_pdf": [
+          116.5,
+          191.6,
+          118.1,
+          193.1
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 28.25,
+        "x_max": 32.0,
+        "y_min": 70.23,
+        "y_max": 71.1,
+        "width": 3.75,
+        "length": 0.87,
+        "raw_pdf": [
+          110.0,
+          245.6,
+          118.0,
+          247.2
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 28.87,
+        "x_max": 31.2,
+        "y_min": 70.9,
+        "y_max": 71.7,
+        "width": 2.33,
+        "length": 0.8,
+        "raw_pdf": [
+          111.4,
+          246.8,
+          116.3,
+          248.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 27.57,
+        "x_max": 29.16,
+        "y_min": 70.9,
+        "y_max": 71.7,
+        "width": 1.59,
+        "length": 0.8,
+        "raw_pdf": [
+          108.6,
+          246.8,
+          112.0,
+          248.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 31.2,
+        "x_max": 32.0,
+        "y_min": 70.9,
+        "y_max": 71.7,
+        "width": 0.8,
+        "length": 0.8,
+        "raw_pdf": [
+          116.3,
+          246.8,
+          118.0,
+          248.3
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 26.37,
+        "x_max": 27.22,
+        "y_min": 11.43,
+        "y_max": 90.85,
+        "width": 0.85,
+        "length": 79.43,
+        "raw_pdf": [
+          106.1,
+          139.9,
+          107.9,
+          282.7
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 26.37,
+        "x_max": 27.22,
+        "y_min": 11.43,
+        "y_max": 90.85,
+        "width": 0.85,
+        "length": 79.43,
+        "raw_pdf": [
+          106.1,
+          139.9,
+          107.9,
+          282.7
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 205.6,
+        "x_max": 206.63,
+        "y_min": 11.29,
+        "y_max": 94.26,
+        "width": 1.02,
+        "length": 82.96,
+        "raw_pdf": [
+          484.4,
+          139.7,
+          486.6,
+          288.8
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 205.6,
+        "x_max": 206.63,
+        "y_min": 11.29,
+        "y_max": 94.26,
+        "width": 1.02,
+        "length": 82.96,
+        "raw_pdf": [
+          484.4,
+          139.7,
+          486.6,
+          288.8
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 21.26,
+        "x_max": 27.05,
+        "y_min": 11.29,
+        "y_max": 11.9,
+        "width": 5.8,
+        "length": 0.6,
+        "raw_pdf": [
+          95.3,
+          139.7,
+          107.5,
+          140.8
+        ]
+      },
+      {
+        "type": "rect",
+        "x_min": 21.26,
+        "x_max": 27.05,
+        "y_min": 11.29,
+        "y_max": 11.9,
+        "width": 5.8,
+        "length": 0.6,
+        "raw_pdf": [
+          95.3,
+          139.7,
+          107.5,
+          140.8
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.66,
+        "x_max": 162.57,
+        "y_min": 113.55,
+        "y_max": 117.69,
+        "width": 0.91,
+        "length": 4.14,
+        "raw_pdf": [
+          391.7,
+          323.5,
+          393.6,
+          331.0
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.66,
+        "x_max": 162.57,
+        "y_min": 113.55,
+        "y_max": 117.69,
+        "width": 0.91,
+        "length": 4.14,
+        "raw_pdf": [
+          391.7,
+          323.5,
+          393.6,
+          331.0
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 143.47,
+        "x_max": 153.13,
+        "y_min": 85.51,
+        "y_max": 91.72,
+        "width": 9.66,
+        "length": 6.21,
+        "raw_pdf": [
+          353.3,
+          273.1,
+          373.7,
+          284.3
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 143.47,
+        "x_max": 153.13,
+        "y_min": 85.51,
+        "y_max": 91.72,
+        "width": 9.66,
+        "length": 6.21,
+        "raw_pdf": [
+          353.3,
+          273.1,
+          373.7,
+          284.3
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 65.03,
+        "x_max": 72.02,
+        "y_min": 90.39,
+        "y_max": 97.8,
+        "width": 6.99,
+        "length": 7.41,
+        "raw_pdf": [
+          187.7,
+          281.9,
+          202.4,
+          295.2
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 65.03,
+        "x_max": 72.02,
+        "y_min": 90.39,
+        "y_max": 97.8,
+        "width": 6.99,
+        "length": 7.41,
+        "raw_pdf": [
+          187.7,
+          281.9,
+          202.4,
+          295.2
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 171.67,
+        "x_max": 181.78,
+        "y_min": 85.78,
+        "y_max": 94.79,
+        "width": 10.12,
+        "length": 9.01,
+        "raw_pdf": [
+          412.8,
+          273.6,
+          434.2,
+          289.8
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 171.67,
+        "x_max": 181.78,
+        "y_min": 85.78,
+        "y_max": 94.79,
+        "width": 10.12,
+        "length": 9.01,
+        "raw_pdf": [
+          412.8,
+          273.6,
+          434.2,
+          289.8
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.83,
+        "x_max": 163.93,
+        "y_min": 109.74,
+        "y_max": 113.81,
+        "width": 2.1,
+        "length": 4.07,
+        "raw_pdf": [
+          392.0,
+          316.7,
+          396.5,
+          324.0
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.83,
+        "x_max": 163.93,
+        "y_min": 109.74,
+        "y_max": 113.81,
+        "width": 2.1,
+        "length": 4.07,
+        "raw_pdf": [
+          392.0,
+          316.7,
+          396.5,
+          324.0
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.83,
+        "x_max": 164.84,
+        "y_min": 117.55,
+        "y_max": 122.56,
+        "width": 3.01,
+        "length": 5.01,
+        "raw_pdf": [
+          392.0,
+          330.7,
+          398.4,
+          339.7
+        ]
+      },
+      {
+        "type": "curve",
+        "x_min": 161.83,
+        "x_max": 164.84,
+        "y_min": 117.55,
+        "y_max": 122.56,
+        "width": 3.01,
+        "length": 5.01,
+        "raw_pdf": [
+          392.0,
+          330.7,
+          398.4,
+          339.7
+        ]
+      }
+    ]
+  },
+  "forklift_runway_specs": {
+    "color": "#4b5563",
+    "stripe_color": "#f59e0b",
+    "description": "Grey forklift runway aisles extracted directly from EAP blueprint",
+    "segments": [
+      {
+        "x_min": 74.52,
+        "x_max": 75.6,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          207.7,
+          290.6,
+          210.0,
+          293.2
+        ]
+      },
+      {
+        "x_min": 74.52,
+        "x_max": 75.6,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          207.7,
+          290.6,
+          210.0,
+          293.2
+        ]
+      },
+      {
+        "x_min": 76.45,
+        "x_max": 77.59,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          211.8,
+          290.6,
+          214.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 76.45,
+        "x_max": 77.59,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          211.8,
+          290.6,
+          214.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 74.29,
+        "x_max": 75.83,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          207.2,
+          291.0,
+          210.5,
+          292.8
+        ]
+      },
+      {
+        "x_min": 76.28,
+        "x_max": 77.76,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.48,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          211.4,
+          291.0,
+          214.6,
+          292.8
+        ]
+      },
+      {
+        "x_min": 74.29,
+        "x_max": 75.83,
+        "y_min": 103.07,
+        "y_max": 104.14,
+        "width": 1.53,
+        "length": 1.07,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          207.2,
+          304.7,
+          210.5,
+          306.6
+        ]
+      },
+      {
+        "x_min": 84.01,
+        "x_max": 89.98,
+        "y_min": 94.46,
+        "y_max": 96.99,
+        "width": 5.97,
+        "length": 2.54,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          227.8,
+          289.2,
+          240.4,
+          293.8
+        ]
+      },
+      {
+        "x_min": 86.51,
+        "x_max": 87.48,
+        "y_min": 96.99,
+        "y_max": 103.87,
+        "width": 0.97,
+        "length": 6.87,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          233.0,
+          293.8,
+          235.1,
+          306.1
+        ]
+      },
+      {
+        "x_min": 86.46,
+        "x_max": 87.54,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          232.9,
+          290.6,
+          235.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 86.46,
+        "x_max": 87.54,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          232.9,
+          290.6,
+          235.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 88.39,
+        "x_max": 89.53,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          237.0,
+          290.6,
+          239.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 88.39,
+        "x_max": 89.53,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          237.0,
+          290.6,
+          239.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 86.23,
+        "x_max": 87.76,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          232.4,
+          291.0,
+          235.7,
+          292.8
+        ]
+      },
+      {
+        "x_min": 88.22,
+        "x_max": 89.7,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.48,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          236.6,
+          291.0,
+          239.8,
+          292.8
+        ]
+      },
+      {
+        "x_min": 86.23,
+        "x_max": 87.76,
+        "y_min": 99.2,
+        "y_max": 100.2,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          232.4,
+          297.7,
+          235.7,
+          299.5
+        ]
+      },
+      {
+        "x_min": 85.43,
+        "x_max": 88.79,
+        "y_min": 112.75,
+        "y_max": 114.41,
+        "width": 3.35,
+        "length": 1.67,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          230.8,
+          322.1,
+          237.8,
+          325.1
+        ]
+      },
+      {
+        "x_min": 104.36,
+        "x_max": 105.44,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          270.7,
+          290.6,
+          273.0,
+          293.2
+        ]
+      },
+      {
+        "x_min": 104.36,
+        "x_max": 105.44,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          270.7,
+          290.6,
+          273.0,
+          293.2
+        ]
+      },
+      {
+        "x_min": 106.29,
+        "x_max": 107.43,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          274.8,
+          290.6,
+          277.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 106.29,
+        "x_max": 107.43,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          274.8,
+          290.6,
+          277.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 104.13,
+        "x_max": 105.67,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          270.2,
+          291.0,
+          273.5,
+          292.8
+        ]
+      },
+      {
+        "x_min": 106.12,
+        "x_max": 107.6,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.48,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          274.4,
+          291.0,
+          277.6,
+          292.8
+        ]
+      },
+      {
+        "x_min": 104.13,
+        "x_max": 105.67,
+        "y_min": 99.2,
+        "y_max": 100.2,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          270.2,
+          297.7,
+          273.5,
+          299.5
+        ]
+      },
+      {
+        "x_min": 103.34,
+        "x_max": 106.69,
+        "y_min": 112.75,
+        "y_max": 114.41,
+        "width": 3.35,
+        "length": 1.67,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          268.6,
+          322.1,
+          275.6,
+          325.1
+        ]
+      },
+      {
+        "x_min": 116.3,
+        "x_max": 117.38,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          295.9,
+          290.6,
+          298.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 116.3,
+        "x_max": 117.38,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          295.9,
+          290.6,
+          298.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 118.23,
+        "x_max": 119.37,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          300.0,
+          290.6,
+          302.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 118.23,
+        "x_max": 119.37,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          300.0,
+          290.6,
+          302.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 116.07,
+        "x_max": 117.61,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          295.4,
+          291.0,
+          298.7,
+          292.8
+        ]
+      },
+      {
+        "x_min": 118.06,
+        "x_max": 119.54,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.48,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          299.6,
+          291.0,
+          302.8,
+          292.8
+        ]
+      },
+      {
+        "x_min": 116.07,
+        "x_max": 117.61,
+        "y_min": 99.2,
+        "y_max": 100.2,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          295.4,
+          297.7,
+          298.7,
+          299.5
+        ]
+      },
+      {
+        "x_min": 115.28,
+        "x_max": 118.63,
+        "y_min": 112.75,
+        "y_max": 114.41,
+        "width": 3.35,
+        "length": 1.67,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          293.8,
+          322.1,
+          300.8,
+          325.1
+        ]
+      },
+      {
+        "x_min": 139.49,
+        "x_max": 140.57,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          344.9,
+          290.6,
+          347.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 139.49,
+        "x_max": 140.57,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.08,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          344.9,
+          290.6,
+          347.2,
+          293.2
+        ]
+      },
+      {
+        "x_min": 141.42,
+        "x_max": 142.56,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          349.0,
+          290.6,
+          351.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 141.42,
+        "x_max": 142.56,
+        "y_min": 95.26,
+        "y_max": 96.66,
+        "width": 1.14,
+        "length": 1.4,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          349.0,
+          290.6,
+          351.4,
+          293.2
+        ]
+      },
+      {
+        "x_min": 139.26,
+        "x_max": 140.8,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          344.4,
+          291.0,
+          347.6,
+          292.8
+        ]
+      },
+      {
+        "x_min": 141.25,
+        "x_max": 142.73,
+        "y_min": 95.46,
+        "y_max": 96.46,
+        "width": 1.48,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          348.6,
+          291.0,
+          351.7,
+          292.8
+        ]
+      },
+      {
+        "x_min": 139.26,
+        "x_max": 140.8,
+        "y_min": 99.2,
+        "y_max": 100.2,
+        "width": 1.53,
+        "length": 1.0,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          344.4,
+          297.7,
+          347.6,
+          299.5
+        ]
+      },
+      {
+        "x_min": 138.47,
+        "x_max": 141.82,
+        "y_min": 112.75,
+        "y_max": 114.41,
+        "width": 3.35,
+        "length": 1.67,
+        "color": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "raw_pdf": [
+          342.7,
+          322.1,
+          349.8,
+          325.1
+        ]
+      },
+      {
+        "x_min": 166.32,
+        "x_max": 166.61,
+        "y_min": 27.11,
+        "y_max": 97.6,
+        "width": 0.28,
+        "length": 70.48,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          401.5,
+          168.1,
+          402.1,
+          294.8
+        ]
+      },
+      {
+        "x_min": 166.32,
+        "x_max": 166.61,
+        "y_min": 27.11,
+        "y_max": 97.6,
+        "width": 0.28,
+        "length": 70.48,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          401.5,
+          168.1,
+          402.1,
+          294.8
+        ]
+      },
+      {
+        "x_min": 167.06,
+        "x_max": 167.35,
+        "y_min": 27.11,
+        "y_max": 97.46,
+        "width": 0.28,
+        "length": 70.35,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          403.1,
+          168.1,
+          403.7,
+          294.6
+        ]
+      },
+      {
+        "x_min": 167.06,
+        "x_max": 167.35,
+        "y_min": 27.11,
+        "y_max": 97.46,
+        "width": 0.28,
+        "length": 70.35,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          403.1,
+          168.1,
+          403.7,
+          294.6
+        ]
+      },
+      {
+        "x_min": 166.21,
+        "x_max": 167.52,
+        "y_min": 98.2,
+        "y_max": 99.2,
+        "width": 1.31,
+        "length": 1.0,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          401.3,
+          295.9,
+          404.0,
+          297.7
+        ]
+      },
+      {
+        "x_min": 167.35,
+        "x_max": 174.28,
+        "y_min": 113.35,
+        "y_max": 116.15,
+        "width": 6.94,
+        "length": 2.8,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          403.7,
+          323.2,
+          418.3,
+          328.2
+        ]
+      },
+      {
+        "x_min": 173.77,
+        "x_max": 175.19,
+        "y_min": 113.95,
+        "y_max": 115.35,
+        "width": 1.42,
+        "length": 1.4,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          417.2,
+          324.2,
+          420.2,
+          326.8
+        ]
+      },
+      {
+        "x_min": 171.84,
+        "x_max": 173.77,
+        "y_min": 114.28,
+        "y_max": 114.88,
+        "width": 1.93,
+        "length": 0.6,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          413.2,
+          324.8,
+          417.2,
+          325.9
+        ]
+      },
+      {
+        "x_min": 199.92,
+        "x_max": 205.49,
+        "y_min": -1.59,
+        "y_max": 114.28,
+        "width": 5.57,
+        "length": 115.87,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          472.4,
+          116.5,
+          484.2,
+          324.8
+        ]
+      },
+      {
+        "x_min": 199.92,
+        "x_max": 205.49,
+        "y_min": -1.59,
+        "y_max": 114.28,
+        "width": 5.57,
+        "length": 115.87,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          472.4,
+          116.5,
+          484.2,
+          324.8
+        ]
+      },
+      {
+        "x_min": 15.57,
+        "x_max": 21.14,
+        "y_min": -1.59,
+        "y_max": 114.48,
+        "width": 5.57,
+        "length": 116.07,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          83.3,
+          116.5,
+          95.0,
+          325.2
+        ]
+      },
+      {
+        "x_min": 15.57,
+        "x_max": 21.14,
+        "y_min": -1.59,
+        "y_max": 114.48,
+        "width": 5.57,
+        "length": 116.07,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          83.3,
+          116.5,
+          95.0,
+          325.2
+        ]
+      },
+      {
+        "x_min": 95.21,
+        "x_max": 95.55,
+        "y_min": 27.71,
+        "y_max": 80.11,
+        "width": 0.34,
+        "length": 52.39,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          251.4,
+          169.2,
+          252.1,
+          263.4
+        ]
+      },
+      {
+        "x_min": 95.21,
+        "x_max": 95.55,
+        "y_min": 27.71,
+        "y_max": 80.11,
+        "width": 0.34,
+        "length": 52.39,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          251.4,
+          169.2,
+          252.1,
+          263.4
+        ]
+      },
+      {
+        "x_min": 96.12,
+        "x_max": 96.52,
+        "y_min": 27.71,
+        "y_max": 79.97,
+        "width": 0.4,
+        "length": 52.26,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          253.3,
+          169.2,
+          254.2,
+          263.2
+        ]
+      },
+      {
+        "x_min": 96.12,
+        "x_max": 96.52,
+        "y_min": 27.71,
+        "y_max": 79.97,
+        "width": 0.4,
+        "length": 52.26,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          253.3,
+          169.2,
+          254.2,
+          263.2
+        ]
+      },
+      {
+        "x_min": 94.93,
+        "x_max": 96.8,
+        "y_min": 72.37,
+        "y_max": 77.71,
+        "width": 1.88,
+        "length": 5.34,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          250.8,
+          249.5,
+          254.8,
+          259.1
+        ]
+      },
+      {
+        "x_min": 194.97,
+        "x_max": 196.05,
+        "y_min": 98.6,
+        "y_max": 99.4,
+        "width": 1.08,
+        "length": 0.8,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          462.0,
+          296.6,
+          464.3,
+          298.1
+        ]
+      },
+      {
+        "x_min": 194.97,
+        "x_max": 196.05,
+        "y_min": 98.6,
+        "y_max": 99.4,
+        "width": 1.08,
+        "length": 0.8,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          462.0,
+          296.6,
+          464.3,
+          298.1
+        ]
+      },
+      {
+        "x_min": 215.55,
+        "x_max": 219.93,
+        "y_min": 1.48,
+        "y_max": 8.29,
+        "width": 4.38,
+        "length": 6.81,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          505.4,
+          122.0,
+          514.7,
+          134.3
+        ]
+      },
+      {
+        "x_min": 215.55,
+        "x_max": 219.93,
+        "y_min": 1.48,
+        "y_max": 8.29,
+        "width": 4.38,
+        "length": 6.81,
+        "color": [
+          0.588,
+          0.588,
+          0.588
+        ],
+        "raw_pdf": [
+          505.4,
+          122.0,
+          514.7,
+          134.3
+        ]
+      }
+    ]
+  },
+  "pedestrian_workers": [
+    {
+      "id": "WORKER-WEST-CORRIDOR",
+      "name": "Marcus Vance",
+      "role": "Safety Marshall",
+      "route": [
+        [
+          26.8,
+          14.0,
+          0.0
+        ],
+        [
+          26.8,
+          88.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 1.25,
+      "vest_color": "#f97316",
+      "helmet_color": "#facc15"
+    },
+    {
+      "id": "WORKER-EAST-CORRIDOR",
+      "name": "Elena Rostova",
+      "role": "Quality Inspector",
+      "route": [
+        [
+          206.1,
+          14.0,
+          0.0
+        ],
+        [
+          206.1,
+          92.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 1.15,
+      "vest_color": "#10b981",
+      "helmet_color": "#ffffff"
+    },
+    {
+      "id": "WORKER-SOUTH-CROSS",
+      "name": "Devon Hayes",
+      "role": "Inventory Auditor",
+      "route": [
+        [
+          72.0,
+          91.5,
+          0.0
+        ],
+        [
+          144.0,
+          91.5,
+          0.0
+        ]
+      ],
+      "speed_mps": 1.2,
+      "vest_color": "#f97316",
+      "helmet_color": "#facc15"
+    },
+    {
+      "id": "WORKER-CENTER-BAY",
+      "name": "Tariq Miller",
+      "role": "Operations Technician",
+      "route": [
+        [
+          169.5,
+          42.0,
+          0.0
+        ],
+        [
+          169.5,
+          86.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 1.1,
+      "vest_color": "#3b82f6",
+      "helmet_color": "#facc15"
+    }
+  ],
+  "forklifts": [
+    {
+      "id": "FORKLIFT-WEST-DOCK",
+      "name": "Toyota 8FGU25 #01",
+      "operator": "Carlos Mendes",
+      "route": [
+        [
+          18.5,
+          14.0,
+          0.0
+        ],
+        [
+          18.5,
+          94.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 2.4,
+      "chassis_color": "#f59e0b",
+      "cargo": "Master Steel Coil AM-7401",
+      "capacity_tons": 5.0
+    },
+    {
+      "id": "FORKLIFT-WEST-AISLE",
+      "name": "Hyster H100FT #02",
+      "operator": "Liam O'Connor",
+      "route": [
+        [
+          95.8,
+          28.0,
+          0.0
+        ],
+        [
+          95.8,
+          80.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 2.2,
+      "chassis_color": "#eab308",
+      "cargo": "Die Set D-Bay Staging",
+      "capacity_tons": 7.0
+    },
+    {
+      "id": "FORKLIFT-EAST-AISLE",
+      "name": "Yale GLP060 #03",
+      "operator": "Sarah Jenkins",
+      "route": [
+        [
+          166.8,
+          28.0,
+          0.0
+        ],
+        [
+          166.8,
+          96.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 2.2,
+      "chassis_color": "#f59e0b",
+      "cargo": "Slit Steel Coil Strip",
+      "capacity_tons": 6.0
+    },
+    {
+      "id": "FORKLIFT-EAST-RECEIVING",
+      "name": "Crown C-5 #04",
+      "operator": "Kenji Sato",
+      "route": [
+        [
+          202.5,
+          14.0,
+          0.0
+        ],
+        [
+          202.5,
+          94.0,
+          0.0
+        ]
+      ],
+      "speed_mps": 2.5,
+      "chassis_color": "#0284c7",
+      "cargo": "Inbound Railcar Coil Staging",
+      "capacity_tons": 8.0
+    }
+  ]
+}

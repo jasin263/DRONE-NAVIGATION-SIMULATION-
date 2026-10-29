@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED=1 \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     build-essential \
+    libzbar0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package definition and application files

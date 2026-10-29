@@ -71,3 +71,7 @@ pytest_baseline.txt
 
 # Client warehouse images
 Warehouse_images/
+
+# Scratch scripts and embedded repositories
+scratch/
+DIMS APP/

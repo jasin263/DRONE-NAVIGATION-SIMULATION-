@@ -7,10 +7,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - ./src:/app/src
       - ./configs:/app/configs
       - ./exports:/app/exports
       - ./Amazonbindata/img:/app/Amazonbindata/img:ro
+      - ./Warehouse_images:/app/Warehouse_images:ro
     environment:
       - PYTHONUNBUFFERED=1
-    command: ["viewer", "--config", "medium", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["viewer", "--config", "rsdc_michigan", "--host", "0.0.0.0", "--port", "8000"]
     restart: unless-stopped

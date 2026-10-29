@@ -2,7 +2,7 @@ version: "1.0"
 
 site:
   id: "WH-STEEL-COIL"
-  name: "Heavy Metal Coil & Sheet Processing Center"
+  name: "RSDC of Michigan - Steel Coil Processing Center"
   units: "metres"
   coordinate_frame:
     origin: [0.0, 0.0, 0.0]
